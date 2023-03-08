@@ -9,6 +9,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.model.components.ComponentMappers;
+import com.mygdx.shapewars.model.components.SpriteComponent;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
@@ -55,7 +57,8 @@ public class ShapeWarsView implements Screen {
         renderer.render(layers);
 
         renderer.getBatch().begin();
-        model.tankSprite.draw(renderer.getBatch());
+        SpriteComponent spriteComponent = ComponentMappers.sprite.get(model.tank);
+        spriteComponent.getSprite().draw(renderer.getBatch());
         renderer.getBatch().end();
     }
 

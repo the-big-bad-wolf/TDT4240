@@ -1,29 +1,25 @@
 package com.mygdx.shapewars.model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.shapewars.model.components.PositionComponent;
+import com.mygdx.shapewars.model.components.SpriteComponent;
+import com.mygdx.shapewars.model.components.VelocityComponent;
 
 public class ShapeWarsModel {
 
     public static final int TANK_WIDTH = 75;
     public static final int TANK_HEIGHT = 75;
 
-    public float x, y;
-    public int velocity;
-    public float direction;
-    public Sprite tankSprite;
     public SpriteBatch batch;
+    public Entity tank;
 
     public ShapeWarsModel() {
         batch = new SpriteBatch();
-        tankSprite = new Sprite(new Texture("tank_graphics.png"));
-        tankSprite.setSize(TANK_WIDTH, TANK_HEIGHT);
-        tankSprite.setOrigin(tankSprite.getWidth() / 2f, tankSprite.getHeight() / 2f);
-
-        // set starting position
-        x = Gdx.graphics.getWidth() / 2f -  tankSprite.getWidth() / 2;
-        y = Gdx.graphics.getHeight() / 2f -  tankSprite.getHeight() / 2;
+        tank = new Entity();
+        tank.add(new PositionComponent(TANK_WIDTH / 2, TANK_HEIGHT / 2));
+        tank.add(new VelocityComponent(0, 0));
+        tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT));
+        
     }
 }
