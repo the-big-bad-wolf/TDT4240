@@ -35,9 +35,13 @@ public class ShapeWarsView implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        System.out.println("Game view showing");
+        int mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
+        int mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
+        camera.setToOrtho(false, mapWidth, mapHeight);
+        camera.position.set(mapWidth/2, mapHeight/2, 0);
+        camera.update();
+
         Gdx.input.setInputProcessor(stage);
         render(0);
     }
