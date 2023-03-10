@@ -3,10 +3,10 @@ package com.mygdx.shapewars.model.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
 
-public class PositionComponent implements Component{
+public class PositionComponent implements Component {
   private Vector2 position;
 
-  public PositionComponent(int x, int y) {
+  public PositionComponent(float x, float y) {
     position = new Vector2(x, y);
   }
 
@@ -14,9 +14,6 @@ public class PositionComponent implements Component{
     return position;
   }
 
-  public void addPosition(int x, int y) {
-    position = new Vector2(x, y);
-  }
   
   public void addPosition(float x, float y) {
     position = new Vector2(x, y);

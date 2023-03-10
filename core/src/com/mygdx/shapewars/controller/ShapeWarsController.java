@@ -11,6 +11,7 @@ import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.model.system.MovementSystem;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
 
@@ -19,20 +20,15 @@ public class ShapeWarsController {
     private final ShapeWarsModel model;
     private final ShapeWarsView shapeWarsView;
     private final MainMenuView mainMenuView;
-    private final VelocityComponent velocityComponent;
-    private final PositionComponent positionComponent;
-    private final SpriteComponent spriteComponent;
-    
     private Screen currentScreen;
+    private MovementSystem movementSystem;
     
     public ShapeWarsController(ShapeWarsModel model, ShapeWarsView view, MainMenuView mainMenuView) {
       this.model = model;
       this.shapeWarsView = view;
       this.mainMenuView = mainMenuView;
       this.currentScreen = mainMenuView;
-      velocityComponent = ComponentMappers.velocity.get(model.tank);
-      positionComponent = ComponentMappers.position.get(model.tank);
-      spriteComponent = ComponentMappers.sprite.get(model.tank);
+      movementSystem = movementSystem.getInstance();
       currentScreen.show();
     }
 
@@ -40,29 +36,20 @@ public class ShapeWarsController {
         if (currentScreen instanceof ShapeWarsView) {
             // get direction
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                velocityComponent.addDirection(2);
+                movementSystem.update(2, 0);
               } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                velocityComponent.addDirection(-2);
+                movementSystem.update(-2, 0);
             }
 
             // get velocity
             if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-                velocityComponent.setSpeed(5);
+                movementSystem.update(0, 5);
               } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-                velocityComponent.setSpeed(-5);
+                movementSystem.update(0, -5);
               } else {
-                velocityComponent.setSpeed(0);
+                movementSystem.update(0, 0);
             }
-
-            // set direction
-            spriteComponent.getSprite().setRotation(velocityComponent.getDirection());
-
-            // calculate and set position
-            float radians = MathUtils.degreesToRadians * velocityComponent.getDirection();
-
-            float newX = positionComponent.getPosition().x + MathUtils.cos(radians) * velocityComponent.getSpeed();
-            float newY = positionComponent.getPosition().y + MathUtils.sin(radians) * velocityComponent.getSpeed();
-
+/*
             Rectangle wallsRect = checkCollisionWithWalls(newX, newY, spriteComponent.getSprite().getWidth(), spriteComponent.getSprite().getHeight(), shapeWarsView.getCollisionLayer());
 
             if (wallsRect != null) {
@@ -92,9 +79,7 @@ public class ShapeWarsController {
                 }
                 // set new position
             }
-            positionComponent.addPosition(newX, newY);
-            spriteComponent.getSprite().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
-
+*/
         } else {
             if (Gdx.input.isKeyPressed(Input.Keys.F)) {
                 currentScreen = shapeWarsView;
