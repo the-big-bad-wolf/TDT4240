@@ -56,8 +56,10 @@ public class ShapeWarsController {
             Polygon hitbox = spriteComponent.getHitbox();
             String collisionType = getCollisionType(newX, newY, hitbox, collisionLayer);
 
+
             // set direction only if no collision with walls
             if (collisionType.equals("none")) {
+                System.out.println("none");
                 // no collision rotate the tank as planned
                 spriteComponent.setRotation(velocityComponent.getDirection());
                 // No collision, update the position as planned
@@ -78,7 +80,6 @@ public class ShapeWarsController {
                             goalX = newX;
                             goalY = newY;
                         }
-                        positionComponent.addPosition(goalX, goalY);
                         break;
                     case "right":
                         // movement is to the right
@@ -89,7 +90,6 @@ public class ShapeWarsController {
                             goalX = newX;
                             goalY = newY;
                         }
-                        positionComponent.addPosition(goalX, goalY);
                         break;
                     case "top":
                         // movement is upwards
@@ -100,18 +100,17 @@ public class ShapeWarsController {
                             goalX = newX;
                             goalY = newY;
                         }
-                        positionComponent.addPosition(goalX, goalY);
                         break;
                     case "bottom":
                         // movement is downwards
                         if (newY < oldY) {
                             goalX = newX;
                             goalY = oldY + 0.1f;
+                            positionComponent.addPosition(goalX, goalY);
                         } else {
                             goalX = newX;
                             goalY = newY;
                         }
-                        positionComponent.addPosition(goalX, goalY);
                         break;
                     case "topLeft":
                         if (newX < oldX) {
@@ -124,7 +123,6 @@ public class ShapeWarsController {
                         } else {
                             goalY = newY;
                         }
-                        positionComponent.addPosition(goalX, goalY);
                         break;
                     case "topRight":
                         if (newX > oldX) {
@@ -137,7 +135,6 @@ public class ShapeWarsController {
                         } else {
                             goalY = newY;
                         }
-                        positionComponent.addPosition(goalX, goalY);
                         break;
                     case "bottomLeft":
                         if (newX < oldX) {
@@ -150,12 +147,16 @@ public class ShapeWarsController {
                         } else {
                             goalY = newY;
                         }
-                        positionComponent.addPosition(goalX, goalY);
                         break;
                     case "bottomRight":
+                        System.out.print("NewX: " + newX);
+                        System.out.println(" | OldX: " + oldX);
+                        System.out.print("NewY: " + newY);
+                        System.out.println(" | OldY: " + oldY);
                         if (newX > oldX) {
                             goalX = oldX - 0.1f;
-                        } else {
+                        }
+                        else {
                             goalX = newX;
                         }
                         if (newY < oldY) {
@@ -163,12 +164,17 @@ public class ShapeWarsController {
                         } else {
                             goalY = newY;
                         }
-                        positionComponent.addPosition(goalX, goalY);
+                        break;
+                    case "severalCollisions":
+                        goalX = oldX;
+                        goalY = oldY;
                         break;
                     default:
-                        positionComponent.addPosition(newX, newY);
+                        goalX = newX;
+                        goalY = newY;
                         break;
                 }
+                positionComponent.addPosition(goalX, goalY);
                 spriteComponent.getSprite().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
                 spriteComponent.getHitbox().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
                 spriteComponent.setRotation(velocityComponent.getDirection());
@@ -213,7 +219,6 @@ public class ShapeWarsController {
         boolean collidedBottom = false;
         boolean collidedLeft = false;
         boolean collidedRight = false;
-        int inLoop = 0;
 
         // iterate over all cells in the collision layer that the hitbox touches
         for (int cellX = startX - 1; cellX <= endX + 1; cellX++) {
@@ -262,10 +267,6 @@ public class ShapeWarsController {
                     }
                 }
             }
-            inLoop++;
-            if (inLoop > 6) {
-                break;
-            }
         }
         // determine the type of collision based on which sides were collided with
         if (collidedTop && !collidedBottom && !collidedLeft && !collidedRight) {
@@ -284,9 +285,22 @@ public class ShapeWarsController {
             return "bottomLeft";
         } else if (collidedBottom && collidedRight && !collidedLeft && !collidedTop) {
             return "bottomRight";
-        } else {
+        }
+        if (!collidedLeft && !collidedBottom) {
             return "none";
         }
+        else {
+            return "severalCollisions";
+        }
+
+        /*else if (collidedLeft && collidedRight && !collidedBottom && !collidedTop) {
+            return "halfWaller";
+        } else if (!collidedLeft && !collidedRight && collidedBottom && collidedTop) {
+            return "halfWaller2";
+        }
+        else {
+            return "none";
+        }*/
     }
 
     public void dispose() {
