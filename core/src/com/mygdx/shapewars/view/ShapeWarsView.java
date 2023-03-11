@@ -39,7 +39,7 @@ public class ShapeWarsView implements Screen {
         int mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
         int mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
         camera.setToOrtho(false, mapWidth, mapHeight);
-        camera.position.set(mapWidth/2, mapHeight/2, 0);
+        camera.position.set(mapWidth/2f, mapHeight/2f, 0);
         camera.update();
 
         Gdx.input.setInputProcessor(stage);
@@ -64,6 +64,12 @@ public class ShapeWarsView implements Screen {
         SpriteComponent spriteComponent = ComponentMappers.sprite.get(model.tank);
         spriteComponent.getSprite().draw(renderer.getBatch());
         renderer.getBatch().end();
+
+        //ShapeRenderer shapeRenderer = new ShapeRenderer();
+        //shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        //shapeRenderer.polygon(spriteComponent.getHitbox().getTransformedVertices());
+        //shapeRenderer.rect(spriteComponent.getSprite().getX(), spriteComponent.getSprite().getY(), spriteComponent.getSprite().getWidth(), spriteComponent.getSprite().getHeight());
+        //shapeRenderer.end();
     }
 
     @Override

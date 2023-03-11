@@ -3,36 +3,36 @@ package com.mygdx.shapewars.model.components;
 import com.badlogic.ashley.core.Component;
 
 public class VelocityComponent implements Component{
-  private int speed;
-  private int direction;
+  private float speed;
+  private float direction;
 
   public VelocityComponent(int speed, int direction) {
     this.speed = speed;
     this.direction = direction;
   }
 
-  public int getSpeed() {
+  public float getSpeed() {
     return speed;
   }
 
-  public int getDirection() {
+  public float getDirection() {
     return direction;
   }
 
-  public void setVelocity(int s, int d) {
+  public void setVelocity(float s, float d) {
     speed = s;
     direction = d;
   }
 
-  public void setSpeed(int s) {
+  public void setSpeed(float s) {
     setVelocity(s, direction);
   }
 
-  public void setDirection(int d) {
+  public void setDirection(float d) {
     setVelocity(speed, d);
   }
 
-  public void addDirection(int d) {
+  public void addDirection(float d) {
     direction += d;
   }
 }
