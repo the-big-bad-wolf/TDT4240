@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.shapewars.model.ShapeWarsModel;
@@ -68,17 +69,24 @@ public class ShapeWarsView implements Screen {
         spriteComponent.getSprite().draw(renderer.getBatch());
         renderer.getBatch().end();
 
-        /*
+        Polygon hitbox = spriteComponent.getHitbox();
+
+        float hitboxTop = hitbox.getBoundingRectangle().y + hitbox.getBoundingRectangle().height;
+        float hitboxBottom = hitbox.getBoundingRectangle().y;
+        float hitboxLeft = hitbox.getBoundingRectangle().x;
+        float hitboxRight = hitbox.getBoundingRectangle().x + hitbox.getBoundingRectangle().width;
+
         Rectangle boundingHit = spriteComponent.getSprite().getBoundingRectangle();
 
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.rect(boundingHit.x, boundingHit.y, boundingHit.width, boundingHit.height);
+        shapeRenderer.rect(hitboxLeft, hitboxBottom, hitboxRight - hitboxLeft, hitboxTop - hitboxBottom);
+        //shapeRenderer.rect(boundingHit.x, boundingHit.y, boundingHit.width, boundingHit.height);
         //shapeRenderer.polygon(spriteComponent.getHitbox().getTransformedVertices());
         //shapeRenderer.rect(spriteComponent.getSprite().getX(), spriteComponent.getSprite().getY(), spriteComponent.getSprite().getWidth(), spriteComponent.getSprite().getHeight());
         shapeRenderer.end();
 
-         */
+
     }
 
     @Override

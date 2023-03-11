@@ -7,7 +7,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.PositionComponent;
@@ -15,10 +14,6 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class ShapeWarsController {
 
@@ -59,148 +54,131 @@ public class ShapeWarsController {
 
             // detect colliding corners and edges
             Polygon hitbox = spriteComponent.getHitbox();
-            List<Vector2> collidingVertices = getCollidingWallVertices(positionComponent.getPosition().x, positionComponent.getPosition().y, spriteComponent.getHitbox(), shapeWarsView.getCollisionLayer());
             String collisionType = getCollisionType(newX, newY, hitbox, collisionLayer);
-            float[] vertices = hitbox.getTransformedVertices();
-
 
             // set direction only if no collision with walls
-            if (collidingVertices.isEmpty() && collisionType.equals("none")) {
+            if (collisionType.equals("none")) {
                 // no collision rotate the tank as planned
                 spriteComponent.setRotation(velocityComponent.getDirection());
                 // No collision, update the position as planned
                 positionComponent.addPosition(newX, newY);
                 spriteComponent.getSprite().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
                 spriteComponent.getHitbox().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
-            }
-            else {
-                if (!collisionType.equals("none")) {
-                    velocityComponent.setSpeed(0);
-                    System.out.println(collisionType);
-                    switch (collisionType) {
-                        case "left":
-                            positionComponent.addPosition(oldX + 0.001f, oldY);
-                            break;
-                        case "right":
-                            positionComponent.addPosition(oldX - 0.001f, oldY);
-                            break;
-                        case "top":
-                            positionComponent.addPosition(oldX, oldY - 0.001f);
-                            break;
-                        case "bottom":
-                            positionComponent.addPosition(newX, oldY + 0.001f);
-                            break;
-                        case "topLeft":
-                            positionComponent.addPosition(oldX + 0.001f, oldY - 0.001f);
-                            break;
-                        case "topRight":
-                            positionComponent.addPosition(oldX - 0.001f, oldY - 0.001f);
-                            break;
-                        case "bottomLeft":
-                            positionComponent.addPosition(oldX + 0.001f, oldY + 0.001f);
-                            break;
-                        case "bottomRight":
-                            positionComponent.addPosition(oldX - 0.001f, oldY + 0.001f);
-                            break;
-                    }
-                }
-                else {
-                    // Handle the collision
-                    velocityComponent.setSpeed(0);
-                    // Initialize variables for collision detection
-                    boolean left = false, right = false, up = false, down = false;
-                    for (Vector2 vertex : collidingVertices) {
-                        float x = vertex.x;
-                        float y = vertex.y;
-                        float centerX = hitbox.getX() + hitbox.getOriginX();
-                        float centerY = hitbox.getY() + hitbox.getOriginY();
-                        if (x < centerX && Math.abs(x - centerX) > Math.abs(y - centerY)) {
-                            left = true;
-                        } else if (x > centerX && Math.abs(x - centerX) > Math.abs(y - centerY)) {
-                            right = true;
-                        } else if (y < centerY && Math.abs(x - centerX) < Math.abs(y - centerY)) {
-                            down = true;
-                        } else if (y > centerY && Math.abs(x - centerX) < Math.abs(y - centerY)) {
-                            up = true;
+            } else {
+                float goalX, goalY;
+                velocityComponent.setSpeed(0);
+                System.out.println(collisionType);
+                switch (collisionType) {
+                    case "left":
+                        // movement is to the left
+                        if (newX < oldX) {
+                            goalX = oldX + 0.1f;
+                            goalY = newY;
+                        } else {
+                            goalX = newX;
+                            goalY = newY;
                         }
-                    }
-
-                    // Move the tank back to its previous position, using the appropriate old X or Y value
-                    if (left && up) {
-                        System.out.println("Collision from left and up");
-                        positionComponent.addPosition(oldX + 0.001f, oldY - 0.001f);
-                    } else if (left && down) {
-                        System.out.println("Collision from left and down");
-                        positionComponent.addPosition(oldX + 0.001f, oldY + 0.001f);
-                    } else if (left) {
-                        System.out.println("Collision from left");
-                        positionComponent.addPosition(oldX + 0.001f, newY);
-                    } else if (right && up) {
-                        System.out.println("Collision from right and up");
-                        positionComponent.addPosition(oldX - 0.001f, oldY - 0.001f);
-                    } else if (right && down) {
-                        System.out.println("Collision from right and down");
-                        positionComponent.addPosition(oldX - 0.001f, oldY + 0.001f);
-                    } else if (right) {
-                        System.out.println("Collision from right");
-                        positionComponent.addPosition(oldX - 0.001f, newY);
-                    } else if (up) {
-                        System.out.println("Collision from up");
-                        positionComponent.addPosition(newX, oldY - 0.001f);
-                    } else if (down) {
-                        System.out.println("Collision from down ");
-                        positionComponent.addPosition(newX, oldY + 0.001f);
-                    }
+                        positionComponent.addPosition(goalX, goalY);
+                        break;
+                    case "right":
+                        // movement is to the right
+                        if (newX > oldX) {
+                            goalX = oldX - 0.1f;
+                            goalY = newY;
+                        } else {
+                            goalX = newX;
+                            goalY = newY;
+                        }
+                        positionComponent.addPosition(goalX, goalY);
+                        break;
+                    case "top":
+                        // movement is upwards
+                        if (newY > oldY) {
+                            goalX = newX;
+                            goalY = oldY - 0.1f;
+                        } else {
+                            goalX = newX;
+                            goalY = newY;
+                        }
+                        positionComponent.addPosition(goalX, goalY);
+                        break;
+                    case "bottom":
+                        // movement is downwards
+                        if (newY < oldY) {
+                            goalX = newX;
+                            goalY = oldY + 0.1f;
+                        } else {
+                            goalX = newX;
+                            goalY = newY;
+                        }
+                        positionComponent.addPosition(goalX, goalY);
+                        break;
+                    case "topLeft":
+                        if (newX < oldX) {
+                            goalX = oldX + 0.1f;
+                        } else {
+                            goalX = newX;
+                        }
+                        if (newY > oldY) {
+                            goalY = oldY - 0.1f;
+                        } else {
+                            goalY = newY;
+                        }
+                        positionComponent.addPosition(goalX, goalY);
+                        break;
+                    case "topRight":
+                        if (newX > oldX) {
+                            goalX = oldX - 0.1f;
+                        } else {
+                            goalX = newX;
+                        }
+                        if (newY > oldY) {
+                            goalY = oldY - 0.1f;
+                        } else {
+                            goalY = newY;
+                        }
+                        positionComponent.addPosition(goalX, goalY);
+                        break;
+                    case "bottomLeft":
+                        if (newX < oldX) {
+                            goalX = oldX + 0.1f;
+                        } else {
+                            goalX = newX;
+                        }
+                        if (newY < oldY) {
+                            goalY = oldY + 0.1f;
+                        } else {
+                            goalY = newY;
+                        }
+                        positionComponent.addPosition(goalX, goalY);
+                        break;
+                    case "bottomRight":
+                        if (newX > oldX) {
+                            goalX = oldX - 0.1f;
+                        } else {
+                            goalX = newX;
+                        }
+                        if (newY < oldY) {
+                            goalY = oldY + 0.1f;
+                        } else {
+                            goalY = newY;
+                        }
+                        positionComponent.addPosition(goalX, goalY);
+                        break;
+                    default:
+                        positionComponent.addPosition(newX, newY);
+                        break;
                 }
-
-
                 spriteComponent.getSprite().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
                 spriteComponent.getHitbox().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
-
-
-                boolean canRotate = true;
-                // check if the rotation would cause a collision
-                for (int i = 0; i < vertices.length; i += 2) {
-                    float x = vertices[i];
-                    float y = vertices[i + 1];
-                    boolean left = false, right = false, up = false, down = false;
-                    // check collision with each wall
-                    for (Vector2 wallVertex : collidingVertices) {
-                        float centerX = wallVertex.x;
-                        float centerY = wallVertex.y;
-
-                        // check which side of the wall the tank is on
-                        if (x < centerX && Math.abs(x - centerX) > Math.abs(y - centerY)) {
-                            left = true;
-                        } else if (x > centerX && Math.abs(x - centerX) > Math.abs(y - centerY)) {
-                            right = true;
-                        } else if (y < centerY && Math.abs(y - centerY) > Math.abs(x - centerX)) {
-                            down = true;
-                        } else if (y > centerY && Math.abs(y - centerY) > Math.abs(x - centerX)) {
-                            up = true;
-                        }
-                    }
-
-                    // if the tank would collide with any wall, it can't rotate
-                    if (left && velocityComponent.getDirection() == 90 || right && velocityComponent.getDirection() == 270 || up && velocityComponent.getDirection() == 180 || down && velocityComponent.getDirection() == 0) {
-                        canRotate = false;
-                        break;
-                    }
-                }
-
-                if (canRotate) {
-                    spriteComponent.getSprite().setRotation(velocityComponent.getDirection());
-                    spriteComponent.getHitbox().setRotation(velocityComponent.getDirection());
-                }
+                spriteComponent.setRotation(velocityComponent.getDirection());
             }
-
         } else {
             if (Gdx.input.isKeyPressed(Input.Keys.F)) {
                 currentScreen = shapeWarsView;
                 currentScreen.show();
             }
         }
-
         currentScreen.render(0);
     }
 
@@ -221,29 +199,6 @@ public class ShapeWarsController {
             velocityComponent.setSpeed(0);
         }
     }
-    public void dispose() {
-        model.batch.dispose();
-    }
-
-    private List<Vector2> getCollidingWallVertices(Polygon hitbox, TiledMapTileLayer collisionLayer) {
-        float[] vertices = hitbox.getTransformedVertices();
-        List<Vector2> collidingVertices = new ArrayList<>();
-        for (int i = 0; i < vertices.length; i += 2) {
-            float x = vertices[i];
-            float y = vertices[i + 1];
-            TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
-            if (cell != null) {
-                collidingVertices.add(new Vector2(x, y));
-            }
-        }
-        return collidingVertices;
-    }
-
-    private List<Vector2> getCollidingWallVertices(float x, float y, Polygon hitbox, TiledMapTileLayer collisionLayer) {
-        hitbox.setPosition(x, y);
-        return getCollidingWallVertices(hitbox, collisionLayer);
-    }
-
 
     public String getCollisionType(float x, float y, Polygon hitbox, TiledMapTileLayer collisionLayer) {
         // iterate over all cells in the collision layer that the hitbox touches
@@ -254,15 +209,11 @@ public class ShapeWarsController {
         int endX = (int) (x + hitbox.getBoundingRectangle().width / 2) / cellWidth;
         int endY = (int) (y + hitbox.getBoundingRectangle().height / 2) / cellHeight;
 
-        System.out.println("startX: " + startX);
-        System.out.println("startY: " + startY);
-        System.out.println("endX: " + endX);
-        System.out.println("endY: " + endY);
-
         boolean collidedTop = false;
         boolean collidedBottom = false;
         boolean collidedLeft = false;
         boolean collidedRight = false;
+        int inLoop = 0;
 
         // iterate over all cells in the collision layer that the hitbox touches
         for (int cellX = startX - 1; cellX <= endX + 1; cellX++) {
@@ -311,6 +262,10 @@ public class ShapeWarsController {
                     }
                 }
             }
+            inLoop++;
+            if (inLoop > 6) {
+                break;
+            }
         }
         // determine the type of collision based on which sides were collided with
         if (collidedTop && !collidedBottom && !collidedLeft && !collidedRight) {
@@ -332,5 +287,9 @@ public class ShapeWarsController {
         } else {
             return "none";
         }
+    }
+
+    public void dispose() {
+        model.batch.dispose();
     }
 }
