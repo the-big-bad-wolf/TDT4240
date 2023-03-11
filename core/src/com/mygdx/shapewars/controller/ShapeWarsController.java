@@ -44,99 +44,48 @@ public class ShapeWarsController {
 
     public void update() {
         if (currentScreen instanceof ShapeWarsView) {
-            // get direction
-            if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                velocityComponent.addDirection(2);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                velocityComponent.addDirection(-2);
-            }
-
-            // get velocity
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-                velocityComponent.setSpeed(5);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-                velocityComponent.setSpeed(-5);
-            } else {
-                velocityComponent.setSpeed(0);
-            }
+            getDirectionAndVelocityInput();
 
             TiledMapTileLayer collisionLayer = shapeWarsView.getCollisionLayer();
 
-// calculate and set position
+            // calculate old and new position values
             float radians = MathUtils.degreesToRadians * velocityComponent.getDirection();
 
             float oldX = positionComponent.getPosition().x;
             float oldY = positionComponent.getPosition().y;
 
-// calculate new position values
             float newX = positionComponent.getPosition().x + MathUtils.cos(radians) * velocityComponent.getSpeed();
             float newY = positionComponent.getPosition().y + MathUtils.sin(radians) * velocityComponent.getSpeed();
 
+            // detect colliding corners and edges
+            Polygon hitbox = spriteComponent.getHitbox();
             List<Vector2> collidingVertices = getCollidingWallVertices(positionComponent.getPosition().x, positionComponent.getPosition().y, spriteComponent.getHitbox(), shapeWarsView.getCollisionLayer());
-            Polygon hitbox = spriteComponent.getHitbox(); // Hitbox des Tanks
+            String collisionType = getCollisionType(newX, newY, hitbox, collisionLayer);
             float[] vertices = hitbox.getTransformedVertices();
 
+
             // set direction only if no collision with walls
-            if (collidingVertices.isEmpty()) {
-                spriteComponent.getSprite().setRotation(velocityComponent.getDirection());
-                spriteComponent.getHitbox().setRotation(velocityComponent.getDirection());
-            } else {
-                boolean canRotate = true;
-                // check if the rotation would cause a collision
-                for (int i = 0; i < vertices.length; i += 2) {
-                    float x = vertices[i];
-                    float y = vertices[i + 1];
-                    boolean left = false, right = false, up = false, down = false;
-
-                    // check collision with each wall
-                    for (Vector2 wallVertex : collidingVertices) {
-                        float centerX = wallVertex.x;
-                        float centerY = wallVertex.y;
-
-                        // check which side of the wall the tank is on
-                        if (x < centerX && Math.abs(x - centerX) > Math.abs(y - centerY)) {
-                            left = true;
-                        } else if (x > centerX && Math.abs(x - centerX) > Math.abs(y - centerY)) {
-                            right = true;
-                        } else if (y < centerY && Math.abs(y - centerY) > Math.abs(x - centerX)) {
-                            down = true;
-                        } else if (y > centerY && Math.abs(y - centerY) > Math.abs(x - centerX)) {
-                            up = true;
-                        }
-                    }
-
-                    // if the tank would collide with any wall, it can't rotate
-                    if (left && velocityComponent.getDirection() == 90 || right && velocityComponent.getDirection() == 270 || up && velocityComponent.getDirection() == 180 || down && velocityComponent.getDirection() == 0) {
-                        canRotate = false;
-                        break;
-                    }
-                }
-
-                if (canRotate) {
-                    spriteComponent.getSprite().setRotation(velocityComponent.getDirection());
-                    spriteComponent.getHitbox().setRotation(velocityComponent.getDirection());
-                }
-            }
-
-            String collisionType = getCollisionType(newX, newY, hitbox, collisionLayer);
-
-            if (collidingVertices.isEmpty() && Objects.equals(collisionType, "none")) {
-                // No collision, move the tank as planned
+            if (collidingVertices.isEmpty() && collisionType.equals("none")) {
+                // no collision rotate the tank as planned
+                spriteComponent.setRotation(velocityComponent.getDirection());
+                // No collision, update the position as planned
                 positionComponent.addPosition(newX, newY);
-                spriteComponent.getHitbox().setPosition(newX, newY);
-            } else {
+                spriteComponent.getSprite().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
+                spriteComponent.getHitbox().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
+            }
+            else {
                 if (!collisionType.equals("none")) {
                     velocityComponent.setSpeed(0);
                     System.out.println(collisionType);
                     switch (collisionType) {
                         case "left":
-                            positionComponent.addPosition(oldX + 0.001f, newY);
+                            positionComponent.addPosition(oldX + 0.001f, oldY);
                             break;
                         case "right":
-                            positionComponent.addPosition(oldX - 0.001f, newY);
+                            positionComponent.addPosition(oldX - 0.001f, oldY);
                             break;
                         case "top":
-                            positionComponent.addPosition(newX, oldY - 0.001f);
+                            positionComponent.addPosition(oldX, oldY - 0.001f);
                             break;
                         case "bottom":
                             positionComponent.addPosition(newX, oldY + 0.001f);
@@ -203,10 +152,47 @@ public class ShapeWarsController {
                         positionComponent.addPosition(newX, oldY + 0.001f);
                     }
                 }
-            }
 
-            spriteComponent.getSprite().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
-            spriteComponent.getHitbox().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
+
+                spriteComponent.getSprite().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
+                spriteComponent.getHitbox().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
+
+
+                boolean canRotate = true;
+                // check if the rotation would cause a collision
+                for (int i = 0; i < vertices.length; i += 2) {
+                    float x = vertices[i];
+                    float y = vertices[i + 1];
+                    boolean left = false, right = false, up = false, down = false;
+                    // check collision with each wall
+                    for (Vector2 wallVertex : collidingVertices) {
+                        float centerX = wallVertex.x;
+                        float centerY = wallVertex.y;
+
+                        // check which side of the wall the tank is on
+                        if (x < centerX && Math.abs(x - centerX) > Math.abs(y - centerY)) {
+                            left = true;
+                        } else if (x > centerX && Math.abs(x - centerX) > Math.abs(y - centerY)) {
+                            right = true;
+                        } else if (y < centerY && Math.abs(y - centerY) > Math.abs(x - centerX)) {
+                            down = true;
+                        } else if (y > centerY && Math.abs(y - centerY) > Math.abs(x - centerX)) {
+                            up = true;
+                        }
+                    }
+
+                    // if the tank would collide with any wall, it can't rotate
+                    if (left && velocityComponent.getDirection() == 90 || right && velocityComponent.getDirection() == 270 || up && velocityComponent.getDirection() == 180 || down && velocityComponent.getDirection() == 0) {
+                        canRotate = false;
+                        break;
+                    }
+                }
+
+                if (canRotate) {
+                    spriteComponent.getSprite().setRotation(velocityComponent.getDirection());
+                    spriteComponent.getHitbox().setRotation(velocityComponent.getDirection());
+                }
+            }
 
         } else {
             if (Gdx.input.isKeyPressed(Input.Keys.F)) {
@@ -218,6 +204,23 @@ public class ShapeWarsController {
         currentScreen.render(0);
     }
 
+    private void getDirectionAndVelocityInput() {
+        // get direction
+        if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            velocityComponent.addDirection(2);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            velocityComponent.addDirection(-2);
+        }
+
+        // get velocity
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+            velocityComponent.setSpeed(5);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
+            velocityComponent.setSpeed(-5);
+        } else {
+            velocityComponent.setSpeed(0);
+        }
+    }
     public void dispose() {
         model.batch.dispose();
     }
@@ -251,11 +254,17 @@ public class ShapeWarsController {
         int endX = (int) (x + hitbox.getBoundingRectangle().width / 2) / cellWidth;
         int endY = (int) (y + hitbox.getBoundingRectangle().height / 2) / cellHeight;
 
+        System.out.println("startX: " + startX);
+        System.out.println("startY: " + startY);
+        System.out.println("endX: " + endX);
+        System.out.println("endY: " + endY);
+
         boolean collidedTop = false;
         boolean collidedBottom = false;
         boolean collidedLeft = false;
         boolean collidedRight = false;
 
+        // iterate over all cells in the collision layer that the hitbox touches
         for (int cellX = startX - 1; cellX <= endX + 1; cellX++) {
             for (int cellY = startY - 1; cellY <= endY + 1; cellY++) {
                 TiledMapTileLayer.Cell cell = collisionLayer.getCell(cellX, cellY);
@@ -302,7 +311,8 @@ public class ShapeWarsController {
                     }
                 }
             }
-        }// determine the type of collision based on which sides were collided with
+        }
+        // determine the type of collision based on which sides were collided with
         if (collidedTop && !collidedBottom && !collidedLeft && !collidedRight) {
             return "top";
         } else if (collidedBottom && !collidedTop && !collidedLeft && !collidedRight) {

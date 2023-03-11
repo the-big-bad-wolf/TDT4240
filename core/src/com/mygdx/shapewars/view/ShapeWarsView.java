@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
@@ -22,6 +24,7 @@ public class ShapeWarsView implements Screen {
 
     private final Stage stage;
     private final ShapeWarsModel model;
+
 
     public ShapeWarsView(ShapeWarsModel model) {
         this.model = model;
@@ -65,11 +68,17 @@ public class ShapeWarsView implements Screen {
         spriteComponent.getSprite().draw(renderer.getBatch());
         renderer.getBatch().end();
 
-        //ShapeRenderer shapeRenderer = new ShapeRenderer();
-        //shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        /*
+        Rectangle boundingHit = spriteComponent.getSprite().getBoundingRectangle();
+
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.rect(boundingHit.x, boundingHit.y, boundingHit.width, boundingHit.height);
         //shapeRenderer.polygon(spriteComponent.getHitbox().getTransformedVertices());
         //shapeRenderer.rect(spriteComponent.getSprite().getX(), spriteComponent.getSprite().getY(), spriteComponent.getSprite().getWidth(), spriteComponent.getSprite().getHeight());
-        //shapeRenderer.end();
+        shapeRenderer.end();
+
+         */
     }
 
     @Override
