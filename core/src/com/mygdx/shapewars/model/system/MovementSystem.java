@@ -45,7 +45,6 @@ public class MovementSystem extends EntitySystem {
 
 
 			Rectangle wallsRect = checkCollisionWithWalls(newX, newY, sprite.getSprite().getWidth(), sprite.getSprite().getHeight(), (TiledMapTileLayer) map.getLayers().get(1));
-			System.out.println(wallsRect);
 			if (wallsRect != null) {
 				// adjust newX and newY based on collision direction
 				if (position.getPosition().x + sprite.getSprite().getWidth() <= wallsRect.getX()) {
