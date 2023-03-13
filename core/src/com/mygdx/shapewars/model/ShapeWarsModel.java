@@ -33,7 +33,6 @@ public class ShapeWarsModel {
         engine = new Engine();
         tank = new Entity();
         movementSystem = movementSystem.getInstance(map);
-        movementSystem = movementSystem.getInstance();
         inputSystem = inputSystem.getInstance();
         tank.add(new PositionComponent(TANK_WIDTH / 2, TANK_HEIGHT / 2));
         tank.add(new VelocityComponent(0, 0));

@@ -22,7 +22,7 @@ public class ShapeWarsController {
       this.shapeWarsView = view;
       this.mainMenuView = mainMenuView;
       this.currentScreen = mainMenuView;
-      movementSystem = movementSystem.getInstance();
+      // movementSystem = movementSystem.getInstance();
       currentScreen.show();
     }
 
