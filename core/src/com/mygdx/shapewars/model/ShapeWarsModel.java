@@ -2,6 +2,7 @@ package com.mygdx.shapewars.model;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
@@ -28,5 +29,9 @@ public class ShapeWarsModel {
         tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT));
         engine.addEntity(tank);
         engine.addSystem(movementSystem);
+    }
+
+    public void update() {
+        engine.update(Gdx.graphics.getDeltaTime());
     }
 }

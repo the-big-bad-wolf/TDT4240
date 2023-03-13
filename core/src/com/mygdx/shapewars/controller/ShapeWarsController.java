@@ -22,6 +22,10 @@ public class ShapeWarsController {
     private final MainMenuView mainMenuView;
     private Screen currentScreen;
     private MovementSystem movementSystem;
+
+    private final VelocityComponent velocityComponent;
+
+
     
     public ShapeWarsController(ShapeWarsModel model, ShapeWarsView view, MainMenuView mainMenuView) {
       this.model = model;
@@ -29,6 +33,7 @@ public class ShapeWarsController {
       this.mainMenuView = mainMenuView;
       this.currentScreen = mainMenuView;
       movementSystem = movementSystem.getInstance();
+      velocityComponent = ComponentMappers.velocity.get(model.tank);
       currentScreen.show();
     }
 
@@ -36,18 +41,18 @@ public class ShapeWarsController {
         if (currentScreen instanceof ShapeWarsView) {
             // get direction
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                movementSystem.update(2, 0);
+                velocityComponent.addDirection(2);
               } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                movementSystem.update(-2, 0);
+                velocityComponent.addDirection(-2);
             }
 
             // get velocity
             if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-                movementSystem.update(0, 5);
+                velocityComponent.setValue(5);
               } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-                movementSystem.update(0, -5);
+                velocityComponent.setValue(-5);
               } else {
-                movementSystem.update(0, 0);
+                velocityComponent.setValue(0);
             }
 /*
             Rectangle wallsRect = checkCollisionWithWalls(newX, newY, spriteComponent.getSprite().getWidth(), spriteComponent.getSprite().getHeight(), shapeWarsView.getCollisionLayer());
@@ -78,8 +83,8 @@ public class ShapeWarsController {
                     newY = wallsRect.getY() + wallsRect.getHeight();
                 }
                 // set new position
-            }
-*/
+            } */
+            model.update();
         } else {
             if (Gdx.input.isKeyPressed(Input.Keys.F)) {
                 currentScreen = shapeWarsView;
@@ -87,7 +92,7 @@ public class ShapeWarsController {
             }
         }
 
-        currentScreen.render(0);
+        currentScreen.render(Gdx.graphics.getDeltaTime());
     }
 
     private Rectangle checkCollisionWithWalls(float x, float y, float width, float height, TiledMapTileLayer wallsLayer) {

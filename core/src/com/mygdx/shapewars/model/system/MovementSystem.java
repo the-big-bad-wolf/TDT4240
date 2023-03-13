@@ -24,17 +24,12 @@ public class MovementSystem extends EntitySystem {
 		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class).get());
 	}
 
-	public void update(int direction, int value) {
-		for (int i = 0; i < entities.size(); ++i) {
-			Entity entity = entities.get(i);
+	public void update(float deltaTime) {
+		for (Entity entity : entities) {
 			PositionComponent position = ComponentMappers.position.get(entity);
 			VelocityComponent velocity = ComponentMappers.velocity.get(entity);
 			SpriteComponent sprite = ComponentMappers.sprite.get(entity);
-			velocity.addDirection(direction);
-			velocity.setValue(value);
 
-			// set direction
-			sprite.getSprite().setRotation(velocity.getDirection());
 
 			// calculate and set position
 			float radians = MathUtils.degreesToRadians * velocity.getDirection();
@@ -43,6 +38,9 @@ public class MovementSystem extends EntitySystem {
 			float newY = position.getPosition().y + MathUtils.sin(radians) * velocity.getValue();
 
 			position.addPosition(newX, newY);
+
+			// set direction
+			sprite.getSprite().setRotation(velocity.getDirection());
 
 			sprite.getSprite().setPosition(position.getPosition().x, position.getPosition().y);
 		}
