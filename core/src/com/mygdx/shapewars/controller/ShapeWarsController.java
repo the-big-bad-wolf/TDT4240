@@ -11,6 +11,7 @@ import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.model.system.MovementSystem;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
 
@@ -19,20 +20,20 @@ public class ShapeWarsController {
     private final ShapeWarsModel model;
     private final ShapeWarsView shapeWarsView;
     private final MainMenuView mainMenuView;
-    private final VelocityComponent velocityComponent;
-    private final PositionComponent positionComponent;
-    private final SpriteComponent spriteComponent;
-    
     private Screen currentScreen;
+    private MovementSystem movementSystem;
+
+    private final VelocityComponent velocityComponent;
+
+
     
     public ShapeWarsController(ShapeWarsModel model, ShapeWarsView view, MainMenuView mainMenuView) {
       this.model = model;
       this.shapeWarsView = view;
       this.mainMenuView = mainMenuView;
       this.currentScreen = mainMenuView;
+      movementSystem = movementSystem.getInstance();
       velocityComponent = ComponentMappers.velocity.get(model.tank);
-      positionComponent = ComponentMappers.position.get(model.tank);
-      spriteComponent = ComponentMappers.sprite.get(model.tank);
       currentScreen.show();
     }
 
@@ -47,22 +48,13 @@ public class ShapeWarsController {
 
             // get velocity
             if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-                velocityComponent.setSpeed(5);
+                velocityComponent.setValue(5);
               } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-                velocityComponent.setSpeed(-5);
+                velocityComponent.setValue(-5);
               } else {
-                velocityComponent.setSpeed(0);
+                velocityComponent.setValue(0);
             }
-
-            // set direction
-            spriteComponent.getSprite().setRotation(velocityComponent.getDirection());
-
-            // calculate and set position
-            float radians = MathUtils.degreesToRadians * velocityComponent.getDirection();
-
-            float newX = positionComponent.getPosition().x + MathUtils.cos(radians) * velocityComponent.getSpeed();
-            float newY = positionComponent.getPosition().y + MathUtils.sin(radians) * velocityComponent.getSpeed();
-
+/*
             Rectangle wallsRect = checkCollisionWithWalls(newX, newY, spriteComponent.getSprite().getWidth(), spriteComponent.getSprite().getHeight(), shapeWarsView.getCollisionLayer());
 
             if (wallsRect != null) {
@@ -91,10 +83,8 @@ public class ShapeWarsController {
                     newY = wallsRect.getY() + wallsRect.getHeight();
                 }
                 // set new position
-            }
-            positionComponent.addPosition(newX, newY);
-            spriteComponent.getSprite().setPosition(positionComponent.getPosition().x, positionComponent.getPosition().y);
-
+            } */
+            model.update();
         } else {
             if (Gdx.input.isKeyPressed(Input.Keys.F)) {
                 currentScreen = shapeWarsView;
@@ -102,7 +92,7 @@ public class ShapeWarsController {
             }
         }
 
-        currentScreen.render(0);
+        currentScreen.render(Gdx.graphics.getDeltaTime());
     }
 
     private Rectangle checkCollisionWithWalls(float x, float y, float width, float height, TiledMapTileLayer wallsLayer) {
