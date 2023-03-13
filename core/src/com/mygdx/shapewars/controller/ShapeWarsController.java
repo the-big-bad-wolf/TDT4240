@@ -4,14 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.model.system.InputSystem;
 import com.mygdx.shapewars.model.system.MovementSystem;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
@@ -25,7 +19,6 @@ public class ShapeWarsController {
     private MovementSystem movementSystem;
 
     //private final VelocityComponent velocityComponent;
-    private final InputSystem inputSystem;
 
 
     
@@ -35,7 +28,6 @@ public class ShapeWarsController {
       this.mainMenuView = mainMenuView;
       this.currentScreen = mainMenuView;
       movementSystem = movementSystem.getInstance();
-      inputSystem = InputSystem.getInstance();
       //velocityComponent = ComponentMappers.velocity.get(model.tank);
       currentScreen.show();
     }
