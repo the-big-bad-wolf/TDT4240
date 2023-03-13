@@ -93,8 +93,4 @@ public class ShapeWarsView implements Screen {
         map.dispose();
         renderer.dispose();
     }
-
-    public TiledMapTileLayer getCollisionLayer() {
-        return (TiledMapTileLayer) map.getLayers().get(1);
-    }
 }
