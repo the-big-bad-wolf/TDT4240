@@ -22,7 +22,6 @@ public class ShapeWarsController {
       this.shapeWarsView = view;
       this.mainMenuView = mainMenuView;
       this.currentScreen = mainMenuView;
-      // movementSystem = movementSystem.getInstance();
       currentScreen.show();
     }
 
@@ -37,22 +36,6 @@ public class ShapeWarsController {
         }
 
         currentScreen.render(Gdx.graphics.getDeltaTime());
-    }
-
-    private Rectangle checkCollisionWithWalls(float x, float y, float width, float height, TiledMapTileLayer wallsLayer) {
-        for (int col = 0; col < wallsLayer.getWidth(); col++) {
-            for (int row = 0; row < wallsLayer.getHeight(); row++) {
-                TiledMapTileLayer.Cell cell = wallsLayer.getCell(col, row);
-                if (cell != null) {
-                    Rectangle rect = new Rectangle(col * wallsLayer.getTileWidth(), row * wallsLayer.getTileHeight(),
-                            wallsLayer.getTileWidth(), wallsLayer.getTileHeight());
-                    if (rect.overlaps(new Rectangle(x, y, width, height))) {
-                        return rect;
-                    }
-                }
-            }
-        }
-        return null;
     }
 
     public void dispose() {

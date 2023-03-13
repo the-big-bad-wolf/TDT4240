@@ -1,17 +1,16 @@
 package com.mygdx.shapewars.view;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.SpriteComponent;
-
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 
@@ -59,8 +58,11 @@ public class ShapeWarsView implements Screen {
         renderer.render(layers);
 
         renderer.getBatch().begin();
-        SpriteComponent spriteComponent = ComponentMappers.sprite.get(model.tank);
-        spriteComponent.getSprite().draw(renderer.getBatch());
+        for (Entity entity : model.engine.getEntities()) {
+            // TODO access components without entities
+            SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
+            spriteComponent.getSprite().draw(renderer.getBatch());
+        }
         renderer.getBatch().end();
     }
 
@@ -90,9 +92,5 @@ public class ShapeWarsView implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
-    }
-
-    public TiledMapTileLayer getCollisionLayer() {
-        return (TiledMapTileLayer) map.getLayers().get(1);
     }
 }
