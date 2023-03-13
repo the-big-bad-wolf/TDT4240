@@ -42,21 +42,7 @@ public class ShapeWarsController {
 
     public void update() {
         if (currentScreen instanceof ShapeWarsView) {
-            // get direction
-            if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                inputSystem.addDirection(2);
-              } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                inputSystem.addDirection(-2);
-            }
-
-            // get velocity
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-                inputSystem.setValue(5);
-              } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-                inputSystem.setValue(-5);
-              } else {
-                inputSystem.setValue(0);
-            }
+          model.update();
 /*
             Rectangle wallsRect = checkCollisionWithWalls(newX, newY, spriteComponent.getSprite().getWidth(), spriteComponent.getSprite().getHeight(), shapeWarsView.getCollisionLayer());
 
@@ -87,7 +73,6 @@ public class ShapeWarsController {
                 }
                 // set new position
             } */
-            model.update();
         } else {
             if (Gdx.input.isKeyPressed(Input.Keys.F)) {
                 currentScreen = shapeWarsView;
