@@ -15,7 +15,7 @@ public class PositionComponent implements Component {
   }
 
   
-  public void addPosition(float x, float y) {
+  public void setPosition(float x, float y) {
     position = new Vector2(x, y);
   }
 }

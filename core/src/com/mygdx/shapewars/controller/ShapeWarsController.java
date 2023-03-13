@@ -21,7 +21,6 @@ public class ShapeWarsController {
     private final ShapeWarsView shapeWarsView;
     private final MainMenuView mainMenuView;
     private Screen currentScreen;
-    private MovementSystem movementSystem;
 
     private final VelocityComponent velocityComponent;
 
@@ -32,7 +31,6 @@ public class ShapeWarsController {
       this.shapeWarsView = view;
       this.mainMenuView = mainMenuView;
       this.currentScreen = mainMenuView;
-      movementSystem = movementSystem.getInstance();
       velocityComponent = ComponentMappers.velocity.get(model.tank);
       currentScreen.show();
     }
@@ -54,36 +52,6 @@ public class ShapeWarsController {
               } else {
                 velocityComponent.setValue(0);
             }
-/*
-            Rectangle wallsRect = checkCollisionWithWalls(newX, newY, spriteComponent.getSprite().getWidth(), spriteComponent.getSprite().getHeight(), shapeWarsView.getCollisionLayer());
-
-            if (wallsRect != null) {
-                // adjust newX and newY based on collision direction
-                if (positionComponent.getPosition().x + spriteComponent.getSprite().getWidth() <= wallsRect.getX()) {
-                    if (positionComponent.getPosition().y + spriteComponent.getSprite().getHeight() <= wallsRect.getY()) {
-                        newY = wallsRect.getY() - spriteComponent.getSprite().getHeight();
-                    } else if (positionComponent.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
-                        newY = wallsRect.getY() + wallsRect.getHeight();
-                    }
-                    // left collision
-                    newX = wallsRect.getX() - spriteComponent.getSprite().getWidth();
-                } else if (positionComponent.getPosition().x >= wallsRect.getX() + wallsRect.getWidth()) {
-                    if (positionComponent.getPosition().y + spriteComponent.getSprite().getHeight() <= wallsRect.getY()) {
-                        newY = wallsRect.getY() - spriteComponent.getSprite().getHeight();
-                    } else if (positionComponent.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
-                        newY = wallsRect.getY() + wallsRect.getHeight();
-                    }
-                    // right collision
-                    newX = wallsRect.getX() + wallsRect.getWidth();
-                } else if (positionComponent.getPosition().y + spriteComponent.getSprite().getHeight() <= wallsRect.getY()) {
-                    // top collision
-                    newY = wallsRect.getY() - spriteComponent.getSprite().getHeight();
-                } else if (positionComponent.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
-                    // bottom collision
-                    newY = wallsRect.getY() + wallsRect.getHeight();
-                }
-                // set new position
-            } */
             model.update();
         } else {
             if (Gdx.input.isKeyPressed(Input.Keys.F)) {

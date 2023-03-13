@@ -16,23 +16,21 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 
 
 public class ShapeWarsView implements Screen {
-    private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
     private final Stage stage;
     private final ShapeWarsModel model;
+    private final TiledMap map;
 
     public ShapeWarsView(ShapeWarsModel model) {
         this.model = model;
         this.stage = new Stage(); // todo check if we need to change that
+        map = model.getMap();
     }
 
     @Override
     public void show() {
-        TmxMapLoader loader = new TmxMapLoader();
-        map = loader.load("maps/secondMap.tmx");
-
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
 
@@ -43,7 +41,7 @@ public class ShapeWarsView implements Screen {
         camera.update();
 
         Gdx.input.setInputProcessor(stage);
-        render(0);
+        render(Gdx.graphics.getDeltaTime());
     }
 
     @Override
