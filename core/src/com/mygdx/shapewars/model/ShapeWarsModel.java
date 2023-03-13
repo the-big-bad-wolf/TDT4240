@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.model.system.InputSystem;
 import com.mygdx.shapewars.model.system.MovementSystem;
 
 public class ShapeWarsModel {
@@ -18,17 +19,20 @@ public class ShapeWarsModel {
     public Entity tank;
     public Engine engine;
     public MovementSystem movementSystem;
+    public InputSystem inputSystem;
 
     public ShapeWarsModel() {
         batch = new SpriteBatch();
         engine = new Engine();
         tank = new Entity();
         movementSystem = movementSystem.getInstance();
+        inputSystem = inputSystem.getInstance();
         tank.add(new PositionComponent(TANK_WIDTH / 2, TANK_HEIGHT / 2));
         tank.add(new VelocityComponent(0, 0));
         tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT));
         engine.addEntity(tank);
         engine.addSystem(movementSystem);
+        engine.addSystem(inputSystem);
     }
 
     public void update() {

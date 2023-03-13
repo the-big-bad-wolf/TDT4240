@@ -11,17 +11,16 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 
-import org.graalvm.compiler.lir.sparc.SPARCMove;
-
 public class MovementSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
 
-  	private static volatile MovementSystem instance;
+  private static volatile MovementSystem instance;
 
 	private MovementSystem() {}
 
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class).get());
+		entities = engine.getEntitiesFor(
+        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class).get());
 	}
 
 	public void update(float deltaTime) {

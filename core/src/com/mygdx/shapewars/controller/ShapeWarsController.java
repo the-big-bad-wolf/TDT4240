@@ -11,6 +11,7 @@ import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.model.system.InputSystem;
 import com.mygdx.shapewars.model.system.MovementSystem;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
@@ -23,7 +24,8 @@ public class ShapeWarsController {
     private Screen currentScreen;
     private MovementSystem movementSystem;
 
-    private final VelocityComponent velocityComponent;
+    //private final VelocityComponent velocityComponent;
+    private final InputSystem inputSystem;
 
 
     
@@ -33,7 +35,8 @@ public class ShapeWarsController {
       this.mainMenuView = mainMenuView;
       this.currentScreen = mainMenuView;
       movementSystem = movementSystem.getInstance();
-      velocityComponent = ComponentMappers.velocity.get(model.tank);
+      inputSystem = InputSystem.getInstance();
+      //velocityComponent = ComponentMappers.velocity.get(model.tank);
       currentScreen.show();
     }
 
@@ -41,18 +44,18 @@ public class ShapeWarsController {
         if (currentScreen instanceof ShapeWarsView) {
             // get direction
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                velocityComponent.addDirection(2);
+                inputSystem.addDirection(2);
               } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                velocityComponent.addDirection(-2);
+                inputSystem.addDirection(-2);
             }
 
             // get velocity
             if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-                velocityComponent.setValue(5);
+                inputSystem.setValue(5);
               } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-                velocityComponent.setValue(-5);
+                inputSystem.setValue(-5);
               } else {
-                velocityComponent.setValue(0);
+                inputSystem.setValue(0);
             }
 /*
             Rectangle wallsRect = checkCollisionWithWalls(newX, newY, spriteComponent.getSprite().getWidth(), spriteComponent.getSprite().getHeight(), shapeWarsView.getCollisionLayer());
