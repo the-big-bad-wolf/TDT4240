@@ -28,7 +28,7 @@ public class ShapeWarsModel {
     public static final int NUM_PLAYERS = 2;
 
     public SpriteBatch batch;
-    public Engine engine;
+    public static Engine engine;
     public MovementSystem movementSystem;
     private TiledMap map;
 
@@ -60,7 +60,7 @@ public class ShapeWarsModel {
             tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
             tank.add(new VelocityComponent(0, 0));
             tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT));
-            tank.add(new HealthComponent());
+            tank.add(new HealthComponent(100));
             tank.add(new IdentityComponent(i));
             engine.addEntity(tank);
         }
@@ -70,8 +70,12 @@ public class ShapeWarsModel {
         engine.addSystem(inputSystem);
     }
 
-    public void update() {
+    public static void update() {
         engine.update(Gdx.graphics.getDeltaTime());
+    }
+
+    public static void addToEngine(Entity entity) {
+      engine.addEntity(entity);
     }
 
     public TiledMap getMap() {
