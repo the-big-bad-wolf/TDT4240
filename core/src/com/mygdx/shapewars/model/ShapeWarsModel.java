@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
@@ -16,6 +15,7 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.model.system.InputSystem;
 import com.mygdx.shapewars.model.system.MovementSystem;
+import com.mygdx.shapewars.model.system.RicochetSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,8 @@ public class ShapeWarsModel {
 
     public SpriteBatch batch;
     public static Engine engine;
-    public MovementSystem movementSystem;
+    public static MovementSystem movementSystem;
+    public static RicochetSystem ricochetSystem;
     private TiledMap map;
 
     public InputSystem inputSystem;
@@ -64,10 +65,12 @@ public class ShapeWarsModel {
             tank.add(new IdentityComponent(i));
             engine.addEntity(tank);
         }
-        movementSystem = movementSystem.getInstance(map);
-        inputSystem = inputSystem.getInstance();
+        movementSystem = MovementSystem.getInstance(map);
+        inputSystem = InputSystem.getInstance();
+        ricochetSystem = RicochetSystem.getInstance();
         engine.addSystem(movementSystem);
         engine.addSystem(inputSystem);
+        engine.addSystem(ricochetSystem);
     }
 
     public static void update() {
