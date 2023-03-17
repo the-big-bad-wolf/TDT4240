@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 
 public class MainMenuView implements Screen {
-    private final float BUTTON_WIDTH = 200f;
-    private final float BUTTON_HEIGHT = 50f;
+    private final float BUTTON_WIDTH = 750f;
+    private final float BUTTON_HEIGHT = 200f;
     private final Stage stage;
     private final ShapeWarsModel model;
 
@@ -90,11 +90,11 @@ public class MainMenuView implements Screen {
 
         // Set the position of the buttons
         startGameButton.setPosition(Gdx.graphics.getWidth() / 2 - startGameButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - startGameButton.getHeight() / 2 + 50);
+                Gdx.graphics.getHeight() / 2 - startGameButton.getHeight() / 2 + 200);
         hostButton.setPosition(Gdx.graphics.getWidth() / 2 - hostButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 2 - hostButton.getHeight() / 2);
         joinButton.setPosition(Gdx.graphics.getWidth() / 2 - joinButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - joinButton.getHeight() / 2 - 50);
+                Gdx.graphics.getHeight() / 2 - joinButton.getHeight() / 2 - 200);
 
         // Add Clicklisteners to the buttons
         startGameButton.addListener(new ClickListener() {
