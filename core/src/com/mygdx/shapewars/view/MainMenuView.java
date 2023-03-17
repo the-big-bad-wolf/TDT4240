@@ -75,6 +75,7 @@ public class MainMenuView implements Screen {
         Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         TextButtonStyle buttonStyle = new TextButtonStyle();
         buttonStyle.font = skin.getFont("default-font");
+        buttonStyle.font.getData().setScale(3f);
         buttonStyle.up = skin.getDrawable("default-round");
         buttonStyle.down = skin.getDrawable("default-round-down");
 
@@ -95,6 +96,10 @@ public class MainMenuView implements Screen {
                 Gdx.graphics.getHeight() / 2 - hostButton.getHeight() / 2);
         joinButton.setPosition(Gdx.graphics.getWidth() / 2 - joinButton.getWidth() / 2,
                 Gdx.graphics.getHeight() / 2 - joinButton.getHeight() / 2 - 200);
+
+        //Add spacings between the buttons
+        hostButton.setPosition(hostButton.getX(), hostButton.getY() - 50f);
+        joinButton.setPosition(joinButton.getX(), joinButton.getY() - 2 * 50f);
 
         // Add Clicklisteners to the buttons
         startGameButton.addListener(new ClickListener() {
