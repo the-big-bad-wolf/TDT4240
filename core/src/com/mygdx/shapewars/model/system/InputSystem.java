@@ -23,7 +23,7 @@ public class InputSystem extends EntitySystem {
 
   public void addedToEngine(Engine engine) {
     entities = engine.getEntitiesFor(
-        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class).get());
+        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class, IdentityComponent.class).get());
   }
 
   public void update(float deltaTime) {
@@ -52,7 +52,7 @@ public class InputSystem extends EntitySystem {
             Entity bullet = new Entity();
             bullet.add(new PositionComponent(positionComponent.getPosition().x,
                 positionComponent.getPosition().y));
-            bullet.add(new VelocityComponent(20, velocityComponent.getDirection()));
+            bullet.add(new VelocityComponent(10, velocityComponent.getDirection()));
             bullet.add(new SpriteComponent("tank_graphics.png", 10, 10));
             bullet.add(new HealthComponent(2));
             ShapeWarsModel.addToEngine(bullet);

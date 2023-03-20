@@ -67,7 +67,7 @@ public class ShapeWarsModel {
         }
         movementSystem = MovementSystem.getInstance(map);
         inputSystem = InputSystem.getInstance();
-        ricochetSystem = RicochetSystem.getInstance();
+        ricochetSystem = RicochetSystem.getInstance(map);
         engine.addSystem(movementSystem);
         engine.addSystem(inputSystem);
         engine.addSystem(ricochetSystem);
