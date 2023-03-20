@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.controller.ShapeWarsController;
 
 public class HostView implements Screen {
     private final float FIELD_WIDTH = 500f;
@@ -20,6 +21,7 @@ public class HostView implements Screen {
     private final float BUTTON_HEIGHT = 100f;
     private final Stage stage;
     private final ShapeWarsModel model;
+    private ShapeWarsController controller;
     private TextField inputField;
 
     public HostView(ShapeWarsModel model) {
@@ -28,6 +30,10 @@ public class HostView implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         createUI();
+    }
+
+    public void setController(ShapeWarsController controller) {
+        this.controller = controller;
     }
 
     @Override

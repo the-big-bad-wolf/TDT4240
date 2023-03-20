@@ -10,21 +10,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.controller.ShapeWarsController;
 
 public class MainMenuView implements Screen {
     private final float BUTTON_WIDTH = 750f;
     private final float BUTTON_HEIGHT = 200f;
     private final Stage stage;
     private final ShapeWarsModel model;
-
+    private ShapeWarsController controller;
     public MainMenuView(ShapeWarsModel model) {
         this.model = model;
-        this.stage = new Stage(); // todo check if we need to change that
+        this.stage = new Stage();
+
         Gdx.input.setInputProcessor(stage);
 
         createButtons();
     }
 
+    public void setController(ShapeWarsController controller) {
+        this.controller = controller;
+    }
     @Override
     public void show() {
         System.out.println("Main menu view showing");
@@ -80,7 +85,7 @@ public class MainMenuView implements Screen {
         buttonStyle.down = skin.getDrawable("default-round-down");
 
         // Create buttons on the MainMenu
-        TextButton startGameButton = new TextButton("Start Game", skin);
+        final TextButton startGameButton = new TextButton("Start Game", skin);
         TextButton hostButton = new TextButton("Host", skin);
         TextButton joinButton = new TextButton("Join", skin);
 
@@ -105,21 +110,31 @@ public class MainMenuView implements Screen {
         startGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to ShapeWarsView
+                dispose();
+                try {
+                    controller.setScreen(controller.getShapeWarsView());
+                } catch (NullPointerException nullPointerException) {
+                    System.out.println("No Controller found");
+                }
             }
-        }); 
+        });
 
         hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to HostView
+                dispose();
+                try {
+                    controller.setScreen(controller.getHostView());
+                } catch (NullPointerException nullPointerException) {
+                    System.out.println("No Controller found");
+                }
             }
         }); 
 
         joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to JoinView
+                // Switch to JoinView (has to be implemented)
             }
         });
 

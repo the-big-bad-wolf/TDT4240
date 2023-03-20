@@ -5,10 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.controller.ShapeWarsController;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -21,6 +21,7 @@ public class ShapeWarsView implements Screen {
     private final Stage stage;
     private final ShapeWarsModel model;
     private final TiledMap map;
+    private ShapeWarsController controller;
 
     public ShapeWarsView(ShapeWarsModel model) {
         this.model = model;
@@ -28,6 +29,9 @@ public class ShapeWarsView implements Screen {
         map = model.getMap();
     }
 
+    public void setController(ShapeWarsController controller) {
+        this.controller = controller;
+    }
     @Override
     public void show() {
         renderer = new OrthogonalTiledMapRenderer(map);
