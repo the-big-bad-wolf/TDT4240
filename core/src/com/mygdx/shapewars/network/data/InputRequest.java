@@ -4,12 +4,12 @@ import java.util.UUID;
 
 public class InputRequest {
 
-    public UUID uuid; // change name of field
+    public String clientId;
     public int valueInput;
     public int directionInput;
 
-    public InputRequest(UUID uuid, int valueInput, int directionInput) {
-        this.uuid = uuid;
+    public InputRequest(String clientId, int valueInput, int directionInput) {
+        this.clientId = clientId;
         this.valueInput = valueInput;
         this.directionInput = directionInput;
     }

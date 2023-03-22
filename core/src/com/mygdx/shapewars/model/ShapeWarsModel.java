@@ -38,8 +38,8 @@ public class ShapeWarsModel {
     public InputSystem inputSystem;
     public ServerConnector serverConnector; // make nice
     public ClientConnector clientConnector;
-    public UUID clientId;
-    public HashMap<UUID, Integer> clientTankMapping = new HashMap<>();
+    public String clientId;
+    public HashMap<String, Integer> clientTankMapping = new HashMap<>();
 
     public ShapeWarsModel() {
         TmxMapLoader loader = new TmxMapLoader();
@@ -76,7 +76,7 @@ public class ShapeWarsModel {
             this.serverConnector = new ServerConnector(this);
         } else if (this.role == Role.Client) {
             this.clientConnector = new ClientConnector();
-            this.clientId = UUID.randomUUID();
+            this.clientId = UUID.randomUUID().toString();
         }
 
         inputSystem = inputSystem.getInstance(role, clientConnector, clientId);

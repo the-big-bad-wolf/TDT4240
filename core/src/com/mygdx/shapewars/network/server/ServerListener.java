@@ -30,12 +30,12 @@ public class ServerListener extends Listener {
     public void received(Connection connection, Object object) {
         if (object instanceof InputRequest) {
             InputRequest inputRequest = (InputRequest) object;
-            if (!model.clientTankMapping.containsKey(inputRequest.uuid)) {
-                model.clientTankMapping.put(inputRequest.uuid, 1); // change to multiple
+            if (!model.clientTankMapping.containsKey(inputRequest.clientId)) {
+                model.clientTankMapping.put(inputRequest.clientId, 1); // change to multiple
             }
 
             System.out.println(inputRequest.directionInput + " " + inputRequest.valueInput);
-            Entity entity = model.engine.getEntities().get(model.clientTankMapping.get(inputRequest.uuid));
+            Entity entity = model.engine.getEntities().get(model.clientTankMapping.get(inputRequest.clientId));
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
             velocityComponent.setVelocity(inputRequest.valueInput, inputRequest.directionInput);
         }

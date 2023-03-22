@@ -23,11 +23,11 @@ public class InputSystem extends EntitySystem {
 
   private Role role;
   private ClientConnector clientConnector;
-  private UUID clientId; // find a way to remove all of these fields
+  private String clientId; // find a way to remove all of these fields
 
   private static volatile InputSystem instance;
 
-  private InputSystem(Role role, ClientConnector clientConnector, UUID clientId) {
+  private InputSystem(Role role, ClientConnector clientConnector, String clientId) {
       this.role = role;
       this.clientConnector = clientConnector;
       this.clientId = clientId;
@@ -67,7 +67,7 @@ public class InputSystem extends EntitySystem {
 
   }
 
-  public static InputSystem getInstance(Role role, ClientConnector clientConnector, UUID clientId) {
+  public static InputSystem getInstance(Role role, ClientConnector clientConnector, String clientId) {
 		if (instance == null) {
 			synchronized (InputSystem.class) {
 				if (instance == null) {

@@ -34,7 +34,7 @@ public class ClientConnector {
         client.addListener(new ClientListener());
     }
 
-    public void sendInput(UUID clientId, int valueInput, int directionInput) {
+    public void sendInput(String clientId, int valueInput, int directionInput) {
         System.out.println("Sending inputs");
         client.sendUDP(new InputRequest(clientId, valueInput, directionInput));
     }
