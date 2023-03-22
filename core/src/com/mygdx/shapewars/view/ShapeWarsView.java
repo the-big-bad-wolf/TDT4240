@@ -17,7 +17,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 public class ShapeWarsView implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
-
     private final Stage stage;
     private final ShapeWarsModel model;
     private final TiledMap map;
