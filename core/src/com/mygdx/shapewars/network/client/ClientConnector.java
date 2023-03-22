@@ -1,11 +1,14 @@
 package com.mygdx.shapewars.network.client;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.shapewars.model.components.PositionComponent;
+import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
 import java.io.IOException;
-import java.util.UUID;
 
 public class ClientConnector {
 
@@ -27,15 +30,26 @@ public class ClientConnector {
         }
 
         kryo = client.getKryo();
-        kryo.register(InputRequest.class);
-        kryo.register(GameResponse.class);
-        kryo.register(UUID.class);
+
+        // register messages
+        this.kryo.register(InputRequest.class);
+        this.kryo.register(GameResponse.class);
+
+        // register components
+        this.kryo.register(PositionComponent.class);
+        this.kryo.register(VelocityComponent.class);
+        this.kryo.register(PositionComponent[].class);
+        this.kryo.register(VelocityComponent[].class);
+
+        // register helper classes
+        this.kryo.register(Array.class);
+        this.kryo.register(Vector2.class);
+        this.kryo.register(float[].class);
 
         client.addListener(new ClientListener());
     }
 
     public void sendInput(String clientId, int valueInput, int directionInput) {
-        System.out.println("Sending inputs");
         client.sendUDP(new InputRequest(clientId, valueInput, directionInput));
     }
 }

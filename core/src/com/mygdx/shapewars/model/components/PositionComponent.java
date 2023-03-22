@@ -10,6 +10,8 @@ public class PositionComponent implements Component {
     position = new Vector2(x, y);
   }
 
+  public PositionComponent() {} // needed for kryonet deserialization
+
   public Vector2 getPosition() {
     return position;
   }
