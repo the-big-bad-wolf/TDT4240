@@ -50,14 +50,12 @@ public class ShapeWarsModel {
             4, 5, ... = non-existent yet
          */
 
-        map = loader.load("maps/thirdMap.tmx"); // make server send this AFTER sophie is done
+        map = loader.load("maps/map2.tmx"); // make server send this AFTER sophie is done
         batch = new SpriteBatch();
         engine = new Engine();
 
         if (this.role == Role.Server) {
-            TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(2);
-
-        TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
+            TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
 
             List<Vector2> spawnCells = new ArrayList<>();
             for (int y = 0; y < spawnLayer.getHeight(); y++) {
