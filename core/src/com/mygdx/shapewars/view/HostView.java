@@ -13,23 +13,25 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.shapewars.view.UIBuilder;
 
 public class HostView implements Screen {
-    private final float FIELD_WIDTH = 500f;
-    private final float FIELD_HEIGHT = 100f;
-    private final float BUTTON_WIDTH = 250f;
-    private final float BUTTON_HEIGHT = 100f;
     private final Stage stage;
     private final ShapeWarsModel model;
+    private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
     private TextField inputField;
+    private TextButton backButton;
+    private TextButton okButton;
 
     public HostView(ShapeWarsModel model) {
         this.model = model;
-        this.stage = new Stage(); 
+        this.stage = new Stage();
+        this.uiBuilder = new UIBuilder(this.stage);
+
         Gdx.input.setInputProcessor(stage);
 
-        createUI();
+        buildUI();
     }
 
     public void setController(ShapeWarsController controller) {
@@ -80,66 +82,39 @@ public class HostView implements Screen {
         stage.dispose();
     }
 
-    private void createUI() {
-        
-        // Create textfield style
-        Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        TextFieldStyle fieldStyle = new TextFieldStyle();
-        fieldStyle.font = skin.getFont("default-font");
-        fieldStyle.font.getData().setScale(3f);
-        fieldStyle.background = skin.getDrawable("default-scroll");
-        fieldStyle.cursor = skin.getDrawable("default-round");
-        
-        // Create button style
-        TextButtonStyle buttonStyle = new TextButtonStyle();
-        buttonStyle.font = skin.getFont("default-font");
-        buttonStyle.font.getData().setScale(3f);
-        buttonStyle.up = skin.getDrawable("default-round");
-        buttonStyle.down = skin.getDrawable("default-round-down");
+    private void buildUI() {
+        float inputFieldWidth = 500;
+        float inputFieldHeight= 100;
+        float allButtonsWidth = 250f;
+        float allButtonsHeight = 100f;
+        float inputFieldXPos = Gdx.graphics.getWidth() / 2 - inputFieldWidth / 2;
+        float inputFieldYPos = Gdx.graphics.getHeight() / 2 + inputFieldHeight / 2 + 100f;
+        float backButtonXPos = Gdx.graphics.getWidth() / 2 - allButtonsWidth - 50f;
+        float backButtonYPos = Gdx.graphics.getHeight() / 2 - allButtonsHeight / 2 - 100f;
+        float okButtonXPos = Gdx.graphics.getWidth() / 2 + 50f;
+        float okButtonYPos = Gdx.graphics.getHeight() / 2 - allButtonsHeight / 2 - 100f;
 
-        // Create textfield
-        inputField = new TextField("", fieldStyle);
-        inputField.setMessageText("String input");
+        inputField = uiBuilder.buildTextField("String input", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
+        backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
+        okButton = uiBuilder.buildButton("OK", allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos);
 
-        // Create buttons
-        TextButton backButton = new TextButton("Back", skin);
-        TextButton okButton = new TextButton("OK", skin);
+        addActionsToUI();
+    }
 
-        // Set the size of the textfield
-        inputField.setSize(FIELD_WIDTH, FIELD_HEIGHT);
-
-        // Set the size of the buttons
-        backButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        okButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-
-        // Set the position of the textfield
-        inputField.setPosition(Gdx.graphics.getWidth() / 2 - inputField.getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 + inputField.getHeight() / 2 + 100f);
-
-        // Set the position of the buttons
-        backButton.setPosition(Gdx.graphics.getWidth() / 2 - BUTTON_WIDTH - 50f,
-                Gdx.graphics.getHeight() / 2 - BUTTON_HEIGHT / 2 - 100f);
-        okButton.setPosition(Gdx.graphics.getWidth() / 2 + 50f,
-                Gdx.graphics.getHeight() / 2 - BUTTON_HEIGHT / 2 - 100f);
-
-        // Add Clicklisteners to the buttons
+    private void addActionsToUI()
+    {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to MainMenuView
+                // Switch to MainMenuView (has to be implemented after BugFix for HostButton)
             }
         }); 
 
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Do nothing
+                // Has to be decided and implemented
             }
         });
-
-        // Add the buttons and textfield to the stage
-        stage.addActor(inputField);
-        stage.addActor(backButton);
-        stage.addActor(okButton);
     }
 }

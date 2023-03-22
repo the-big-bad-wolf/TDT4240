@@ -11,20 +11,25 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.shapewars.view.UIBuilder;
 
 public class MainMenuView implements Screen {
-    private final float BUTTON_WIDTH = 750f;
-    private final float BUTTON_HEIGHT = 200f;
     private final Stage stage;
     private final ShapeWarsModel model;
+    private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
+    private TextButton startButton;
+    private TextButton hostButton;
+    private TextButton joinButton;
+
     public MainMenuView(ShapeWarsModel model) {
         this.model = model;
         this.stage = new Stage();
+        this.uiBuilder = new UIBuilder(this.stage);
 
         Gdx.input.setInputProcessor(stage);
 
-        createButtons();
+        buildUI();
     }
 
     public void setController(ShapeWarsController controller) {
@@ -74,40 +79,26 @@ public class MainMenuView implements Screen {
         stage.dispose();
     }
 
-    private void createButtons() {
+    private void buildUI() {
+        float allButtonsWidth = 750f;
+        float allButtonsHeight = 200f;
+        float startButtonXPos = Gdx.graphics.getWidth() / 2 - allButtonsWidth / 2;
+        float startButtonYPos = Gdx.graphics.getHeight() / 2 - allButtonsHeight / 2 + 200;
+        float hostButtonXPos = Gdx.graphics.getWidth() / 2 - allButtonsWidth / 2;
+        float hostButtonYPos = Gdx.graphics.getHeight() / 2 - allButtonsHeight / 2 - 50f;
+        float joinButtonXPos = Gdx.graphics.getWidth() / 2 - allButtonsWidth / 2;
+        float joinButtonYPos = Gdx.graphics.getHeight() / 2 - allButtonsHeight / 2 - 300;
 
-        // Create button style
-        Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        TextButtonStyle buttonStyle = new TextButtonStyle();
-        buttonStyle.font = skin.getFont("default-font");
-        buttonStyle.font.getData().setScale(3f);
-        buttonStyle.up = skin.getDrawable("default-round");
-        buttonStyle.down = skin.getDrawable("default-round-down");
+        startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
+        hostButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
+        joinButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
 
-        // Create buttons on the MainMenu
-        final TextButton startGameButton = new TextButton("Start Game", skin);
-        TextButton hostButton = new TextButton("Host", skin);
-        TextButton joinButton = new TextButton("Join", skin);
+        addActionsToUI();
+    }
 
-        // Set the size of the buttons
-        startGameButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        hostButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        joinButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-
-        // Set the position of the buttons
-        startGameButton.setPosition(Gdx.graphics.getWidth() / 2 - startGameButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - startGameButton.getHeight() / 2 + 200);
-        hostButton.setPosition(Gdx.graphics.getWidth() / 2 - hostButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - hostButton.getHeight() / 2);
-        joinButton.setPosition(Gdx.graphics.getWidth() / 2 - joinButton.getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - joinButton.getHeight() / 2 - 200);
-
-        //Add spacings between the buttons
-        hostButton.setPosition(hostButton.getX(), hostButton.getY() - 50f);
-        joinButton.setPosition(joinButton.getX(), joinButton.getY() - 2 * 50f);
-
-        // Add Clicklisteners to the buttons
-        startGameButton.addListener(new ClickListener() {
+    private void addActionsToUI()
+    {
+        startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
@@ -134,13 +125,8 @@ public class MainMenuView implements Screen {
         joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to JoinView (has to be implemented)
+                // Switch to JoinView (has to be decided and implemented)
             }
         });
-
-        // Add the buttons to the stage
-        stage.addActor(startGameButton);
-        stage.addActor(hostButton);
-        stage.addActor(joinButton);
     }
 }
