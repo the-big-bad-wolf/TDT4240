@@ -62,7 +62,7 @@ public class InputSystem extends EntitySystem {
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
             velocityComponent.setVelocity(inputValue, inputDirection);
         } else {
-            clientConnector.sendInput(null, inputValue, inputDirection); // update clientId
+            clientConnector.sendInput(clientId, inputValue, inputDirection); // update clientId
         }
 
   }

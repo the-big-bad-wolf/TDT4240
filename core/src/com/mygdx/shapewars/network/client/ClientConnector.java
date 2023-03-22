@@ -26,7 +26,7 @@ public class ClientConnector {
             e.printStackTrace();
         }
 
-        Kryo kryo = client.getKryo();
+        kryo = client.getKryo();
         kryo.register(InputRequest.class);
         kryo.register(GameResponse.class);
         kryo.register(UUID.class);
@@ -36,6 +36,6 @@ public class ClientConnector {
 
     public void sendInput(UUID clientId, int valueInput, int directionInput) {
         System.out.println("Sending inputs");
-        client.sendTCP(new InputRequest(clientId, valueInput, directionInput));
+        client.sendUDP(new InputRequest(clientId, valueInput, directionInput));
     }
 }
