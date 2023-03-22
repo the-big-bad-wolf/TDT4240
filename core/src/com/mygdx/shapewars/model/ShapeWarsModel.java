@@ -36,7 +36,7 @@ public class ShapeWarsModel {
     private TiledMap map;
     private Role role = Role.Server; // change with client/ hosts screens
     public InputSystem inputSystem;
-    public ServerConnector serverConnector; // make nice
+    public ServerConnector serverConnector; // make nice, no need to have two connectors here
     public ClientConnector clientConnector;
     public String clientId;
     public HashMap<String, Integer> clientTankMapping = new HashMap<>();
@@ -77,6 +77,11 @@ public class ShapeWarsModel {
         } else if (this.role == Role.Client) {
             this.clientConnector = new ClientConnector(this);
             this.clientId = UUID.randomUUID().toString();
+
+            for (int i = 0; i < NUM_PLAYERS; i++) {
+                Entity tank = new Entity();
+                engine.addEntity(tank);
+            }
         }
 
         inputSystem = inputSystem.getInstance(role, clientConnector, clientId);
