@@ -2,6 +2,7 @@ package com.mygdx.shapewars.network.server;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
 
@@ -12,8 +13,9 @@ public class ServerConnector {
 
     private Server server;
     private Kryo kryo;
+    private ShapeWarsModel model;
 
-    public ServerConnector() {
+    public ServerConnector(ShapeWarsModel model) {
         this.server = new Server();
         this.server.start();
         this.kryo = kryo;
@@ -29,7 +31,7 @@ public class ServerConnector {
         this.kryo.register(GameResponse.class);
         kryo.register(UUID.class);
 
-        this.server.addListener(new ServerListener());
+        this.server.addListener(new ServerListener(model));
 
     }
 }

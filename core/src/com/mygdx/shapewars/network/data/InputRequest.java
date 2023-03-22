@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class InputRequest {
 
-    public UUID uuid;
+    public UUID uuid; // change name of field
     public int valueInput;
     public int directionInput;
 

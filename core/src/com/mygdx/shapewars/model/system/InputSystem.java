@@ -16,17 +16,21 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
 
+import java.util.UUID;
+
 public class InputSystem extends EntitySystem {
   private ImmutableArray<Entity> entities;
 
   private Role role;
   private ClientConnector clientConnector;
-  
+  private UUID clientId; // find a way to remove all of these fields
+
   private static volatile InputSystem instance;
 
-  private InputSystem(Role role, ClientConnector clientConnector) {
+  private InputSystem(Role role, ClientConnector clientConnector, UUID clientId) {
       this.role = role;
       this.clientConnector = clientConnector;
+      this.clientId = clientId;
   };
 
   public void addedToEngine(Engine engine) {
@@ -56,7 +60,6 @@ public class InputSystem extends EntitySystem {
         if (role == Role.Server) {
             Entity entity = entities.get(0);
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-            IdentityComponent identityComponent = ComponentMappers.identity.get(entity);
             velocityComponent.setVelocity(inputValue, inputDirection);
         } else {
             clientConnector.sendInput(null, inputValue, inputDirection); // update clientId
@@ -64,11 +67,11 @@ public class InputSystem extends EntitySystem {
 
   }
 
-  public static InputSystem getInstance(Role role, ClientConnector clientConnector) {
+  public static InputSystem getInstance(Role role, ClientConnector clientConnector, UUID clientId) {
 		if (instance == null) {
 			synchronized (InputSystem.class) {
 				if (instance == null) {
-					instance = new InputSystem(role, clientConnector);
+					instance = new InputSystem(role, clientConnector, clientId);
 				}
 			}
 		}

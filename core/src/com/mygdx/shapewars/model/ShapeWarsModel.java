@@ -21,13 +21,15 @@ import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class ShapeWarsModel {
 
     public static final int TANK_WIDTH = 75;
     public static final int TANK_HEIGHT = 75;
-    public static final int NUM_PLAYERS = 2;
+    public static final int NUM_PLAYERS = 2; // add lobby and don't hardcode this
     public SpriteBatch batch;
     public Engine engine;
     public MovementSystem movementSystem;
@@ -36,6 +38,8 @@ public class ShapeWarsModel {
     public InputSystem inputSystem;
     public ServerConnector serverConnector; // make nice
     public ClientConnector clientConnector;
+    public UUID clientId;
+    public HashMap<UUID, Integer> clientTankMapping = new HashMap<>();
 
     public ShapeWarsModel() {
         TmxMapLoader loader = new TmxMapLoader();
@@ -69,12 +73,13 @@ public class ShapeWarsModel {
             movementSystem = movementSystem.getInstance(map);
             engine.addSystem(movementSystem);
 
-            this.serverConnector = new ServerConnector();
+            this.serverConnector = new ServerConnector(this);
         } else if (this.role == Role.Client) {
             this.clientConnector = new ClientConnector();
+            this.clientId = UUID.randomUUID();
         }
 
-        inputSystem = inputSystem.getInstance(role, clientConnector);
+        inputSystem = inputSystem.getInstance(role, clientConnector, clientId);
         engine.addSystem(inputSystem);
     }
 
