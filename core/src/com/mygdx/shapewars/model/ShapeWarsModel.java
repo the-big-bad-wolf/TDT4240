@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
@@ -22,8 +21,8 @@ import java.util.List;
 
 public class ShapeWarsModel {
 
-    public static final int TANK_WIDTH = 75;
-    public static final int TANK_HEIGHT = 75;
+    public static final int TANK_WIDTH = 55;
+    public static final int TANK_HEIGHT = 55;
 
     public static final int NUM_PLAYERS = 2;
 
@@ -36,13 +35,20 @@ public class ShapeWarsModel {
 
     public ShapeWarsModel() {
         TmxMapLoader loader = new TmxMapLoader();
-        map = loader.load("maps/thirdMap.tmx");
+        /*
+            current map structure:
+            0 = groundLayer
+            1 = collisionLayer
+            2 = bulletLayer
+            3 = spawnLayer
+            4, 5, ... = non-existent yet
+         */
+        map = loader.load("maps/map4.tmx");
         batch = new SpriteBatch();
         engine = new Engine();
 
 
-
-        TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(2);
+        TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
 
         List<Vector2> spawnCells = new ArrayList<>();
         for (int y = 0; y < spawnLayer.getHeight(); y++) {
