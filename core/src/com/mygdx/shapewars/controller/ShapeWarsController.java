@@ -37,7 +37,7 @@ public class ShapeWarsController {
         if (currentScreen instanceof ShapeWarsView) {
             model.update();
         } else {
-            if (Gdx.input.isKeyPressed(Input.Keys.F)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.F) || Gdx.input.isTouched()) {
                 currentScreen = shapeWarsView;
                 currentScreen.show();
             }

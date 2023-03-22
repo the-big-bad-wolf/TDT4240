@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
@@ -26,11 +25,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class ShapeWarsModel {
-
     public static final int TANK_WIDTH = 75;
     public static final int TANK_HEIGHT = 75;
     public static final int NUM_PLAYERS = 2; // add lobby and don't hardcode this
-    public SpriteBatch batch;
+  public SpriteBatch batch;
     public Engine engine;
     public MovementSystem movementSystem;
     private TiledMap map;
@@ -43,12 +41,23 @@ public class ShapeWarsModel {
 
     public ShapeWarsModel() {
         TmxMapLoader loader = new TmxMapLoader();
+        /*
+            current map structure:
+            0 = groundLayer
+            1 = collisionLayer
+            2 = bulletLayer
+            3 = spawnLayer
+            4, 5, ... = non-existent yet
+         */
+
         map = loader.load("maps/thirdMap.tmx"); // make server send this AFTER sophie is done
         batch = new SpriteBatch();
         engine = new Engine();
 
         if (this.role == Role.Server) {
             TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(2);
+
+        TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
 
             List<Vector2> spawnCells = new ArrayList<>();
             for (int y = 0; y < spawnLayer.getHeight(); y++) {
@@ -57,6 +66,7 @@ public class ShapeWarsModel {
                     if (cell != null) {
                         spawnCells.add(new Vector2(x, y));
                     }
+
                 }
             }
 

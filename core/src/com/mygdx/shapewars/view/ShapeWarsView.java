@@ -5,21 +5,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
-
 public class ShapeWarsView implements Screen {
-    private OrthogonalTiledMapRenderer renderer;
+    private OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera camera;
     private final Stage stage;
     private final ShapeWarsModel model;
     private final TiledMap map;
+    private FitViewport fitViewport;
+    private Sprite backgroundSprite;
+    private ExtendViewport extendViewport;
 
 
     public ShapeWarsView(ShapeWarsModel model) {
@@ -30,14 +35,24 @@ public class ShapeWarsView implements Screen {
 
     @Override
     public void show() {
-        renderer = new OrthogonalTiledMapRenderer(map);
-        camera = new OrthographicCamera();
+        // create a render object to easily render all layers, objects, etc. of our TileMap
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        int mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
-        int mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
+        // creation and setting of map to make sure dimensions are set right and whole map is shown
+        OrthographicCamera camera = new OrthographicCamera();
+        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
+        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
         camera.setToOrtho(false, mapWidth, mapHeight);
-        camera.position.set(mapWidth/2f, mapHeight/2f, 0);
         camera.update();
+
+        // fitViewport scales the game world to fit on screen with the correct dimensions
+        fitViewport = new FitViewport(mapWidth, mapHeight, camera);
+        // extendViewport allows for a scalable background that shows when fitViewport doesn't use the whole screen
+        extendViewport = new ExtendViewport(mapWidth, mapHeight);
+
+        // Background that shows around the actual playing field
+        Texture background = new Texture(Gdx.files.internal("maps/mapExpansionGrass.png"));
+        backgroundSprite = new Sprite(background);
 
         Gdx.input.setInputProcessor(stage);
         render(Gdx.graphics.getDeltaTime());
@@ -54,23 +69,32 @@ public class ShapeWarsView implements Screen {
             layers[i] = i;
         }
 
-        renderer.setView(camera);
-        renderer.render(layers);
+        // drawing of the background, first sets the view to the extendViewport
+        extendViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        mapRenderer.setView((OrthographicCamera) extendViewport.getCamera());
+        mapRenderer.getBatch().begin();
+        backgroundSprite.setSize(extendViewport.getWorldWidth(), extendViewport.getWorldHeight());
+        backgroundSprite.setPosition(-extendViewport.getWorldWidth() / 2, -extendViewport.getWorldHeight() / 2);
+        backgroundSprite.draw(mapRenderer.getBatch());
+        mapRenderer.getBatch().end();
 
-        renderer.getBatch().begin();
+        // drawing of actual map, therefore setting view back to fitViewpoint
+        fitViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        mapRenderer.setView((OrthographicCamera) fitViewport.getCamera());
+        mapRenderer.render(layers);
+        mapRenderer.getBatch().begin();
         for (Entity entity : model.engine.getEntities()) {
             // TODO access components without entities
             SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
-            spriteComponent.getSprite().draw(renderer.getBatch());
+            spriteComponent.getSprite().draw(mapRenderer.getBatch());
         }
-        renderer.getBatch().end();
+        mapRenderer.getBatch().end();
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
+        fitViewport.update(width, height);
+        extendViewport.update(width, height);
     }
 
     @Override
@@ -91,6 +115,6 @@ public class ShapeWarsView implements Screen {
     @Override
     public void dispose() {
         map.dispose();
-        renderer.dispose();
+        mapRenderer.dispose();
     }
 }
