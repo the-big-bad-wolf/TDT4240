@@ -21,7 +21,7 @@ public class VelocityComponent implements Component{
 
   public void setVelocity(float v, float d) {
     value = v;
-    direction = d;
+    direction += d;
   }
 
   public void setValue(float v) {

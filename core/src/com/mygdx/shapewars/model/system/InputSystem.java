@@ -13,13 +13,25 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.network.Role;
+import com.mygdx.shapewars.network.client.ClientConnector;
+
+import java.util.UUID;
 
 public class InputSystem extends EntitySystem {
   private ImmutableArray<Entity> entities;
-  
+
+  private Role role;
+  private ClientConnector clientConnector;
+  private String clientId; // find a way to remove all of these fields
+
   private static volatile InputSystem instance;
 
-  private InputSystem() {};
+  private InputSystem(Role role, ClientConnector clientConnector, String clientId) {
+      this.role = role;
+      this.clientConnector = clientConnector;
+      this.clientId = clientId;
+  };
 
   public void addedToEngine(Engine engine) {
     entities = engine.getEntitiesFor(
@@ -27,54 +39,39 @@ public class InputSystem extends EntitySystem {
   }
 
   public void update(float deltaTime) {
-    for (Entity entity : entities) {
-      VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
+        int inputDirection = 0, inputValue = 0;
 
-      IdentityComponent identityComponent = ComponentMappers.identity.get(entity);
-
-      if (identityComponent.getId() == 0) {
-          if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            velocityComponent.addDirection(2);
-          } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            velocityComponent.addDirection(-2);
-          }
-
-          //Controls value of velocity
-          if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            velocityComponent.setValue(5);
-          } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            velocityComponent.setValue(-5);
-          } else {
-            velocityComponent.setValue(0);
-          }
-      } else if (identityComponent.getId() == 1) {
-            //Controls direction of velocity
-
-            //Controls direction of velocity
-          if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            velocityComponent.addDirection(2);
-          } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            velocityComponent.addDirection(-2);
-          }
-
-          //Controls value of velocity
-          if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            velocityComponent.setValue(5);
-          } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            velocityComponent.setValue(-5);
-          } else {
-            velocityComponent.setValue(0);
-          }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            inputDirection = 2;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            inputDirection = -2;
         }
-      }
+
+        //Controls value of velocity
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            inputValue = 5;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            inputValue = -5;
+        }
+
+
+
+        // todo completely change
+        if (role == Role.Server) {
+            Entity entity = entities.get(0);
+            VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
+            velocityComponent.setVelocity(inputValue, inputDirection);
+        } else {
+            clientConnector.sendInput(clientId, inputValue, inputDirection); // update clientId
+        }
 
   }
 
-  public static InputSystem getInstance() {
+  public static InputSystem getInstance(Role role, ClientConnector clientConnector, String clientId) {
 		if (instance == null) {
 			synchronized (InputSystem.class) {
 				if (instance == null) {
-					instance = new InputSystem();
+					instance = new InputSystem(role, clientConnector, clientId);
 				}
 			}
 		}
