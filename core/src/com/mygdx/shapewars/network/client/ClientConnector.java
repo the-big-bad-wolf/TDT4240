@@ -13,7 +13,7 @@ public class ClientConnector {
     private Kryo kryo;
 
     public ClientConnector() {
-        new ClientConnector("10.22.10.149");
+       this("10.22.10.149");
     }
 
     public ClientConnector(String ipAddress) {
@@ -29,6 +29,7 @@ public class ClientConnector {
         Kryo kryo = client.getKryo();
         kryo.register(InputRequest.class);
         kryo.register(GameResponse.class);
+        kryo.register(UUID.class);
 
         client.addListener(new ClientListener());
     }

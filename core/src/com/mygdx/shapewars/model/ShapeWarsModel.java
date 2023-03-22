@@ -42,8 +42,6 @@ public class ShapeWarsModel {
         map = loader.load("maps/thirdMap.tmx"); // make server send this AFTER sophie is done
         batch = new SpriteBatch();
         engine = new Engine();
-        inputSystem = inputSystem.getInstance(role, clientConnector);
-        engine.addSystem(inputSystem);
 
         if (this.role == Role.Server) {
             TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(2);
@@ -76,6 +74,8 @@ public class ShapeWarsModel {
             this.clientConnector = new ClientConnector();
         }
 
+        inputSystem = inputSystem.getInstance(role, clientConnector);
+        engine.addSystem(inputSystem);
     }
 
     public void update() {

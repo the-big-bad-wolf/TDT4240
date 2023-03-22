@@ -13,4 +13,6 @@ public class InputRequest {
         this.valueInput = valueInput;
         this.directionInput = directionInput;
     }
+
+    public InputRequest() {}
 }

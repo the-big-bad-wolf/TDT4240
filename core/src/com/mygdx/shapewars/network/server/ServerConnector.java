@@ -6,6 +6,7 @@ import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class ServerConnector {
 
@@ -26,6 +27,7 @@ public class ServerConnector {
         this.kryo = server.getKryo();
         this.kryo.register(InputRequest.class);
         this.kryo.register(GameResponse.class);
+        kryo.register(UUID.class);
 
         this.server.addListener(new ServerListener());
 

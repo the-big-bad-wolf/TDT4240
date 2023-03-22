@@ -20,7 +20,7 @@ public class ServerListener extends Listener {
     public void received(Connection connection, Object object) {
         if (object instanceof InputRequest) {
             InputRequest inputRequest = (InputRequest) object;
-            System.out.println(inputRequest.uuid.toString() + " " + inputRequest.directionInput + " " + inputRequest.valueInput);
+            System.out.println(inputRequest.directionInput + " " + inputRequest.valueInput);
         }
     }
 }
