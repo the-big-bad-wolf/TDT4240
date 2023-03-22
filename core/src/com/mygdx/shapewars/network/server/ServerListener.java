@@ -5,8 +5,12 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
+import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
+import java.util.ArrayList;
+
 
 public class ServerListener extends Listener {
 
@@ -38,6 +42,18 @@ public class ServerListener extends Listener {
             Entity entity = model.engine.getEntities().get(model.clientTankMapping.get(inputRequest.clientId));
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
             velocityComponent.setVelocity(inputRequest.valueInput, inputRequest.directionInput);
+
+            ArrayList<VelocityComponent> velocityComponentsNew = new ArrayList<>();
+            ArrayList<PositionComponent> positionComponentsNew = new ArrayList<>();
+            for (Entity e : model.engine.getEntities()) {
+                velocityComponentsNew.add(ComponentMappers.velocity.get(e));
+                positionComponentsNew.add(ComponentMappers.position.get(e));
+            }
+
+            PositionComponent[] positionComponentsArray = positionComponentsNew.toArray(new PositionComponent[positionComponentsNew.size()]);
+            VelocityComponent[] velocityComponentsArray = velocityComponentsNew.toArray(new VelocityComponent[velocityComponentsNew.size()]);
+            GameResponse response = new GameResponse(velocityComponentsArray, positionComponentsArray);
+            connection.sendUDP(response);
         }
     }
 }
