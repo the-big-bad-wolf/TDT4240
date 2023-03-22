@@ -16,7 +16,6 @@ public class ServerConnector {
 
     private Server server;
     private Kryo kryo;
-    private ShapeWarsModel model;
 
     public ServerConnector(ShapeWarsModel model) {
         this.server = new Server();

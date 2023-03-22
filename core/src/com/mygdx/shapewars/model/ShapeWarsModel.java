@@ -75,7 +75,7 @@ public class ShapeWarsModel {
 
             this.serverConnector = new ServerConnector(this);
         } else if (this.role == Role.Client) {
-            this.clientConnector = new ClientConnector();
+            this.clientConnector = new ClientConnector(this);
             this.clientId = UUID.randomUUID().toString();
         }
 

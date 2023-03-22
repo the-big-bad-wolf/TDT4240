@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.data.GameResponse;
@@ -15,11 +16,11 @@ public class ClientConnector {
     private Client client;
     private Kryo kryo;
 
-    public ClientConnector() {
-       this("10.22.10.149");
+    public ClientConnector(ShapeWarsModel model) {
+       this(model, "10.22.10.149");
     }
 
-    public ClientConnector(String ipAddress) {
+    public ClientConnector(ShapeWarsModel model, String ipAddress) {
         this.client = new com.esotericsoftware.kryonet.Client();
         this.client.start();
 
@@ -46,7 +47,7 @@ public class ClientConnector {
         this.kryo.register(Vector2.class);
         this.kryo.register(float[].class);
 
-        client.addListener(new ClientListener());
+        client.addListener(new ClientListener(model));
     }
 
     public void sendInput(String clientId, int valueInput, int directionInput) {

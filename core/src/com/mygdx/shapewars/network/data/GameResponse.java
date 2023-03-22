@@ -5,14 +5,8 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 
 public class GameResponse {
 
-    public long time = System.currentTimeMillis();
-
     public VelocityComponent[] velocityComponents;
     public PositionComponent[] positionComponents;
-
-    public GameResponse(long time) {
-        this.time = time;
-    }
 
     public GameResponse() {}
 
