@@ -3,10 +3,12 @@ package com.mygdx.shapewars.view;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -18,7 +20,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 
 public class ShapeWarsView implements Screen {
     private OrthogonalTiledMapRenderer mapRenderer;
-    private OrthographicCamera camera;
+    private ShapeRenderer shapeRenderer;
     private final Stage stage;
     private final ShapeWarsModel model;
     private final TiledMap map;
@@ -37,6 +39,7 @@ public class ShapeWarsView implements Screen {
     public void show() {
         // create a render object to easily render all layers, objects, etc. of our TileMap
         mapRenderer = new OrthogonalTiledMapRenderer(map);
+        shapeRenderer = new ShapeRenderer();
 
         // creation and setting of map to make sure dimensions are set right and whole map is shown
         OrthographicCamera camera = new OrthographicCamera();
@@ -89,6 +92,15 @@ public class ShapeWarsView implements Screen {
             spriteComponent.getSprite().draw(mapRenderer.getBatch());
         }
         mapRenderer.getBatch().end();
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(135/255f, 206/255f, 235/255f, 0.3f));
+        shapeRenderer.circle(model.getJoystick().getOuterCircle().x, model.getJoystick().getOuterCircle().y, model.getJoystick().getOuterCircle().radius);
+        shapeRenderer.setColor(new Color(0, 0, 139/255f, 0.3f));
+        shapeRenderer.circle(model.getJoystick().getInnerCircle().x, model.getJoystick().getInnerCircle().y, model.getJoystick().getInnerCircle().radius);
+        shapeRenderer.end();
     }
 
     @Override
