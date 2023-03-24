@@ -5,10 +5,10 @@ import java.util.UUID;
 public class InputRequest {
 
     public String clientId;
-    public int valueInput;
-    public int directionInput;
+    public float valueInput;
+    public float directionInput;
 
-    public InputRequest(String clientId, int valueInput, int directionInput) {
+    public InputRequest(String clientId, float valueInput, float directionInput) {
         this.clientId = clientId;
         this.valueInput = valueInput;
         this.directionInput = directionInput;

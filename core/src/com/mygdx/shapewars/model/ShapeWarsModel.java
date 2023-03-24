@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.shapewars.controller.Joystick;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
@@ -38,6 +39,7 @@ public class ShapeWarsModel {
     public ClientConnector clientConnector;
     public String clientId;
     public HashMap<String, Integer> clientTankMapping = new HashMap<>();
+    public Joystick joystick;
 
     public ShapeWarsModel() {
         TmxMapLoader loader = new TmxMapLoader();
@@ -53,6 +55,8 @@ public class ShapeWarsModel {
         map = loader.load("maps/map2.tmx"); // make server send this AFTER sophie is done
         batch = new SpriteBatch();
         engine = new Engine();
+
+        joystick = new Joystick(200, 200, 70, 40);
 
         if (this.role == Role.Server) {
             TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
@@ -87,7 +91,7 @@ public class ShapeWarsModel {
             this.clientId = UUID.randomUUID().toString();
         }
 
-        inputSystem = inputSystem.getInstance(role, clientConnector, clientId);
+        inputSystem = inputSystem.getInstance(role, clientConnector, clientId, joystick);
         engine.addSystem(inputSystem);
     }
 
@@ -97,5 +101,9 @@ public class ShapeWarsModel {
 
     public TiledMap getMap() {
         return map;
+    }
+
+    public Joystick getJoystick() {
+        return joystick;
     }
 }
