@@ -81,6 +81,10 @@ public class ShapeWarsModel {
       engine.addEntity(entity);
     }
 
+    public static void removedFromEngine(Entity entity) {
+        engine.removeEntity(entity);
+      }
+
     public TiledMap getMap() {
         return map;
     }

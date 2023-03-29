@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
@@ -18,6 +19,7 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 
 public class RicochetSystem extends EntitySystem {
   private ImmutableArray<Entity> entities;
+  private ImmutableArray<Entity> tanks;
 
   private TiledMap map;
 
@@ -31,6 +33,8 @@ public class RicochetSystem extends EntitySystem {
     entities = engine.getEntitiesFor(
         Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class)
             .exclude(IdentityComponent.class).get());
+    tanks = engine.getEntitiesFor(
+        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class, IdentityComponent.class).get());
   }
 
   public void update(float deltaTime) {
@@ -38,6 +42,19 @@ public class RicochetSystem extends EntitySystem {
       PositionComponent position = ComponentMappers.position.get(entity);
       VelocityComponent velocity = ComponentMappers.velocity.get(entity);
       SpriteComponent sprite = ComponentMappers.sprite.get(entity);
+
+      // Check if bullet hits tank
+      for (Entity tank : tanks) {
+        PositionComponent tankPosition = ComponentMappers.position.get(tank);
+        SpriteComponent tankSprite = ComponentMappers.sprite.get(tank);
+        HealthComponent tankHealth = ComponentMappers.health.get(tank);
+
+        if (checkCollisionWithTank(position, tankPosition, tankSprite)) {
+          tankHealth.takeDamage(1);
+          ShapeWarsModel.removedFromEngine(entity);
+          break;
+        }
+      }
 
       // calculate and set position
       float radians = MathUtils.degreesToRadians * velocity.getDirection();
@@ -130,6 +147,16 @@ public class RicochetSystem extends EntitySystem {
       }
     }
     return null;
+  }
+
+  private boolean checkCollisionWithTank(PositionComponent bulletPosition, PositionComponent tankPosition, SpriteComponent tankSprite) {
+    float x1 = tankPosition.getPosition().x;
+    float y1 = tankPosition.getPosition().y;
+    float width = tankSprite.getSprite().getWidth();
+    float height = tankSprite.getSprite().getWidth();
+    float x2 = bulletPosition.getPosition().x;
+    float y2 = bulletPosition.getPosition().y;
+    return x2 >= x1 && x2 <= x1 + width && y2 >= y1 && y2 <= y1 + height;
   }
 
   public static RicochetSystem getInstance(TiledMap map) {
