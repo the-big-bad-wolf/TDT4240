@@ -54,8 +54,6 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         this.joystick = joystick;
     }
 
-    ;
-
     public void addedToEngine(Engine engine) {
     entities = engine.getEntitiesFor(
         Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
@@ -107,6 +105,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 bullet.add(new SpriteComponent("tank_graphics.png", 10, 10));
                 bullet.add(new HealthComponent(2));
                 ShapeWarsModel.addToEngine(bullet);
+                space = false;
             }
         } else {
             clientConnector.sendInput(clientId, inputValue, inputDirection); // update clientId
@@ -137,9 +136,6 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         } else if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN) {
             down = true;
         }
-        if (keycode == Input.Keys.SPACE) {
-            space = true;
-        }
         usedJoystick = false;
         return false;
     }
@@ -157,7 +153,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             down = false;
         }
         if (keycode == Input.Keys.SPACE) {
-            space = false;
+            space = true;
         }
         usedJoystick = false;
         return false;
