@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.controller.ShapeWarsController;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -27,7 +28,7 @@ public class ShapeWarsView implements Screen {
     private FitViewport fitViewport;
     private Sprite backgroundSprite;
     private ExtendViewport extendViewport;
-
+    private ShapeWarsController controller;
 
     public ShapeWarsView(ShapeWarsModel model) {
         this.model = model;
@@ -35,6 +36,9 @@ public class ShapeWarsView implements Screen {
         map = model.getMap();
     }
 
+    public void setController(ShapeWarsController controller) {
+        this.controller = controller;
+    }
     @Override
     public void show() {
         // create a render object to easily render all layers, objects, etc. of our TileMap
