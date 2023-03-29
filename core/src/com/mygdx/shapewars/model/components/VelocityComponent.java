@@ -23,6 +23,11 @@ public class VelocityComponent implements Component{
 
   public void setVelocity(float v, float d) {
     value = v;
+    direction = d;
+  }
+
+  public void setMagnitudeAndDirection(float v, float d) {
+    value = v;
     direction += d;
   }
 

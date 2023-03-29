@@ -34,7 +34,8 @@ public class MovementSystem extends EntitySystem {
 
 	// todo remove everything sprite here, move to sprite system
 	public void update(float deltaTime) {
-		for (Entity entity : entities) {
+		for (int i = 0; i < entities.size(); i++) {
+			Entity entity = entities.get(i);
 			PositionComponent position = ComponentMappers.position.get(entity);
 			VelocityComponent velocity = ComponentMappers.velocity.get(entity);
 			SpriteComponent sprite = ComponentMappers.sprite.get(entity);

@@ -39,10 +39,9 @@ public class ServerListener extends Listener {
                 model.clientTankMapping.put(inputRequest.clientId, 1); // change to multiple
             }
 
-            System.out.println(inputRequest.directionInput + " " + inputRequest.valueInput);
             Entity entity = model.engine.getEntities().get(model.clientTankMapping.get(inputRequest.clientId));
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-            velocityComponent.setVelocity(inputRequest.valueInput, inputRequest.directionInput);
+            velocityComponent.setMagnitudeAndDirection(inputRequest.valueInput, inputRequest.directionInput);
 
             ArrayList<VelocityComponent> velocityComponentsNew = new ArrayList<>();
             ArrayList<PositionComponent> positionComponentsNew = new ArrayList<>();

@@ -27,26 +27,28 @@ import java.util.UUID;
 public class ShapeWarsModel {
     public static final int TANK_WIDTH = 75;
     public static final int TANK_HEIGHT = 75;
-    public static final int NUM_PLAYERS = 2; // add lobby and don't hardcode this
+    public static final int NUM_PLAYERS = 2; // todo add lobby
     public SpriteBatch batch;
     public Engine engine;
     public MovementSystem movementSystem;
     private TiledMap map;
-    private Role role = Role.Server; // change with client/ hosts screens
+    private Role role = Role.Server; // todo change with screens
     public InputSystem inputSystem;
     public SpriteSystem spriteSystem;
-    public ServerConnector serverConnector; // make nice, no need to have two connectors here
+    public ServerConnector serverConnector; // todo implement strategy pattern
     public ClientConnector clientConnector;
     public String clientId;
     public HashMap<String, Integer> clientTankMapping = new HashMap<>();
 
     public ShapeWarsModel() {
         TmxMapLoader loader = new TmxMapLoader();
-        map = loader.load("maps/thirdMap.tmx"); // make server send this AFTER sophie is done
+        map = loader.load("maps/thirdMap.tmx"); // todo get from server
         batch = new SpriteBatch();
         engine = new Engine();
 
         if (this.role == Role.Server) {
+            this.serverConnector = new ServerConnector(this);
+
             TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(2);
 
             List<Vector2> spawnCells = new ArrayList<>();
@@ -64,7 +66,7 @@ public class ShapeWarsModel {
                 Vector2 cell = spawnCells.get(i);
                 tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // change to support multiple colors
+                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo change to support multiple colors
                 tank.add(new HealthComponent());
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
@@ -72,16 +74,17 @@ public class ShapeWarsModel {
             movementSystem = movementSystem.getInstance(map);
             engine.addSystem(movementSystem);
 
-            this.serverConnector = new ServerConnector(this);
+
         } else if (this.role == Role.Client) {
             this.clientConnector = new ClientConnector(this);
             this.clientId = UUID.randomUUID().toString();
+            // todo send initial request (initial position <int, int>; map name <string>; tank sprite files <string[]>)
 
             for (int i = 0; i < NUM_PLAYERS; i++) {
                 Entity tank = new Entity();
                 tank.add(new PositionComponent(0, 0));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // change to support multiple colors
+                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo change to support multiple colors
                 tank.add(new HealthComponent());
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);

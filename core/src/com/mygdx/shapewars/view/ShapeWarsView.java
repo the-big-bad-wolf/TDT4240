@@ -58,7 +58,8 @@ public class ShapeWarsView implements Screen {
         renderer.render(layers);
 
         renderer.getBatch().begin();
-        for (Entity entity : model.engine.getEntities()) {
+        for (int i = 0; i < model.engine.getEntities().size(); i++) {
+            Entity entity = model.engine.getEntities().get(i);
             // TODO access components without entities
             SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
             spriteComponent.getSprite().draw(renderer.getBatch());

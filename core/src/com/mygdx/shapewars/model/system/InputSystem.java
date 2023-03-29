@@ -9,7 +9,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
@@ -41,6 +40,7 @@ public class InputSystem extends EntitySystem {
   public void update(float deltaTime) {
         int inputDirection = 0, inputValue = 0;
 
+        // todo add arrow buttons back
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             inputDirection = 2;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
@@ -60,7 +60,7 @@ public class InputSystem extends EntitySystem {
         if (role == Role.Server) {
             Entity entity = entities.get(0);
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-            velocityComponent.setVelocity(inputValue, inputDirection);
+            velocityComponent.setMagnitudeAndDirection(inputValue, inputDirection);
         } else {
             clientConnector.sendInput(clientId, inputValue, inputDirection); // update clientId
         }
