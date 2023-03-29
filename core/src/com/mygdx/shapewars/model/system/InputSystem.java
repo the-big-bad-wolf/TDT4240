@@ -37,6 +37,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     boolean down;
     boolean left;
     boolean right;
+    boolean space;
     boolean driving;
     boolean movingThumbstick;
 
@@ -80,21 +81,6 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         else {
             inputValue = 0;
         }
-        
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-          Entity bullet = new Entity();
-          int distanceFromTank = 50;
-          float rotation = (float) Math.toRadians(spriteComponent.getSprite().getRotation());
-          float x = (float) (positionComponent.getPosition().x + (spriteComponent.getSprite().getWidth() / 2)
-              + (distanceFromTank * Math.cos(rotation)));
-          float y = (float) (positionComponent.getPosition().y + (spriteComponent.getSprite().getHeight() / 2)
-              + (distanceFromTank * Math.sin(rotation)));
-          bullet.add(new PositionComponent(x, y));
-          bullet.add(new VelocityComponent(10, velocityComponent.getDirection()));
-          bullet.add(new SpriteComponent("tank_graphics.png", 10, 10));
-          bullet.add(new HealthComponent(2));
-          ShapeWarsModel.addToEngine(bullet);
-        }
 
         // todo completely change
         if (role == Role.Server) {
@@ -105,6 +91,22 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             }
             else {
                 velocityComponent.setVelocity(inputValue, inputDirection);
+            }
+            if (space) {
+                spriteComponent = ComponentMappers.sprite.get(entity);
+                positionComponent = ComponentMappers.position.get(entity);
+                Entity bullet = new Entity();
+                int distanceFromTank = 50;
+                float rotation = (float) Math.toRadians(spriteComponent.getSprite().getRotation());
+                float x = (float) (positionComponent.getPosition().x + (spriteComponent.getSprite().getWidth() / 2)
+                    + (distanceFromTank * Math.cos(rotation)));
+                float y = (float) (positionComponent.getPosition().y + (spriteComponent.getSprite().getHeight() / 2)
+                    + (distanceFromTank * Math.sin(rotation)));
+                bullet.add(new PositionComponent(x, y));
+                bullet.add(new VelocityComponent(10, velocityComponent.getDirection()));
+                bullet.add(new SpriteComponent("tank_graphics.png", 10, 10));
+                bullet.add(new HealthComponent(2));
+                ShapeWarsModel.addToEngine(bullet);
             }
         } else {
             clientConnector.sendInput(clientId, inputValue, inputDirection); // update clientId
@@ -135,6 +137,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         } else if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN) {
             down = true;
         }
+        if (keycode == Input.Keys.SPACE) {
+            space = true;
+        }
         usedJoystick = false;
         return false;
     }
@@ -150,6 +155,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             up = false;
         } else if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN) {
             down = false;
+        }
+        if (keycode == Input.Keys.SPACE) {
+            space = false;
         }
         usedJoystick = false;
         return false;

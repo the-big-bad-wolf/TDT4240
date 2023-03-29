@@ -6,7 +6,7 @@ public class VelocityComponent implements Component{
   private float value;
   private float direction;
 
-  public VelocityComponent(int value, int direction) {
+  public VelocityComponent(float value, float direction) {
     this.value = value;
     this.direction = direction;
   }
