@@ -7,8 +7,11 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
@@ -17,7 +20,6 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 
 public class MovementSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
-
 	private TiledMap map;
 
   	private static volatile MovementSystem instance;
@@ -37,49 +39,57 @@ public class MovementSystem extends EntitySystem {
 			VelocityComponent velocity = ComponentMappers.velocity.get(entity);
 			SpriteComponent sprite = ComponentMappers.sprite.get(entity);
 
+			TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(1);
+			float tileSize = collisionLayer.getTileWidth();
 
-			// calculate and set position
+			// calculate old and new position values
 			float radians = MathUtils.degreesToRadians * velocity.getDirection();
 
 			float newX = position.getPosition().x + MathUtils.cos(radians) * velocity.getValue();
 			float newY = position.getPosition().y + MathUtils.sin(radians) * velocity.getValue();
 
+			// calculate the tank's bounding box
+			Polygon tankBounds = new Polygon(new float[] {
+					0, 0,
+					sprite.getSprite().getWidth(), 0,
+					sprite.getSprite().getWidth(), sprite.getSprite().getHeight(),
+					0, sprite.getSprite().getHeight()
+			});
+			tankBounds.setOrigin(sprite.getSprite().getOriginX(), sprite.getSprite().getOriginY());
+			tankBounds.setPosition(newX, newY);
+			tankBounds.setRotation(velocity.getDirection());
 
-			Rectangle wallsRect = checkCollisionWithWalls(newX, newY, sprite.getSprite().getWidth(), sprite.getSprite().getHeight(), (TiledMapTileLayer) map.getLayers().get(1));
-			if (wallsRect != null) {
-				// adjust newX and newY based on collision direction
-				if (position.getPosition().x + sprite.getSprite().getWidth() <= wallsRect.getX()) {
-					if (position.getPosition().y + sprite.getSprite().getHeight() <= wallsRect.getY()) {
-						newY = wallsRect.getY() - sprite.getSprite().getHeight();
-					} else if (position.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
-						newY = wallsRect.getY() + wallsRect.getHeight();
+			// check for collision with walls
+			for (int x = 0; x < collisionLayer.getWidth(); x++) {
+				for (int y = 0; y < collisionLayer.getHeight(); y++) {
+					TiledMapTileLayer.Cell cell = collisionLayer.getCell(x, y);
+					if (cell != null) {
+						Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
+						Polygon tileBounds = new Polygon(new float[] {
+								rect.x, rect.y, // bottom left corner
+								rect.x + rect.width, rect.y, // bottom right corner
+								rect.x + rect.width, rect.y + rect.height, // top right corner
+								rect.x, rect.y + rect.height // top left corner
+						});
+
+						if (Intersector.overlapConvexPolygons(tankBounds, tileBounds)) {
+							// tank collides with wall, adjust position
+							Intersector.MinimumTranslationVector mtv = new Intersector.MinimumTranslationVector();
+							Intersector.overlapConvexPolygons(tankBounds, tileBounds, mtv);
+							Vector2 overlapVector = new Vector2(mtv.normal.x * mtv.depth, mtv.normal.y * mtv.depth);
+							newX += overlapVector.x;
+							newY += overlapVector.y;
+						}
+
 					}
-					// left collision
-					newX = wallsRect.getX() - sprite.getSprite().getWidth();
-				} else if (position.getPosition().x >= wallsRect.getX() + wallsRect.getWidth()) {
-					if (position.getPosition().y + sprite.getSprite().getHeight() <= wallsRect.getY()) {
-						newY = wallsRect.getY() - sprite.getSprite().getHeight();
-					} else if (position.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
-						newY = wallsRect.getY() + wallsRect.getHeight();
-					}
-					// right collision
-					newX = wallsRect.getX() + wallsRect.getWidth();
-				} else if (position.getPosition().y + sprite.getSprite().getHeight() <= wallsRect.getY()) {
-					// top collision
-					newY = wallsRect.getY() - sprite.getSprite().getHeight();
-				} else if (position.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
-					// bottom collision
-					newY = wallsRect.getY() + wallsRect.getHeight();
 				}
-				// set new position
 			}
 
+			// update position and rotation
 			position.setPosition(newX, newY);
-
-			// set direction
-			sprite.getSprite().setRotation(velocity.getDirection());
-
-			sprite.getSprite().setPosition(position.getPosition().x, position.getPosition().y);
+			sprite.getSprite().setPosition(newX, newY);
+			sprite.getHitbox().setPosition(newX, newY);
+			sprite.setRotation(velocity.getDirection());
 		}
 	}
 

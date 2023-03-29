@@ -1,0 +1,20 @@
+package com.mygdx.shapewars.network.client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+
+public class ClientListener extends Listener {
+
+    @Override
+    public void connected(Connection connection) {
+        System.out.println("Client connected");
+    }
+
+    @Override
+    public void disconnected(Connection connection) {
+        System.out.println("Client disconnected");
+    }
+
+    @Override
+    public void received(Connection connection, Object object) {
+    }
+}
