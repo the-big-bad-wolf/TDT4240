@@ -32,6 +32,7 @@ public class MovementSystem extends EntitySystem {
         Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class).get());
 	}
 
+	// todo remove everything sprite here, move to sprite system
 	public void update(float deltaTime) {
 		for (Entity entity : entities) {
 			PositionComponent position = ComponentMappers.position.get(entity);
@@ -86,9 +87,7 @@ public class MovementSystem extends EntitySystem {
 
 			// update position and rotation
 			position.setPosition(newX, newY);
-			sprite.getSprite().setPosition(newX, newY);
 			sprite.getHitbox().setPosition(newX, newY);
-			sprite.setRotation(velocity.getDirection());
 		}
 	}
 

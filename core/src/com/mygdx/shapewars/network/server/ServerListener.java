@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
+import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.data.GameResponse;
@@ -45,14 +46,17 @@ public class ServerListener extends Listener {
 
             ArrayList<VelocityComponent> velocityComponentsNew = new ArrayList<>();
             ArrayList<PositionComponent> positionComponentsNew = new ArrayList<>();
+            ArrayList<HealthComponent> healthComponentsNew = new ArrayList<>();
             for (Entity e : model.engine.getEntities()) {
                 velocityComponentsNew.add(ComponentMappers.velocity.get(e));
                 positionComponentsNew.add(ComponentMappers.position.get(e));
+                healthComponentsNew.add(ComponentMappers.health.get(e));
             }
 
             PositionComponent[] positionComponentsArray = positionComponentsNew.toArray(new PositionComponent[positionComponentsNew.size()]);
             VelocityComponent[] velocityComponentsArray = velocityComponentsNew.toArray(new VelocityComponent[velocityComponentsNew.size()]);
-            GameResponse response = new GameResponse(velocityComponentsArray, positionComponentsArray);
+            HealthComponent[] healthComponentsArray = healthComponentsNew.toArray(new HealthComponent[healthComponentsNew.size()]);
+            GameResponse response = new GameResponse(velocityComponentsArray, positionComponentsArray, healthComponentsArray);
             connection.sendUDP(response);
         }
     }

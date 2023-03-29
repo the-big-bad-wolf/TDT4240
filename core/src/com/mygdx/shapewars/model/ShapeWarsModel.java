@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
@@ -16,17 +15,16 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.model.system.InputSystem;
 import com.mygdx.shapewars.model.system.MovementSystem;
+import com.mygdx.shapewars.model.system.SpriteSystem;
 import com.mygdx.shapewars.network.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 public class ShapeWarsModel {
-
     public static final int TANK_WIDTH = 75;
     public static final int TANK_HEIGHT = 75;
     public static final int NUM_PLAYERS = 2; // add lobby and don't hardcode this
@@ -36,6 +34,7 @@ public class ShapeWarsModel {
     private TiledMap map;
     private Role role = Role.Server; // change with client/ hosts screens
     public InputSystem inputSystem;
+    public SpriteSystem spriteSystem;
     public ServerConnector serverConnector; // make nice, no need to have two connectors here
     public ClientConnector clientConnector;
     public String clientId;
@@ -80,12 +79,19 @@ public class ShapeWarsModel {
 
             for (int i = 0; i < NUM_PLAYERS; i++) {
                 Entity tank = new Entity();
+                tank.add(new PositionComponent(0, 0));
+                tank.add(new VelocityComponent(0, 0));
+                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // change to support multiple colors
+                tank.add(new HealthComponent());
+                tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }
         }
 
         inputSystem = inputSystem.getInstance(role, clientConnector, clientId);
         engine.addSystem(inputSystem);
+        spriteSystem = spriteSystem.getInstance();
+        engine.addSystem(spriteSystem);
     }
 
     public void update() {
