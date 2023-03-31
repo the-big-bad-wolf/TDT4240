@@ -16,6 +16,7 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.model.system.InputSystem;
 import com.mygdx.shapewars.model.system.MovementSystem;
+import com.mygdx.shapewars.model.system.RicochetSystem;
 import com.mygdx.shapewars.network.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
@@ -28,10 +29,14 @@ import java.util.UUID;
 public class ShapeWarsModel {
     public static final int TANK_WIDTH = 75;
     public static final int TANK_HEIGHT = 75;
-    public static final int NUM_PLAYERS = 2; // add lobby and don't hardcode this
-  public SpriteBatch batch;
-    public Engine engine;
-    public MovementSystem movementSystem;
+
+    public static final int NUM_PLAYERS = 2;
+
+    public SpriteBatch batch;
+    public static Engine engine;
+    public static MovementSystem movementSystem;
+    public static RicochetSystem ricochetSystem;
+
     private TiledMap map;
     private Role role = Role.Server; // change with client/ hosts screens
     public InputSystem inputSystem;
@@ -71,20 +76,17 @@ public class ShapeWarsModel {
 
                 }
             }
-
             for (int i = 0; i < NUM_PLAYERS; i++) {
                 Entity tank = new Entity();
                 Vector2 cell = spawnCells.get(i);
                 tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
                 tank.add(new VelocityComponent(0, 0));
                 tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // change to support multiple colors
-                tank.add(new HealthComponent());
+                tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }
-            movementSystem = movementSystem.getInstance(map);
-            engine.addSystem(movementSystem);
-
+            
             this.serverConnector = new ServerConnector(this);
         } else if (this.role == Role.Client) {
             this.clientConnector = new ClientConnector();
@@ -92,12 +94,24 @@ public class ShapeWarsModel {
         }
 
         inputSystem = inputSystem.getInstance(role, clientConnector, clientId, joystick);
+        movementSystem = MovementSystem.getInstance(map);
+        ricochetSystem = RicochetSystem.getInstance(map);
         engine.addSystem(inputSystem);
+        engine.addSystem(movementSystem);
+        engine.addSystem(ricochetSystem);
     }
 
-    public void update() {
+    public static void update() {
         engine.update(Gdx.graphics.getDeltaTime());
     }
+
+    public static void addToEngine(Entity entity) {
+      engine.addEntity(entity);
+    }
+
+    public static void removedFromEngine(Entity entity) {
+        engine.removeEntity(entity);
+      }
 
     public TiledMap getMap() {
         return map;

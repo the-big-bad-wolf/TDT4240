@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.shapewars.controller.Joystick;
@@ -18,7 +19,6 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
-
 import java.util.UUID;
 
 public class InputSystem extends EntitySystem implements InputProcessor {
@@ -32,10 +32,12 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     private VelocityComponent velocityComponent;
     private PositionComponent positionComponent;
     private IdentityComponent identityComponent;
+    private SpriteComponent spriteComponent;
     boolean up;
     boolean down;
     boolean left;
     boolean right;
+    boolean space;
     boolean driving;
     boolean movingThumbstick;
 
@@ -52,11 +54,10 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         this.joystick = joystick;
     }
 
-    ;
-
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(
-                Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class).get());
+    entities = engine.getEntitiesFor(
+        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
+            IdentityComponent.class).get());
     }
 
     public void update(float deltaTime) {
@@ -87,7 +88,24 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 velocityComponent.setVelocityJoystick(inputValue, inputDirection);
             }
             else {
-                velocityComponent.setVelocity(inputValue, inputDirection);
+                velocityComponent.setVelocity(inputValue, velocityComponent.getDirection() + inputDirection);
+            }
+            if (space) {
+                spriteComponent = ComponentMappers.sprite.get(entity);
+                positionComponent = ComponentMappers.position.get(entity);
+                Entity bullet = new Entity();
+                int distanceFromTank = 50;
+                float rotation = (float) Math.toRadians(spriteComponent.getSprite().getRotation());
+                float x = (float) (positionComponent.getPosition().x + (spriteComponent.getSprite().getWidth() / 2)
+                    + (distanceFromTank * Math.cos(rotation)));
+                float y = (float) (positionComponent.getPosition().y + (spriteComponent.getSprite().getHeight() / 2)
+                    + (distanceFromTank * Math.sin(rotation)));
+                bullet.add(new PositionComponent(x, y));
+                bullet.add(new VelocityComponent(10, velocityComponent.getDirection()));
+                bullet.add(new SpriteComponent("tank_graphics.png", 10, 10));
+                bullet.add(new HealthComponent(2));
+                ShapeWarsModel.addToEngine(bullet);
+                space = false;
             }
         } else {
             clientConnector.sendInput(clientId, inputValue, inputDirection); // update clientId
@@ -133,6 +151,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             up = false;
         } else if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN) {
             down = false;
+        }
+        if (keycode == Input.Keys.SPACE) {
+            space = true;
         }
         usedJoystick = false;
         return false;
