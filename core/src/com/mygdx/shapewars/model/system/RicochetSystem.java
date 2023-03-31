@@ -70,30 +70,24 @@ public class RicochetSystem extends EntitySystem {
       if (wallsRect != null) {
         // adjust newX and newY based on collision direction
         if (position.getPosition().x <= wallsRect.getX()) {
-          System.out.println("RIGHT");
           hasHitX = true;
           if (position.getPosition().y + sprite.getSprite().getHeight() <= wallsRect.getY()) {
-            System.out.println("ALSO TOP");
             newY = wallsRect.getY() - sprite.getSprite().getHeight();
             hasHitX = false;
             hasHitY = true;
           } else if (position.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
-            System.out.println("AND BOTTOM");
             newY = wallsRect.getY() + wallsRect.getHeight();
           }
           newX = wallsRect.getX() - sprite.getSprite().getWidth();
           // left collision
         } else if (position.getPosition().x >= wallsRect.getX() + wallsRect.getWidth()) {
-          System.out.println("LEFT");
           hasHitX = true;
           if (position.getPosition().y + sprite.getSprite().getHeight() <= wallsRect.getY()) {
-            System.out.println("ACTUALLY TOP");
             newY = wallsRect.getY() - sprite.getSprite().getHeight();
             hasHitX = false;
             hasHitY = true;
             // right collision
           } else if (position.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
-            System.out.println("ALSO BOTTOM");
             newY = wallsRect.getY() + wallsRect.getHeight();
             hasHitX = false;
             hasHitY = true;
@@ -101,12 +95,10 @@ public class RicochetSystem extends EntitySystem {
           newX = wallsRect.getX() + wallsRect.getWidth();
           // top collision
         } else if (position.getPosition().y + sprite.getSprite().getHeight() <= wallsRect.getY()) {
-          System.out.println("TOP");
           newY = wallsRect.getY() - sprite.getSprite().getHeight();
           hasHitY = true;
           // bottom collision
         } else if (position.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
-          System.out.println("BOTTOM");
           newY = wallsRect.getY() + wallsRect.getHeight();
           hasHitY = true;
         }
