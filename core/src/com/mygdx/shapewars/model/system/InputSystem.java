@@ -88,9 +88,10 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 velocityComponent.setVelocityJoystick(inputValue, inputDirection);
             }
             else {
-                velocityComponent.setVelocity(inputValue, inputDirection);
+                velocityComponent.setVelocity(inputValue, velocityComponent.getDirection() + inputDirection);
             }
             if (space) {
+                System.out.println("SHOOT");
                 spriteComponent = ComponentMappers.sprite.get(entity);
                 positionComponent = ComponentMappers.position.get(entity);
                 Entity bullet = new Entity();
