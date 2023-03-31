@@ -48,44 +48,11 @@ public class MovementSystem extends EntitySystem {
 			float newX = position.getPosition().x + MathUtils.cos(radians) * velocity.getValue();
 			float newY = position.getPosition().y + MathUtils.sin(radians) * velocity.getValue();
 
-			// calculate the tank's bounding box
-			Polygon tankBounds = new Polygon(new float[] {
-					0, 0,
-					sprite.getSprite().getWidth(), 0,
-					sprite.getSprite().getWidth(), sprite.getSprite().getHeight(),
-					0, sprite.getSprite().getHeight()
-			});
-			tankBounds.setOrigin(sprite.getSprite().getOriginX(), sprite.getSprite().getOriginY());
-			tankBounds.setPosition(newX, newY);
-			tankBounds.setRotation(velocity.getDirection());
-
-			// check for collision with walls
-			for (int x = 0; x < collisionLayer.getWidth(); x++) {
-				for (int y = 0; y < collisionLayer.getHeight(); y++) {
-					TiledMapTileLayer.Cell cell = collisionLayer.getCell(x, y);
-					if (cell != null) {
-						Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-						Polygon tileBounds = new Polygon(new float[] {
-								rect.x, rect.y, // bottom left corner
-								rect.x + rect.width, rect.y, // bottom right corner
-								rect.x + rect.width, rect.y + rect.height, // top right corner
-								rect.x, rect.y + rect.height // top left corner
-						});
-
-						if (Intersector.overlapConvexPolygons(tankBounds, tileBounds)) {
-							// tank collides with wall, adjust position
-							Intersector.MinimumTranslationVector mtv = new Intersector.MinimumTranslationVector();
-							Intersector.overlapConvexPolygons(tankBounds, tileBounds, mtv);
-							Vector2 overlapVector = new Vector2(mtv.normal.x * mtv.depth, mtv.normal.y * mtv.depth);
-							newX += overlapVector.x;
-							newY += overlapVector.y;
-						}
-
-					}
-				}
-			}
 
 			// update position and rotation
+			Vector2 overlapVector = CollisionSystem.getCollisionWithWall(entity, collisionLayer, newX, newY);
+			newX += overlapVector.x;
+			newY += overlapVector.y;
 			position.setPosition(newX, newY);
 			sprite.getSprite().setPosition(newX, newY);
 			sprite.getHitbox().setPosition(newX, newY);

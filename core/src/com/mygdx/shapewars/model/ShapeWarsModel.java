@@ -30,7 +30,7 @@ public class ShapeWarsModel {
     public static final int TANK_WIDTH = 75;
     public static final int TANK_HEIGHT = 75;
 
-    public static final int NUM_PLAYERS = 2;
+    public static final int NUM_PLAYERS = 1;
 
     public SpriteBatch batch;
     public static Engine engine;

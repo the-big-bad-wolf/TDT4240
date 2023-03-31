@@ -10,7 +10,7 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 
-public class FiringSystem extends EntitySystem{
+public class FiringSystem extends EntitySystem {
   private ImmutableArray<Entity> entities;
   
   private static volatile FiringSystem instance;
