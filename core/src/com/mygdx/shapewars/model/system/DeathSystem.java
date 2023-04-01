@@ -27,7 +27,6 @@ public class DeathSystem extends EntitySystem {
             HealthComponent healthComponent = ComponentMappers.health.get(entity);
             if (healthComponent.getHealth() <= 0) {
                 ShapeWarsModel.removeFromEngine(entity);
-                System.out.println("DØD");
             }
         }
     }
