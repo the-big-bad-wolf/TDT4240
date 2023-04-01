@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
@@ -18,7 +19,7 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 
 public class RicochetSystem extends EntitySystem {
-  private ImmutableArray<Entity> entities;
+  private ImmutableArray<Entity> bullets;
   private ImmutableArray<Entity> tanks;
 
   private TiledMap map;
@@ -30,18 +31,19 @@ public class RicochetSystem extends EntitySystem {
   };
 
   public void addedToEngine(Engine engine) {
-    entities = engine.getEntitiesFor(
+    bullets = engine.getEntitiesFor(
         Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class)
             .exclude(IdentityComponent.class).get());
     tanks = engine.getEntitiesFor(
-        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class, IdentityComponent.class).get());
+        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
+            IdentityComponent.class).get());
   }
 
   public void update(float deltaTime) {
-    for (Entity entity : entities) {
-      PositionComponent position = ComponentMappers.position.get(entity);
-      VelocityComponent velocity = ComponentMappers.velocity.get(entity);
-      SpriteComponent sprite = ComponentMappers.sprite.get(entity);
+    for (Entity bullet : bullets) {
+      PositionComponent position = ComponentMappers.position.get(bullet);
+      VelocityComponent velocity = ComponentMappers.velocity.get(bullet);
+      SpriteComponent sprite = ComponentMappers.sprite.get(bullet);
 
       // Check if bullet hits tank
       for (Entity tank : tanks) {
@@ -51,7 +53,7 @@ public class RicochetSystem extends EntitySystem {
 
         if (checkCollisionWithTank(position, tankPosition, tankSprite)) {
           tankHealth.takeDamage(1);
-          ShapeWarsModel.removedFromEngine(entity);
+          ShapeWarsModel.removedFromEngine(bullet);
           break;
         }
       }
@@ -65,9 +67,9 @@ public class RicochetSystem extends EntitySystem {
       boolean hasHitX = false;
       boolean hasHitY = false;
 
-      Rectangle wallsRect = checkCollisionWithWalls(newX, newY, sprite.getSprite().getWidth(),
-          sprite.getSprite().getHeight(), (TiledMapTileLayer) map.getLayers().get(1));
-      if (wallsRect != null) {
+      Rectangle wallsRect = CollisionSystem.<Rectangle>getCollisionWithWall(bullet,
+          (TiledMapTileLayer) map.getLayers().get(1), newX, newY);
+      if (wallsRect.area() != 0) {
         // adjust newX and newY based on collision direction
         if (position.getPosition().x <= wallsRect.getX()) {
           hasHitX = true;
@@ -125,23 +127,8 @@ public class RicochetSystem extends EntitySystem {
     }
   }
 
-  private Rectangle checkCollisionWithWalls(float x, float y, float width, float height, TiledMapTileLayer wallsLayer) {
-    for (int col = 0; col < wallsLayer.getWidth(); col++) {
-      for (int row = 0; row < wallsLayer.getHeight(); row++) {
-        TiledMapTileLayer.Cell cell = wallsLayer.getCell(col, row);
-        if (cell != null) {
-          Rectangle rect = new Rectangle(col * wallsLayer.getTileWidth(), row * wallsLayer.getTileHeight(),
-              wallsLayer.getTileWidth(), wallsLayer.getTileHeight());
-          if (rect.overlaps(new Rectangle(x, y, width, height))) {
-            return rect;
-          }
-        }
-      }
-    }
-    return null;
-  }
-
-  private boolean checkCollisionWithTank(PositionComponent bulletPosition, PositionComponent tankPosition, SpriteComponent tankSprite) {
+  private boolean checkCollisionWithTank(PositionComponent bulletPosition, PositionComponent tankPosition,
+      SpriteComponent tankSprite) {
     float x1 = tankPosition.getPosition().x;
     float y1 = tankPosition.getPosition().y;
     float width = tankSprite.getSprite().getWidth();

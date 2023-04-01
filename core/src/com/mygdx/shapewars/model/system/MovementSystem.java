@@ -60,7 +60,7 @@ public class MovementSystem extends EntitySystem {
 		}
 	}
 
-	private Rectangle checkCollisionWithWalls(float x, float y, float width, float height, TiledMapTileLayer wallsLayer) {
+/* 	private Rectangle checkCollisionWithWalls(float x, float y, float width, float height, TiledMapTileLayer wallsLayer) {
 		for (int col = 0; col < wallsLayer.getWidth(); col++) {
 			for (int row = 0; row < wallsLayer.getHeight(); row++) {
 				TiledMapTileLayer.Cell cell = wallsLayer.getCell(col, row);
@@ -74,7 +74,8 @@ public class MovementSystem extends EntitySystem {
 			}
 		}
 		return null;
-	}
+	} */
+
 	public static MovementSystem getInstance(TiledMap map) {
 		if (instance == null) {
 			synchronized (MovementSystem.class) {
