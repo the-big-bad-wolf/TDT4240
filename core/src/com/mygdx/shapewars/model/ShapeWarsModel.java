@@ -39,7 +39,7 @@ public class ShapeWarsModel {
     public static RicochetSystem ricochetSystem;
     public static DeathSystem deathSystem;
 
-    private TiledMap map;
+    private static TiledMap map;
     private Role role = Role.Server; // change with client/ hosts screens
     public InputSystem inputSystem;
     public ServerConnector serverConnector; // make nice
@@ -95,9 +95,9 @@ public class ShapeWarsModel {
             this.clientId = UUID.randomUUID().toString();
         }
 
-        inputSystem = inputSystem.getInstance(role, clientConnector, clientId, joystick);
-        movementSystem = MovementSystem.getInstance(map);
-        ricochetSystem = RicochetSystem.getInstance(map);
+        inputSystem = InputSystem.getInstance(role, clientConnector, clientId, joystick);
+        movementSystem = MovementSystem.getInstance();
+        ricochetSystem = RicochetSystem.getInstance();
         deathSystem = DeathSystem.getInstance();
         engine.addSystem(inputSystem);
         engine.addSystem(movementSystem);
@@ -117,11 +117,15 @@ public class ShapeWarsModel {
         engine.removeEntity(entity);
       }
 
-    public TiledMap getMap() {
+    public static TiledMap getMap() {
         return map;
     }
 
     public Joystick getJoystick() {
         return joystick;
+    }
+
+    public static TiledMapTileLayer getLayer(int layerId) {
+      return (TiledMapTileLayer) getMap().getLayers().get(layerId);
     }
 }

@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.shapewars.controller.Joystick;
@@ -19,7 +18,6 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
-import java.util.UUID;
 
 public class InputSystem extends EntitySystem implements InputProcessor {
     private ImmutableArray<Entity> entities;
@@ -28,11 +26,6 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     private float inputValue;
     private boolean usedJoystick;
 
-
-    private VelocityComponent velocityComponent;
-    private PositionComponent positionComponent;
-    private IdentityComponent identityComponent;
-    private SpriteComponent spriteComponent;
     boolean up;
     boolean down;
     boolean left;

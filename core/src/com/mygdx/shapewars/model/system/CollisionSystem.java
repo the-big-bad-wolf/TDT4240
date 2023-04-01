@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
@@ -44,11 +45,31 @@ public class CollisionSystem extends EntitySystem {
     }
 
     /**
+     * Calculates all the entire area of a tile and returns it.
+     *
+     * @param x              the tile's x value.
+     * @param y              the tile's y value.
+     * @return the bounds of the tile as a Polygon.
+     */
+    private static Polygon getTileBounds(int x, int y) {
+        TiledMapTileLayer collisionLayer = ShapeWarsModel.getLayer(1);
+        float tileSize = collisionLayer.getTileWidth();
+        Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
+        Polygon tileBounds = new Polygon(new float[] {
+                rect.x, rect.y, // bottom left corner
+                rect.x + rect.width, rect.y, // bottom right corner
+                rect.x + rect.width, rect.y + rect.height, // top right corner
+                rect.x, rect.y + rect.height // top left corner
+        });
+        return tileBounds;
+    }
+
+    /**
      * Makes a rectangle of the area an Entity covers.
      *
      * @param entity the entity to make a rectangle of.
-     * @param x the x position of the entity.
-     * @param y the y position of the entity.
+     * @param x      the x position of the entity.
+     * @param y      the y position of the entity.
      * @return the Rectangle of the area covered.
      */
     private static Rectangle getEntityRectangle(Entity entity, float x, float y) {
@@ -77,30 +98,34 @@ public class CollisionSystem extends EntitySystem {
     /**
      * Checks for a collision between an entity and a wall.
      *
-     * @param <T> the type you want to return which must be a Rectangle or Vector2.
+     * @param <T>            the type you want to return which must be a Rectangle
+     *                       or Vector2.
      * @param entity         the entity to check collision on.
      * @param collisionLayer the collision layer of the map.
      * @param newX           the new X value from the MovementSystem.
      * @param newY           the new Y value from the MovementSystem.
      * @return the overlap between something... Please tell us Sophie.
      */
-    public static <T> T getCollisionWithWall(Entity entity, TiledMapTileLayer collisionLayer, float newX, float newY) {
+    @SuppressWarnings("unchecked")
+    public static <T> T getCollisionWithWall(Entity entity, float newX, float newY) {
         // check for collision with walls
         Polygon tileBounds = new Polygon();
         Polygon entityBounds = getEntityBounds(entity, newX, newY);
         Vector2 overlapVector = new Vector2();
         Rectangle entityRectangle = getEntityRectangle(entity, newX, newY);
+        TiledMapTileLayer collisionLayer = ShapeWarsModel.getLayer(1);
         for (int x = 0; x < collisionLayer.getWidth(); x++) {
             for (int y = 0; y < collisionLayer.getHeight(); y++) {
                 TiledMapTileLayer.Cell cell = collisionLayer.getCell(x, y);
                 if (cell != null) {
                     // Checks if the entity is tank or not
                     if (entity.getComponent(IdentityComponent.class) != null) {
-                        tileBounds = getTileBounds(collisionLayer, x, y);
+                        tileBounds = getTileBounds(x, y);
                         Vector2 tempVector = getOverlapVector(entityBounds, tileBounds);
                         overlapVector.add(tempVector.x, tempVector.y);
                     } else {
-                        Rectangle rect = new Rectangle(x * collisionLayer.getTileWidth(), y * collisionLayer.getTileHeight(),
+                        Rectangle rect = new Rectangle(x * collisionLayer.getTileWidth(),
+                                y * collisionLayer.getTileHeight(),
                                 collisionLayer.getTileWidth(), collisionLayer.getTileHeight());
                         if (rect.overlaps(entityRectangle)) {
                             return (T) rect;
@@ -113,27 +138,7 @@ public class CollisionSystem extends EntitySystem {
             return (T) overlapVector;
         } else {
             return (T) new Rectangle();
-        }      
-    }
-
-    /**
-     * Calculates all the entire area of a tile and returns it.
-     *
-     * @param collisionLayer the collision layer to check for collisions with.
-     * @param x              the tile's x value.
-     * @param y              the tile's y value.
-     * @return the bounds of the tile as a Polygon.
-     */
-    private static Polygon getTileBounds(TiledMapTileLayer collisionLayer, int x, int y) {
-        float tileSize = collisionLayer.getTileWidth();
-        Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-        Polygon tileBounds = new Polygon(new float[] {
-                rect.x, rect.y, // bottom left corner
-                rect.x + rect.width, rect.y, // bottom right corner
-                rect.x + rect.width, rect.y + rect.height, // top right corner
-                rect.x, rect.y + rect.height // top left corner
-        });
-        return tileBounds;
+        }
     }
 
     public static CollisionSystem getInstance() {
