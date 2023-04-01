@@ -103,7 +103,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 bullet.add(new PositionComponent(x, y));
                 bullet.add(new VelocityComponent(10, velocityComponent.getDirection()));
                 bullet.add(new SpriteComponent("tank_graphics.png", 10, 10));
-                bullet.add(new HealthComponent(2));
+                bullet.add(new HealthComponent(3));
                 ShapeWarsModel.addToEngine(bullet);
                 space = false;
             }

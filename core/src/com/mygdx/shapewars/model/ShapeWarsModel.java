@@ -14,6 +14,7 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.model.system.DeathSystem;
 import com.mygdx.shapewars.model.system.InputSystem;
 import com.mygdx.shapewars.model.system.MovementSystem;
 import com.mygdx.shapewars.model.system.RicochetSystem;
@@ -36,6 +37,7 @@ public class ShapeWarsModel {
     public static Engine engine;
     public static MovementSystem movementSystem;
     public static RicochetSystem ricochetSystem;
+    public static DeathSystem deathSystem;
 
     private TiledMap map;
     private Role role = Role.Server; // change with client/ hosts screens
@@ -96,9 +98,11 @@ public class ShapeWarsModel {
         inputSystem = inputSystem.getInstance(role, clientConnector, clientId, joystick);
         movementSystem = MovementSystem.getInstance(map);
         ricochetSystem = RicochetSystem.getInstance(map);
+        deathSystem = DeathSystem.getInstance();
         engine.addSystem(inputSystem);
         engine.addSystem(movementSystem);
         engine.addSystem(ricochetSystem);
+        engine.addSystem(deathSystem);
     }
 
     public static void update() {
@@ -109,7 +113,7 @@ public class ShapeWarsModel {
       engine.addEntity(entity);
     }
 
-    public static void removedFromEngine(Entity entity) {
+    public static void removeFromEngine(Entity entity) {
         engine.removeEntity(entity);
       }
 

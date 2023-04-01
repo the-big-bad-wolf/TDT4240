@@ -41,28 +41,29 @@ public class RicochetSystem extends EntitySystem {
 
   public void update(float deltaTime) {
     for (Entity bullet : bullets) {
-      PositionComponent position = ComponentMappers.position.get(bullet);
-      VelocityComponent velocity = ComponentMappers.velocity.get(bullet);
-      SpriteComponent sprite = ComponentMappers.sprite.get(bullet);
+      PositionComponent bulletPositionComponent = ComponentMappers.position.get(bullet);
+      VelocityComponent bulletVelocityComponent = ComponentMappers.velocity.get(bullet);
+      SpriteComponent bulletSpriteComponent = ComponentMappers.sprite.get(bullet);
+      HealthComponent bulletHealthComponent = ComponentMappers.health.get(bullet);
 
       // Check if bullet hits tank
       for (Entity tank : tanks) {
-        PositionComponent tankPosition = ComponentMappers.position.get(tank);
-        SpriteComponent tankSprite = ComponentMappers.sprite.get(tank);
-        HealthComponent tankHealth = ComponentMappers.health.get(tank);
+        PositionComponent tankPositionComponent = ComponentMappers.position.get(tank);
+        SpriteComponent tankSpriteComponent = ComponentMappers.sprite.get(tank);
+        HealthComponent tankHealthComponent = ComponentMappers.health.get(tank);
 
-        if (checkCollisionWithTank(position, tankPosition, tankSprite)) {
-          tankHealth.takeDamage(1);
-          ShapeWarsModel.removedFromEngine(bullet);
+        if (checkCollisionWithTank(bulletPositionComponent, tankPositionComponent, tankSpriteComponent)) {
+          tankHealthComponent.takeDamage(1);
+          bulletHealthComponent.takeDamage(100);
           break;
         }
       }
 
       // calculate and set position
-      float radians = MathUtils.degreesToRadians * velocity.getDirection();
+      float radians = MathUtils.degreesToRadians * bulletVelocityComponent.getDirection();
 
-      float newX = position.getPosition().x + MathUtils.cos(radians) * velocity.getValue();
-      float newY = position.getPosition().y + MathUtils.sin(radians) * velocity.getValue();
+      float newX = bulletPositionComponent.getPosition().x + MathUtils.cos(radians) * bulletVelocityComponent.getValue();
+      float newY = bulletPositionComponent.getPosition().y + MathUtils.sin(radians) * bulletVelocityComponent.getValue();
 
       boolean hasHitX = false;
       boolean hasHitY = false;
@@ -71,68 +72,70 @@ public class RicochetSystem extends EntitySystem {
           (TiledMapTileLayer) map.getLayers().get(1), newX, newY);
       if (wallsRect.area() != 0) {
         // adjust newX and newY based on collision direction
-        if (position.getPosition().x <= wallsRect.getX()) {
+        if (bulletPositionComponent.getPosition().x <= wallsRect.getX()) {
           hasHitX = true;
-          if (position.getPosition().y + sprite.getSprite().getHeight() <= wallsRect.getY()) {
-            newY = wallsRect.getY() - sprite.getSprite().getHeight();
+          if (bulletPositionComponent.getPosition().y + bulletSpriteComponent.getSprite().getHeight() <= wallsRect.getY()) {
+            newY = wallsRect.getY() - bulletSpriteComponent.getSprite().getHeight();
             hasHitX = false;
             hasHitY = true;
-          } else if (position.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
+          } else if (bulletPositionComponent.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
             newY = wallsRect.getY() + wallsRect.getHeight();
           }
-          newX = wallsRect.getX() - sprite.getSprite().getWidth();
+          newX = wallsRect.getX() - bulletSpriteComponent.getSprite().getWidth();
           // left collision
-        } else if (position.getPosition().x >= wallsRect.getX() + wallsRect.getWidth()) {
+        } else if (bulletPositionComponent.getPosition().x >= wallsRect.getX() + wallsRect.getWidth()) {
           hasHitX = true;
-          if (position.getPosition().y + sprite.getSprite().getHeight() <= wallsRect.getY()) {
-            newY = wallsRect.getY() - sprite.getSprite().getHeight();
+          if (bulletPositionComponent.getPosition().y + bulletSpriteComponent.getSprite().getHeight() <= wallsRect.getY()) {
+            newY = wallsRect.getY() - bulletSpriteComponent.getSprite().getHeight();
             hasHitX = false;
             hasHitY = true;
             // right collision
-          } else if (position.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
+          } else if (bulletPositionComponent.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
             newY = wallsRect.getY() + wallsRect.getHeight();
             hasHitX = false;
             hasHitY = true;
           }
           newX = wallsRect.getX() + wallsRect.getWidth();
           // top collision
-        } else if (position.getPosition().y + sprite.getSprite().getHeight() <= wallsRect.getY()) {
-          newY = wallsRect.getY() - sprite.getSprite().getHeight();
+        } else if (bulletPositionComponent.getPosition().y + bulletSpriteComponent.getSprite().getHeight() <= wallsRect.getY()) {
+          newY = wallsRect.getY() - bulletSpriteComponent.getSprite().getHeight();
           hasHitY = true;
           // bottom collision
-        } else if (position.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
+        } else if (bulletPositionComponent.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
           newY = wallsRect.getY() + wallsRect.getHeight();
           hasHitY = true;
         }
       }
 
+
       // set new position
-      position.setPosition(newX, newY);
+      bulletPositionComponent.setPosition(newX, newY);
 
       // set direction
       if (hasHitX || hasHitY) {
+        bulletHealthComponent.takeDamage(1);
         if (hasHitX && hasHitY) {
-          velocity.setDirection((180 - velocity.getDirection()) * -1);
+          bulletVelocityComponent.setDirection((180 - bulletVelocityComponent.getDirection()) * -1);
         } else if (hasHitX && !hasHitY) {
-          velocity.setDirection(180 - velocity.getDirection());
+          bulletVelocityComponent.setDirection(180 - bulletVelocityComponent.getDirection());
         } else {
-          velocity.setDirection(velocity.getDirection() * -1);
+          bulletVelocityComponent.setDirection(bulletVelocityComponent.getDirection() * -1);
         }
         // System.out.println(velocity.getDirection());
       }
 
-      sprite.getSprite().setRotation(velocity.getDirection() + 90);
+      bulletSpriteComponent.getSprite().setRotation(bulletVelocityComponent.getDirection() + 90);
 
-      sprite.getSprite().setPosition(position.getPosition().x, position.getPosition().y);
+      bulletSpriteComponent.getSprite().setPosition(bulletPositionComponent.getPosition().x, bulletPositionComponent.getPosition().y);
     }
   }
 
-  private boolean checkCollisionWithTank(PositionComponent bulletPosition, PositionComponent tankPosition,
-      SpriteComponent tankSprite) {
-    float x1 = tankPosition.getPosition().x;
-    float y1 = tankPosition.getPosition().y;
-    float width = tankSprite.getSprite().getWidth();
-    float height = tankSprite.getSprite().getWidth();
+  private boolean checkCollisionWithTank(PositionComponent bulletPosition, PositionComponent tankPositionComponent,
+      SpriteComponent tankSpriteComponent) {
+    float x1 = tankPositionComponent.getPosition().x;
+    float y1 = tankPositionComponent.getPosition().y;
+    float width = tankSpriteComponent.getSprite().getWidth();
+    float height = tankSpriteComponent.getSprite().getWidth();
     float x2 = bulletPosition.getPosition().x;
     float y2 = bulletPosition.getPosition().y;
     return x2 >= x1 && x2 <= x1 + width && y2 >= y1 && y2 <= y1 + height;
