@@ -22,7 +22,8 @@ public class HostView implements Screen {
     private TextButton backButton;
     private TextButton okButton;
 
-    public HostView() {
+    public HostView(ShapeWarsController controller) {
+        this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
 
@@ -35,10 +36,6 @@ public class HostView implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         buildUI();
-    }
-
-    public void setController(ShapeWarsController controller) {
-        this.controller = controller;
     }
 
     @Override
@@ -109,7 +106,7 @@ public class HostView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    controller.setScreen(controller.getMainMenuView());
+                    controller.setScreen(new MainMenuView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No controller found");
                 }

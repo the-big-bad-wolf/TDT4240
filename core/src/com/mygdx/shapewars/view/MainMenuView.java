@@ -10,26 +10,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 
 public class MainMenuView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
-    private ShapeWarsController controller;
+    private final ShapeWarsController controller;
     private TextButton startButton;
     private TextButton hostButton;
     private TextButton joinButton;
 
-    public MainMenuView() {
+    public MainMenuView(ShapeWarsController controller) {
+        this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
 
         Gdx.input.setInputProcessor(stage);
 
         buildUI();
-    }
-
-    public void setController(ShapeWarsController controller) {
-        this.controller = controller;
     }
 
     @Override
@@ -105,7 +103,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.setScreen(controller.getShapeWarsView());
+                    controller.setScreen(new ShapeWarsView(new ShapeWarsModel(), controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
@@ -116,7 +114,7 @@ public class MainMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    controller.setScreen(controller.getHostView());
+                    controller.setScreen(new HostView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
