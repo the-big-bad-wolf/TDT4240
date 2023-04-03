@@ -9,20 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
 public class MainMenuView implements Screen {
     private final Stage stage;
-    private final ShapeWarsModel model;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
     private TextButton startButton;
     private TextButton hostButton;
     private TextButton joinButton;
 
-    public MainMenuView(ShapeWarsModel model) {
-        this.model = model;
+    public MainMenuView() {
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
 
@@ -34,6 +31,7 @@ public class MainMenuView implements Screen {
     public void setController(ShapeWarsController controller) {
         this.controller = controller;
     }
+
     @Override
     public void show() {
         // make menu resizable
@@ -53,9 +51,6 @@ public class MainMenuView implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
-
-        model.batch.begin();
-        model.batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -96,15 +91,15 @@ public class MainMenuView implements Screen {
         float joinButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
         float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
 
-        startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
+        startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos,
+                startButtonYPos);
         hostButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
         joinButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
 
         addActionsToUI();
     }
 
-    private void addActionsToUI()
-    {
+    private void addActionsToUI() {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -126,7 +121,7 @@ public class MainMenuView implements Screen {
                     System.out.println("No Controller found");
                 }
             }
-        }); 
+        });
 
         joinButton.addListener(new ClickListener() {
             @Override

@@ -1,13 +1,13 @@
 package com.mygdx.shapewars;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
 import com.mygdx.shapewars.view.HostView;
 
-public class ShapeWars extends ApplicationAdapter {
+public class ShapeWars extends Game {
 
 	private ShapeWarsController controller;
 
@@ -15,8 +15,8 @@ public class ShapeWars extends ApplicationAdapter {
 	public void create() {
 		ShapeWarsModel model = new ShapeWarsModel();
 		ShapeWarsView shapeWarsView = new ShapeWarsView(model);
-		MainMenuView mainMenuView = new MainMenuView(model);
-		HostView hostView = new HostView(model);
+		MainMenuView mainMenuView = new MainMenuView();
+		HostView hostView = new HostView();
 		controller = new ShapeWarsController(model, shapeWarsView, mainMenuView, hostView);
 		mainMenuView.setController(controller);
 		shapeWarsView.setController(controller);

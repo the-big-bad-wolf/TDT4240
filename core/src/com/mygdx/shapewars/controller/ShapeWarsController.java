@@ -27,7 +27,7 @@ public class ShapeWarsController {
 
     public void update() {
         if (currentScreen instanceof ShapeWarsView) {
-            model.update();
+            ShapeWarsModel.update();
         }
         currentScreen.render(Gdx.graphics.getDeltaTime());
     }
