@@ -11,6 +11,8 @@ public class VelocityComponent implements Component{
     this.direction = direction;
   }
 
+  public VelocityComponent() {} // needed for kryonet deserialization
+
   public float getValue() {
     return this.value;
   }
@@ -27,6 +29,11 @@ public class VelocityComponent implements Component{
   public void setVelocityJoystick(float v, float d) {
     this.value = v;
     this.direction = d;
+  }
+
+  public void setMagnitudeAndDirection(float v, float d) {
+    value = v;
+    direction += d;
   }
 
   public void setValue(float v) {

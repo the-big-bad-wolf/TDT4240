@@ -5,8 +5,13 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
+import com.mygdx.shapewars.model.components.HealthComponent;
+import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
+import java.util.ArrayList;
+
 
 public class ServerListener extends Listener {
 
@@ -34,10 +39,24 @@ public class ServerListener extends Listener {
                 model.clientTankMapping.put(inputRequest.clientId, 1); // change to multiple
             }
 
-            System.out.println(inputRequest.directionInput + " " + inputRequest.valueInput);
             Entity entity = model.engine.getEntities().get(model.clientTankMapping.get(inputRequest.clientId));
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-            velocityComponent.setVelocity(inputRequest.valueInput, inputRequest.directionInput);
+            velocityComponent.setMagnitudeAndDirection(inputRequest.valueInput, inputRequest.directionInput);
+
+            ArrayList<VelocityComponent> velocityComponentsNew = new ArrayList<>();
+            ArrayList<PositionComponent> positionComponentsNew = new ArrayList<>();
+            ArrayList<HealthComponent> healthComponentsNew = new ArrayList<>();
+            for (Entity e : model.engine.getEntities()) {
+                velocityComponentsNew.add(ComponentMappers.velocity.get(e));
+                positionComponentsNew.add(ComponentMappers.position.get(e));
+                healthComponentsNew.add(ComponentMappers.health.get(e));
+            }
+
+            PositionComponent[] positionComponentsArray = positionComponentsNew.toArray(new PositionComponent[positionComponentsNew.size()]);
+            VelocityComponent[] velocityComponentsArray = velocityComponentsNew.toArray(new VelocityComponent[velocityComponentsNew.size()]);
+            HealthComponent[] healthComponentsArray = healthComponentsNew.toArray(new HealthComponent[healthComponentsNew.size()]);
+            GameResponse response = new GameResponse(velocityComponentsArray, positionComponentsArray, healthComponentsArray);
+            connection.sendUDP(response);
         }
     }
 }

@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.shapewars.controller.Joystick;
@@ -48,9 +49,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     }
 
     public void addedToEngine(Engine engine) {
-    entities = engine.getEntitiesFor(
-        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
-            IdentityComponent.class).get());
+        entities = engine.getEntitiesFor(
+                Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
+                        IdentityComponent.class).get());
     }
 
     public void update(float deltaTime) {
@@ -87,6 +88,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 FiringSystem.spawnBullet(entity);
                 space = false;
             }
+            // velocityComponent.setMagnitudeAndDirection(inputValue, inputDirection);
         } else {
             clientConnector.sendInput(clientId, inputValue, inputDirection); // update clientId
         }

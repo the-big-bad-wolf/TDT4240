@@ -39,6 +39,7 @@ public class ShapeWarsView implements Screen {
     public void setController(ShapeWarsController controller) {
         this.controller = controller;
     }
+
     @Override
     public void show() {
         // create a render object to easily render all layers, objects, etc. of our TileMap
@@ -90,8 +91,9 @@ public class ShapeWarsView implements Screen {
         mapRenderer.setView((OrthographicCamera) fitViewport.getCamera());
         mapRenderer.render(layers);
         mapRenderer.getBatch().begin();
-        for (Entity entity : model.engine.getEntities()) {
+        for (int i = 0; i < model.engine.getEntities().size(); i++) {
             // TODO access components without entities
+            Entity entity = model.engine.getEntities().get(i);
             SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
             spriteComponent.getSprite().draw(mapRenderer.getBatch());
         }

@@ -26,8 +26,10 @@ public class MovementSystem extends EntitySystem {
         Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, IdentityComponent.class).get());
 	}
 
+	// todo remove everything sprite here, move to sprite system
 	public void update(float deltaTime) {
-		for (Entity entity : entities) {
+		for (int i = 0; i < entities.size(); i++) {
+			Entity entity = entities.get(i);
 			PositionComponent position = ComponentMappers.position.get(entity);
 			VelocityComponent velocity = ComponentMappers.velocity.get(entity);
 			SpriteComponent sprite = ComponentMappers.sprite.get(entity);
@@ -43,9 +45,7 @@ public class MovementSystem extends EntitySystem {
 			newX += overlapVector.x;
 			newY += overlapVector.y;
 			position.setPosition(newX, newY);
-			sprite.getSprite().setPosition(newX, newY);
 			sprite.getHitbox().setPosition(newX, newY);
-			sprite.setRotation(velocity.getDirection());
 		}
 	}
 

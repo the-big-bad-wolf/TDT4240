@@ -1,7 +1,5 @@
 package com.mygdx.shapewars.network.data;
 
-import java.util.UUID;
-
 public class InputRequest {
 
     public String clientId;
