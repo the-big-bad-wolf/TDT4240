@@ -9,6 +9,8 @@ public class HealthComponent implements Component {
     this.health = health;
   }
 
+  public HealthComponent() { } // needed for kryonet deserialization
+
   public int getHealth() {
     return health;
   }
