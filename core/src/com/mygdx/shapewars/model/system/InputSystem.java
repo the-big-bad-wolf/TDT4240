@@ -13,12 +13,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.shapewars.controller.Joystick;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
+import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
-import java.util.UUID;
 
 public class InputSystem extends EntitySystem implements InputProcessor {
     private ImmutableArray<Entity> entities;

@@ -101,7 +101,7 @@ public class ShapeWarsModel {
                 tank.add(new PositionComponent(0, 0));
                 tank.add(new VelocityComponent(0, 0));
                 tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo change to support multiple colors
-                tank.add(new HealthComponent());
+                tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }

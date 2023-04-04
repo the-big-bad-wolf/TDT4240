@@ -1,7 +1,12 @@
 package com.mygdx.shapewars.network.client;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.model.components.HealthComponent;
+import com.mygdx.shapewars.model.components.PositionComponent;
+import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
 import java.io.IOException;
@@ -47,7 +52,7 @@ public class ClientConnector {
         client.addListener(new ClientListener(model));
     }
 
-    public void sendInput(String clientId, int valueInput, int directionInput) {
+    public void sendInput(String clientId, float valueInput, float directionInput) {
         client.sendUDP(new InputRequest(clientId, valueInput, directionInput));
     }
 }
