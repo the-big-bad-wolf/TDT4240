@@ -19,7 +19,8 @@ import com.mygdx.shapewars.model.system.InputSystem;
 import com.mygdx.shapewars.model.system.MovementSystem;
 import com.mygdx.shapewars.model.system.SpriteSystem;
 import com.mygdx.shapewars.model.system.RicochetSystem;
-import com.mygdx.shapewars.network.Role;
+import com.mygdx.shapewars.types.Launcher;
+import com.mygdx.shapewars.types.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 import java.util.ArrayList;
@@ -37,7 +38,6 @@ public class ShapeWarsModel {
     public static MovementSystem movementSystem;
     public static RicochetSystem ricochetSystem;
     public static DeathSystem deathSystem;
-
     private static TiledMap map;
     private Role role = Role.Server; // change with client/ hosts screens
     public InputSystem inputSystem;
@@ -47,8 +47,10 @@ public class ShapeWarsModel {
     public String clientId;
     public HashMap<String, Integer> clientTankMapping = new HashMap<>();
     public Joystick joystick;
+    public Launcher launcher;
 
-    public ShapeWarsModel() {
+    public ShapeWarsModel(Launcher launcher) {
+        this.launcher = launcher;
         TmxMapLoader loader = new TmxMapLoader();
         /*
             current map structure:

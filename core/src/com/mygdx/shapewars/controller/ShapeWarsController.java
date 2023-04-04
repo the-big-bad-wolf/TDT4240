@@ -1,21 +1,10 @@
 package com.mygdx.shapewars.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Net;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.net.HttpRequestBuilder;
-import com.badlogic.gdx.net.ServerSocket;
-import com.badlogic.gdx.net.ServerSocketHints;
-import com.badlogic.gdx.net.Socket;
-import com.badlogic.gdx.net.SocketHints;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
-import com.badlogic.gdx.Net.Protocol;
 import com.mygdx.shapewars.view.HostView;
 
 public class ShapeWarsController {

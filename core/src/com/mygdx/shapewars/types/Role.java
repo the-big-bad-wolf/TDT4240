@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.network;
+package com.mygdx.shapewars.types;
 
 public enum Role {
     Server, Client
