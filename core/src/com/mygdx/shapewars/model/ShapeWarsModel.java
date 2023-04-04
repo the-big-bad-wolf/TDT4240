@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.shapewars.controller.Joystick;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
@@ -16,6 +17,7 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.model.system.InputSystem;
 import com.mygdx.shapewars.model.system.MovementSystem;
 import com.mygdx.shapewars.model.system.SpriteSystem;
+import com.mygdx.shapewars.model.system.RicochetSystem;
 import com.mygdx.shapewars.network.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
@@ -25,12 +27,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class ShapeWarsModel {
+
     public static final int TANK_WIDTH = 75;
     public static final int TANK_HEIGHT = 75;
     public static final int NUM_PLAYERS = 2; // todo add lobby
     public SpriteBatch batch;
-    public Engine engine;
-    public MovementSystem movementSystem;
+    public static Engine engine;
+    public static MovementSystem movementSystem;
+    public static RicochetSystem ricochetSystem;
+
     private TiledMap map;
     private Role role = Role.Server; // todo change with screens
     public InputSystem inputSystem;
@@ -39,17 +44,28 @@ public class ShapeWarsModel {
     public ClientConnector clientConnector;
     public String clientId;
     public HashMap<String, Integer> clientTankMapping = new HashMap<>();
+    public Joystick joystick;
 
     public ShapeWarsModel() {
         TmxMapLoader loader = new TmxMapLoader();
-        map = loader.load("maps/thirdMap.tmx"); // todo get from server
+        /*
+            current map structure:
+            0 = groundLayer
+            1 = collisionLayer
+            2 = bulletLayer
+            3 = spawnLayer
+            4, 5, ... = non-existent yet
+         */
+
+        map = loader.load("maps/map2.tmx"); // make server send this AFTER sophie is done
         batch = new SpriteBatch();
         engine = new Engine();
 
+        joystick = new Joystick(200, 200, 70, 40);
+
         if (this.role == Role.Server) {
             this.serverConnector = new ServerConnector(this);
-
-            TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(2);
+            TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
 
             List<Vector2> spawnCells = new ArrayList<>();
             for (int y = 0; y < spawnLayer.getHeight(); y++) {
@@ -66,8 +82,8 @@ public class ShapeWarsModel {
                 Vector2 cell = spawnCells.get(i);
                 tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo change to support multiple colors
-                tank.add(new HealthComponent());
+                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // change to support multiple colors
+                tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }
@@ -91,17 +107,33 @@ public class ShapeWarsModel {
             }
         }
 
-        inputSystem = inputSystem.getInstance(role, clientConnector, clientId);
+        inputSystem = inputSystem.getInstance(role, clientConnector, clientId, joystick);
+        movementSystem = MovementSystem.getInstance(map);
+        ricochetSystem = RicochetSystem.getInstance(map);
         engine.addSystem(inputSystem);
         spriteSystem = spriteSystem.getInstance();
         engine.addSystem(spriteSystem);
+        engine.addSystem(movementSystem);
+        engine.addSystem(ricochetSystem);
     }
 
-    public void update() {
+    public static void update() {
         engine.update(Gdx.graphics.getDeltaTime());
     }
 
+    public static void addToEngine(Entity entity) {
+      engine.addEntity(entity);
+    }
+
+    public static void removedFromEngine(Entity entity) {
+        engine.removeEntity(entity);
+      }
+
     public TiledMap getMap() {
         return map;
+    }
+
+    public Joystick getJoystick() {
+        return joystick;
     }
 }
