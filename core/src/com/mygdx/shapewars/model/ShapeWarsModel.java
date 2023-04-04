@@ -16,6 +16,8 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.model.system.DeathSystem;
 import com.mygdx.shapewars.model.system.InputSystem;
+import com.mygdx.shapewars.model.system.InputSystemDesktop;
+import com.mygdx.shapewars.model.system.InputSystemMobile;
 import com.mygdx.shapewars.model.system.MovementSystem;
 import com.mygdx.shapewars.model.system.SpriteSystem;
 import com.mygdx.shapewars.model.system.RicochetSystem;
@@ -111,7 +113,12 @@ public class ShapeWarsModel {
             }
         }
 
-        inputSystem = InputSystem.getInstance(role, clientConnector, clientId, joystick);
+        // todo what needs to be only in the server?
+        if (launcher == Launcher.Desktop)
+            inputSystem = InputSystemDesktop.getInstance(role, clientConnector, clientId);
+        else
+            inputSystem = InputSystemMobile.getInstance(role, clientConnector, clientId, joystick);
+
         movementSystem = MovementSystem.getInstance();
         ricochetSystem = RicochetSystem.getInstance();
         deathSystem = DeathSystem.getInstance();
