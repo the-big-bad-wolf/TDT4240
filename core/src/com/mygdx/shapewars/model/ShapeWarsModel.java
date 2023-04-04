@@ -89,7 +89,7 @@ public class ShapeWarsModel {
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }
-            movementSystem = movementSystem.getInstance(map);
+            movementSystem = movementSystem.getInstance();
             engine.addSystem(movementSystem);
 
 
