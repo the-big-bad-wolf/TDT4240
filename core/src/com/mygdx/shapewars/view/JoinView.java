@@ -13,11 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.network.Role;
 
 public class JoinView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
-    private ShapeWarsController controller;
+    private final ShapeWarsController controller;
     private TextField inputField;
     private TextButton backButton;
     private TextButton okButton;
@@ -118,6 +120,7 @@ public class JoinView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println(inputField.getText());
+                controller.setScreen(new ShapeWarsView(new ShapeWarsModel(Role.Client), controller));
             }
         });
 

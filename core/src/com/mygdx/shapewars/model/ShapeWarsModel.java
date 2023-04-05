@@ -39,7 +39,7 @@ public class ShapeWarsModel {
     public static DeathSystem deathSystem;
 
     private static TiledMap map;
-    private Role role = Role.Server; // change with client/ hosts screens
+    private Role role; // change with client/ hosts screens
     public InputSystem inputSystem;
     public SpriteSystem spriteSystem;
     public ServerConnector serverConnector; // todo implement strategy pattern
@@ -48,15 +48,20 @@ public class ShapeWarsModel {
     public HashMap<String, Integer> clientTankMapping = new HashMap<>();
     public Joystick joystick;
 
-    public ShapeWarsModel() {
+    public ShapeWarsModel(Role role) {
+        this(role, "");
+    }
+
+    public ShapeWarsModel(Role role, String ipAdress) {
+        this.role = role;
         TmxMapLoader loader = new TmxMapLoader();
         /*
-            current map structure:
-            0 = groundLayer
-            1 = collisionLayer
-            2 = bulletLayer
-            3 = spawnLayer
-            4, 5, ... = non-existent yet
+         * current map structure:
+         * 0 = groundLayer
+         * 1 = collisionLayer
+         * 2 = bulletLayer
+         * 3 = spawnLayer
+         * 4, 5, ... = non-existent yet
          */
 
         map = loader.load("maps/map2.tmx"); // make server send this AFTER sophie is done
@@ -82,9 +87,11 @@ public class ShapeWarsModel {
             for (int i = 0; i < NUM_PLAYERS; i++) {
                 Entity tank = new Entity();
                 Vector2 cell = spawnCells.get(i);
-                tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
+                tank.add(
+                        new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // change to support multiple colors
+                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // change to support
+                                                                                             // multiple colors
                 tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
@@ -92,17 +99,18 @@ public class ShapeWarsModel {
             movementSystem = movementSystem.getInstance();
             engine.addSystem(movementSystem);
 
-
         } else if (this.role == Role.Client) {
-            this.clientConnector = new ClientConnector(this);
+            this.clientConnector = new ClientConnector(this, ipAdress);
             this.clientId = UUID.randomUUID().toString();
-            // todo send initial request (initial position <int, int>; map name <string>; tank sprite files <string[]>)
+            // todo send initial request (initial position <int, int>; map name <string>;
+            // tank sprite files <string[]>)
 
             for (int i = 0; i < NUM_PLAYERS; i++) {
                 Entity tank = new Entity();
                 tank.add(new PositionComponent(0, 0));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo change to support multiple colors
+                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo change to support
+                                                                                             // multiple colors
                 tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
@@ -126,12 +134,12 @@ public class ShapeWarsModel {
     }
 
     public static void addToEngine(Entity entity) {
-      engine.addEntity(entity);
+        engine.addEntity(entity);
     }
 
     public static void removeFromEngine(Entity entity) {
         engine.removeEntity(entity);
-      }
+    }
 
     public static TiledMap getMap() {
         return map;
@@ -142,6 +150,6 @@ public class ShapeWarsModel {
     }
 
     public static TiledMapTileLayer getLayer(int layerId) {
-      return (TiledMapTileLayer) getMap().getLayers().get(layerId);
+        return (TiledMapTileLayer) getMap().getLayers().get(layerId);
     }
 }

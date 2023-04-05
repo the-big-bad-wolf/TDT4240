@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.network.Role;
 
 public class MainMenuView implements Screen {
     private final Stage stage;
@@ -103,7 +104,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.setScreen(new ShapeWarsView(new ShapeWarsModel(), controller));
+                    controller.setScreen(new ShapeWarsView(new ShapeWarsModel(Role.Server), controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
