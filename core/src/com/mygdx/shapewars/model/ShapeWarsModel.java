@@ -5,6 +5,7 @@ import static com.mygdx.shapewars.config.GameConfig.TANK_WIDTH;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -17,15 +18,9 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.model.system.DeathSystem;
-import com.mygdx.shapewars.model.system.InputSystem;
-import com.mygdx.shapewars.model.system.InputSystemDesktop;
-import com.mygdx.shapewars.model.system.InputSystemMobile;
-import com.mygdx.shapewars.model.system.MovementSystem;
-import com.mygdx.shapewars.model.system.SpriteSystem;
-import com.mygdx.shapewars.model.system.RicochetSystem;
 import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.config.Role;
+import com.mygdx.shapewars.model.system.SystemFactory;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 import java.util.ArrayList;
@@ -37,13 +32,8 @@ public class ShapeWarsModel {
     public static final int NUM_PLAYERS = 2; // todo add lobby
     public SpriteBatch batch;
     public static Engine engine;
-    public static MovementSystem movementSystem;
-    public static RicochetSystem ricochetSystem;
-    public static DeathSystem deathSystem;
     private static TiledMap map;
-    private Role role = Role.Server; // change with client/ hosts screens
-    public InputSystem inputSystem;
-    public SpriteSystem spriteSystem;
+    private Role role = Role.Server; // todo change with client/ hosts screens
     public ServerConnector serverConnector; // todo implement strategy pattern
     public ClientConnector clientConnector;
     public String clientId;
@@ -93,10 +83,6 @@ public class ShapeWarsModel {
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }
-            movementSystem = movementSystem.getInstance();
-            engine.addSystem(movementSystem);
-
-
         } else if (this.role == Role.Client) {
             this.clientConnector = new ClientConnector(this);
             this.clientId = UUID.randomUUID().toString();
@@ -113,21 +99,10 @@ public class ShapeWarsModel {
             }
         }
 
-        // todo what needs to be only in the server?
-        if (launcher == Launcher.Desktop)
-            inputSystem = InputSystemDesktop.getInstance(role, clientConnector, clientId);
-        else
-            inputSystem = InputSystemMobile.getInstance(role, clientConnector, clientId, joystick);
-
-        movementSystem = MovementSystem.getInstance();
-        ricochetSystem = RicochetSystem.getInstance();
-        deathSystem = DeathSystem.getInstance();
-        engine.addSystem(inputSystem);
-        spriteSystem = spriteSystem.getInstance();
-        engine.addSystem(spriteSystem);
-        engine.addSystem(movementSystem);
-        engine.addSystem(ricochetSystem);
-        engine.addSystem(deathSystem);
+        // todo reduce parameters
+        for (EntitySystem system : SystemFactory.generateSystems(role, launcher, joystick, clientConnector, clientId)) {
+            engine.addSystem(system);
+        }
     }
 
     public static void update() {
