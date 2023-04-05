@@ -84,15 +84,15 @@ public class MainMenuView implements Screen {
         float allButtonsHeight = 200f;
         float startButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 + 200;
-        float hostButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
-        float hostButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 50f;
         float joinButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
-        float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
+        float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 50f;
+        float hostButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
+        float hostButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
 
         startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos,
                 startButtonYPos);
-        hostButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
-        joinButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
+        joinButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
+        hostButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
 
         addActionsToUI();
     }
@@ -110,18 +110,18 @@ public class MainMenuView implements Screen {
             }
         });
 
-        hostButton.addListener(new ClickListener() {
+        joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    controller.setScreen(new HostView(controller));
+                    controller.setScreen(new JoinView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
             }
         });
 
-        joinButton.addListener(new ClickListener() {
+        hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Switch to JoinView (has to be decided and implemented)

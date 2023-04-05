@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
-public class HostView implements Screen {
+public class JoinView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
@@ -22,7 +22,7 @@ public class HostView implements Screen {
     private TextButton backButton;
     private TextButton okButton;
 
-    public HostView(ShapeWarsController controller) {
+    public JoinView(ShapeWarsController controller) {
         this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
