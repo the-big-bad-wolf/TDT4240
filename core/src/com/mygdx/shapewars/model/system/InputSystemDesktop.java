@@ -1,6 +1,5 @@
 package com.mygdx.shapewars.model.system;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.types.Role;
@@ -10,7 +9,6 @@ public class InputSystemDesktop extends InputSystem {
 
     private InputSystemDesktop(Role role, ClientConnector clientConnector, String clientId) {
         super(role, clientConnector, clientId);
-        Gdx.input.setInputProcessor(this);
     }
 
     public static InputSystemDesktop getInstance(Role role, ClientConnector clientConnector, String clientId) {
@@ -35,6 +33,9 @@ public class InputSystemDesktop extends InputSystem {
             inputValue = 5;
         else if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN)
             inputValue = -5;
+
+        if (keycode == Input.Keys.SPACE)
+            firing = true;
 
         return false; // standard return value
     }

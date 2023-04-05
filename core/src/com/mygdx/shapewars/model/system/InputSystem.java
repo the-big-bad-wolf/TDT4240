@@ -25,7 +25,7 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
     private ClientConnector clientConnector;
     private String clientId; // find a way to remove all of these fields
 
-    public boolean usedJoystick = false; // todo remove
+    protected boolean firing;
 
     public InputSystem(Role role, ClientConnector clientConnector, String clientId) {
         this.role = role;
@@ -44,31 +44,23 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
         if (role == Role.Server) {
             Entity entity = entities.get(0);
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-            if (usedJoystick) {
-                velocityComponent.setVelocityJoystick(inputValue, inputDirection);
-            } else {
-                velocityComponent.setVelocity(inputValue, velocityComponent.getDirection() + inputDirection);
-            }
-            // if (space) {
-            //    FiringSystem.spawnBullet(entity);
-            //    space = false;
-            //}
-            // velocityComponent.setMagnitudeAndDirection(inputValue, inputDirection);
-        } else {
-            clientConnector.sendInput(clientId, inputValue, inputDirection); // update clientId
-        }
+            velocityComponent.setVelocity(inputValue, velocityComponent.getDirection() + inputDirection);
 
+            if (firing)
+               FiringSystem.spawnBullet(entity);
+        } else {
+            clientConnector.sendInput(clientId, inputValue, inputDirection); // todo update clientId, add firing
+        }
+        firing = false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        System.out.println("i should not be called");
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        System.out.println("i should not be called");
         return false;
     }
 

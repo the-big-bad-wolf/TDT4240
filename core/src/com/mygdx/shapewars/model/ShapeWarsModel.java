@@ -67,7 +67,7 @@ public class ShapeWarsModel {
         batch = new SpriteBatch();
         engine = new Engine();
 
-        joystick = new Joystick(200, 200, 70, 40);
+        joystick = new Joystick(400, 400, 300, 150);
 
         if (this.role == Role.Server) {
             this.serverConnector = new ServerConnector(this);

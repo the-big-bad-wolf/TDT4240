@@ -8,13 +8,14 @@ import com.mygdx.shapewars.types.Role;
 
 public class InputSystemMobile extends InputSystem {
     private Joystick joystick;
-    private boolean movingThumbstick;
+    private final int outerCircleRadius;
+    private boolean movingJoystick;
     private static volatile InputSystemMobile instance;
 
     private InputSystemMobile(Role role, ClientConnector clientConnector, String clientId, Joystick joystick) {
         super(role, clientConnector, clientId);
         this.joystick = joystick;
-        Gdx.input.setInputProcessor(this);
+        this.outerCircleRadius = Math.round(joystick.getOuterCircle().radius);
     }
 
     public static InputSystemMobile getInstance(Role role, ClientConnector clientConnector, String clientId, Joystick joystick) {
@@ -30,52 +31,40 @@ public class InputSystemMobile extends InputSystem {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (joystick.getOuterCircle().contains(screenX, Gdx.graphics.getHeight() - screenY)) {
-            movingThumbstick = true;
-            joystick.getInnerCircle().setPosition(screenX, Gdx.graphics.getHeight() - screenY);
-        }
-        else {
-            movingThumbstick = false;
-        }
-
-        return false; // standard return value
+        movingJoystick = joystick.getOuterCircle().contains(screenX, Gdx.graphics.getHeight() - screenY);
+        return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x, joystick.getOuterCircle().y);
         inputValue = 0;
-        movingThumbstick = false;
-        // usedJoystick = false;
-        // inputDirection = 0;
-        return false; // standard return value
+        inputDirection = 0;
+        movingJoystick = false;
+        return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (movingThumbstick) {
-            float deltaX = screenX - joystick.getOuterCircle().x;
-            float deltaY = Gdx.graphics.getHeight() - screenY - joystick.getOuterCircle().y;
-            float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-            float maxRadius = joystick.getOuterCircle().radius;
-            if (deltaLength > maxRadius) {
-                deltaX = deltaX * maxRadius / deltaLength;
-                deltaY = deltaY * maxRadius / deltaLength;
-            }
-            //inputThumbstick.getInnerCircleSprite().setCenter(inputThumbstick.getOuterCircle().x + deltaX, Gdx.graphics.getHeight() - (inputThumbstick.getOuterCircle().y - deltaY)); // Bewegen des inneren Kreises an die neue Position
-            joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x + deltaX, (joystick.getOuterCircle().y + deltaY));
+        if (!movingJoystick)
+            return false;
 
-            deltaX = screenX - joystick.getOuterCircle().x;
-            deltaY = (Gdx.graphics.getHeight() - screenY) - joystick.getOuterCircle().y;
-            float angle = MathUtils.atan2(deltaY, deltaX) * MathUtils.radiansToDegrees;
+        float deltaX = screenX - 275 - joystick.getOuterCircle().x; // todo sophie why did i need the 275 here? something with the map borders?
+        float deltaY = Gdx.graphics.getHeight() - screenY - joystick.getOuterCircle().y;
 
-            inputDirection = angle;
+        deltaX = MathUtils.clamp(deltaX, -outerCircleRadius, outerCircleRadius);
+        deltaY = MathUtils.clamp(deltaY, -outerCircleRadius, outerCircleRadius);
 
-            if (joystick.getOuterCircle().x != joystick.getInnerCircle().x && joystick.getOuterCircle().y != joystick.getInnerCircle().y) {
-                inputValue = 5;
-            }
-            usedJoystick = true;
-        }
-        return false; // standard return value
+        joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x + deltaX, joystick.getOuterCircle().y + deltaY);
+
+        float maxSpeed = 5.0f;
+        float maxTurnRate = 2.0f;
+        inputDirection = -deltaX / outerCircleRadius * maxTurnRate;
+        inputValue = deltaY / outerCircleRadius * maxSpeed;
+        return false;
     }
+
+    /*
+     * todo: decide on joystick implementation, add firing button
+     */
 }
