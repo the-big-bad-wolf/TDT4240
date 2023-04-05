@@ -12,20 +12,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.network.Role;
 
-public class HostView implements Screen {
+public class JoinView implements Screen {
     private final Stage stage;
-    private final ShapeWarsModel model;
     private final UIBuilder uiBuilder;
-    private ShapeWarsController controller;
+    private final ShapeWarsController controller;
     private TextField inputField;
     private TextButton backButton;
     private TextButton okButton;
 
-    public HostView(ShapeWarsModel model) {
-        this.model = model;
+    public JoinView(ShapeWarsController controller) {
+        this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
 
@@ -38,10 +38,6 @@ public class HostView implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         buildUI();
-    }
-
-    public void setController(ShapeWarsController controller) {
-        this.controller = controller;
     }
 
     @Override
@@ -57,9 +53,6 @@ public class HostView implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
-
-        model.batch.begin();
-        model.batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -92,7 +85,7 @@ public class HostView implements Screen {
 
     private void buildUI() {
         float inputFieldWidth = 500;
-        float inputFieldHeight= 100;
+        float inputFieldHeight = 100;
         float allButtonsWidth = 250f;
         float allButtonsHeight = 100f;
         float inputFieldXPos = Gdx.graphics.getWidth() / 2f - inputFieldWidth / 2;
@@ -102,7 +95,8 @@ public class HostView implements Screen {
         float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float okButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
 
-        inputField = uiBuilder.buildTextField("Enter your code", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
+        inputField = uiBuilder.buildTextField("Enter your code", inputFieldWidth, inputFieldHeight, inputFieldXPos,
+                inputFieldYPos);
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
         okButton = uiBuilder.buildButton("OK", allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos);
 
@@ -113,8 +107,9 @@ public class HostView implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
-                    controller.setScreen(controller.getMainMenuView());
+                    controller.setScreen(new MainMenuView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No controller found");
                 }
@@ -124,7 +119,8 @@ public class HostView implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Has to be decided and implemented
+                System.out.println(inputField.getText());
+                controller.setScreen(new ShapeWarsView(new ShapeWarsModel(Role.Client), controller));
             }
         });
 

@@ -50,7 +50,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(
-                Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
+                Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class,
+                        HealthComponent.class,
                         IdentityComponent.class).get());
     }
 
@@ -61,7 +62,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             inputDirection = 2;
         } else if (right) {
             inputDirection = -2;
-        } else if (!usedJoystick){
+        } else if (!usedJoystick) {
             inputDirection = 0;
         }
 
@@ -69,8 +70,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             inputValue = 5;
         } else if (down) {
             inputValue = -5;
-        }
-        else {
+        } else {
             inputValue = 0;
         }
 
@@ -80,8 +80,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
             if (usedJoystick) {
                 velocityComponent.setVelocityJoystick(inputValue, inputDirection);
-            }
-            else {
+            } else {
                 velocityComponent.setVelocity(inputValue, velocityComponent.getDirection() + inputDirection);
             }
             if (space) {
@@ -95,7 +94,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
     }
 
-    public static InputSystem getInstance(Role role, ClientConnector clientConnector, String clientId, Joystick joystick) {
+    public static InputSystem getInstance(Role role, ClientConnector clientConnector, String clientId,
+            Joystick joystick) {
         if (instance == null) {
             synchronized (InputSystem.class) {
                 if (instance == null) {
@@ -148,11 +148,10 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (joystick.getOuterCircle().contains(screenX, Gdx.graphics.getHeight()-screenY)) {
+        if (joystick.getOuterCircle().contains(screenX, Gdx.graphics.getHeight() - screenY)) {
             movingThumbstick = true;
             joystick.getInnerCircle().setPosition(screenX, Gdx.graphics.getHeight() - screenY);
-        }
-        else {
+        } else {
             movingThumbstick = false;
         }
         return false;
@@ -179,8 +178,11 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 deltaX = deltaX * maxRadius / deltaLength;
                 deltaY = deltaY * maxRadius / deltaLength;
             }
-            //inputThumbstick.getInnerCircleSprite().setCenter(inputThumbstick.getOuterCircle().x + deltaX, Gdx.graphics.getHeight() - (inputThumbstick.getOuterCircle().y - deltaY)); // Bewegen des inneren Kreises an die neue Position
-            joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x + deltaX, (joystick.getOuterCircle().y + deltaY));
+            // inputThumbstick.getInnerCircleSprite().setCenter(inputThumbstick.getOuterCircle().x
+            // + deltaX, Gdx.graphics.getHeight() - (inputThumbstick.getOuterCircle().y -
+            // deltaY)); // Bewegen des inneren Kreises an die neue Position
+            joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x + deltaX,
+                    (joystick.getOuterCircle().y + deltaY));
 
             deltaX = screenX - joystick.getOuterCircle().x;
             deltaY = (Gdx.graphics.getHeight() - screenY) - joystick.getOuterCircle().y;
@@ -188,7 +190,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
             inputDirection = angle;
 
-            if (joystick.getOuterCircle().x != joystick.getInnerCircle().x && joystick.getOuterCircle().y != joystick.getInnerCircle().y) {
+            if (joystick.getOuterCircle().x != joystick.getInnerCircle().x
+                    && joystick.getOuterCircle().y != joystick.getInnerCircle().y) {
                 driving = true;
             }
             usedJoystick = true;

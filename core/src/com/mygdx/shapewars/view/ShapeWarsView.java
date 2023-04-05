@@ -13,8 +13,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -30,32 +30,35 @@ public class ShapeWarsView implements Screen {
     private ExtendViewport extendViewport;
     private ShapeWarsController controller;
 
-    public ShapeWarsView(ShapeWarsModel model) {
+    public ShapeWarsView(ShapeWarsModel model, ShapeWarsController controller) {
+        this.controller = controller;
         this.model = model;
         this.stage = new Stage(); // todo check if we need to change that
         map = model.getMap();
     }
 
-    public void setController(ShapeWarsController controller) {
-        this.controller = controller;
-    }
-
     @Override
     public void show() {
-        // create a render object to easily render all layers, objects, etc. of our TileMap
+        // create a render object to easily render all layers, objects, etc. of our
+        // TileMap
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         shapeRenderer = new ShapeRenderer();
 
-        // creation and setting of map to make sure dimensions are set right and whole map is shown
+        // creation and setting of map to make sure dimensions are set right and whole
+        // map is shown
         OrthographicCamera camera = new OrthographicCamera();
-        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
-        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
+        float mapWidth = map.getProperties().get("width", Integer.class)
+                * map.getProperties().get("tilewidth", Integer.class);
+        float mapHeight = map.getProperties().get("height", Integer.class)
+                * map.getProperties().get("tileheight", Integer.class);
         camera.setToOrtho(false, mapWidth, mapHeight);
         camera.update();
 
-        // fitViewport scales the game world to fit on screen with the correct dimensions
+        // fitViewport scales the game world to fit on screen with the correct
+        // dimensions
         fitViewport = new FitViewport(mapWidth, mapHeight, camera);
-        // extendViewport allows for a scalable background that shows when fitViewport doesn't use the whole screen
+        // extendViewport allows for a scalable background that shows when fitViewport
+        // doesn't use the whole screen
         extendViewport = new ExtendViewport(mapWidth, mapHeight);
 
         // Background that shows around the actual playing field
@@ -102,10 +105,12 @@ public class ShapeWarsView implements Screen {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(new Color(135/255f, 206/255f, 235/255f, 0.3f));
-        shapeRenderer.circle(model.getJoystick().getOuterCircle().x, model.getJoystick().getOuterCircle().y, model.getJoystick().getOuterCircle().radius);
-        shapeRenderer.setColor(new Color(0, 0, 139/255f, 0.3f));
-        shapeRenderer.circle(model.getJoystick().getInnerCircle().x, model.getJoystick().getInnerCircle().y, model.getJoystick().getInnerCircle().radius);
+        shapeRenderer.setColor(new Color(135 / 255f, 206 / 255f, 235 / 255f, 0.3f));
+        shapeRenderer.circle(model.getJoystick().getOuterCircle().x, model.getJoystick().getOuterCircle().y,
+                model.getJoystick().getOuterCircle().radius);
+        shapeRenderer.setColor(new Color(0, 0, 139 / 255f, 0.3f));
+        shapeRenderer.circle(model.getJoystick().getInnerCircle().x, model.getJoystick().getInnerCircle().y,
+                model.getJoystick().getInnerCircle().radius);
         shapeRenderer.end();
     }
 
@@ -134,5 +139,6 @@ public class ShapeWarsView implements Screen {
     public void dispose() {
         map.dispose();
         mapRenderer.dispose();
+        model.batch.dispose();
     }
 }
