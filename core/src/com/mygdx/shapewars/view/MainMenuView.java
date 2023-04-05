@@ -113,6 +113,7 @@ public class MainMenuView implements Screen {
         joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
                     controller.setScreen(new JoinView(controller));
                 } catch (NullPointerException nullPointerException) {

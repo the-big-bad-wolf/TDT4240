@@ -105,6 +105,7 @@ public class JoinView implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
                     controller.setScreen(new MainMenuView(controller));
                 } catch (NullPointerException nullPointerException) {
@@ -116,7 +117,7 @@ public class JoinView implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Has to be decided and implemented
+                System.out.println(inputField.getText());
             }
         });
 
