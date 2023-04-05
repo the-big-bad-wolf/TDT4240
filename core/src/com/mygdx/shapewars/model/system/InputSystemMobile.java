@@ -1,10 +1,14 @@
 package com.mygdx.shapewars.model.system;
 
+import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
+import static com.mygdx.shapewars.config.GameConfig.MAX_TURN_RATE;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.mygdx.shapewars.config.GameConfig;
 import com.mygdx.shapewars.controller.Joystick;
 import com.mygdx.shapewars.network.client.ClientConnector;
-import com.mygdx.shapewars.types.Role;
+import com.mygdx.shapewars.config.Role;
 
 public class InputSystemMobile extends InputSystem {
     private Joystick joystick;
@@ -57,10 +61,8 @@ public class InputSystemMobile extends InputSystem {
 
         joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x + deltaX, joystick.getOuterCircle().y + deltaY);
 
-        float maxSpeed = 5.0f;
-        float maxTurnRate = 2.0f;
-        inputDirection = -deltaX / outerCircleRadius * maxTurnRate;
-        inputValue = deltaY / outerCircleRadius * maxSpeed;
+        inputDirection = -deltaX / outerCircleRadius * MAX_TURN_RATE;
+        inputValue = deltaY / outerCircleRadius * MAX_SPEED;
         return false;
     }
 

@@ -4,7 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.mygdx.shapewars.ShapeWars;
-import com.mygdx.shapewars.types.Launcher;
+import com.mygdx.shapewars.config.Launcher;
 
 public class HtmlLauncher extends GwtApplication {
 

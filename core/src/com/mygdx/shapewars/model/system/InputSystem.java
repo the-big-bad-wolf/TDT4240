@@ -13,7 +13,7 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.types.Role;
+import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
 
 public abstract class InputSystem extends EntitySystem implements InputProcessor {

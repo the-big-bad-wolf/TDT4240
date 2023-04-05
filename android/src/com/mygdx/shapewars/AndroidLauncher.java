@@ -4,8 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.mygdx.shapewars.ShapeWars;
-import com.mygdx.shapewars.types.Launcher;
+import com.mygdx.shapewars.config.Launcher;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override

@@ -1,8 +1,11 @@
 package com.mygdx.shapewars.model.system;
 
+import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
+import static com.mygdx.shapewars.config.GameConfig.MAX_TURN_RATE;
+
 import com.badlogic.gdx.Input;
 import com.mygdx.shapewars.network.client.ClientConnector;
-import com.mygdx.shapewars.types.Role;
+import com.mygdx.shapewars.config.Role;
 
 public class InputSystemDesktop extends InputSystem {
     private static volatile InputSystemDesktop instance;
@@ -25,14 +28,14 @@ public class InputSystemDesktop extends InputSystem {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.A || keycode == Input.Keys.LEFT)
-            this.inputDirection = 2;
+            this.inputDirection = MAX_TURN_RATE;
         else if (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT)
-            this.inputDirection = -2;
+            this.inputDirection = -MAX_TURN_RATE;
 
         if (keycode == Input.Keys.W || keycode == Input.Keys.UP)
-            inputValue = 5;
+            inputValue = MAX_SPEED;
         else if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN)
-            inputValue = -5;
+            inputValue = -MAX_SPEED;
 
         if (keycode == Input.Keys.SPACE)
             firing = true;

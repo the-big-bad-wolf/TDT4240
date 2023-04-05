@@ -1,7 +1,7 @@
 package com.mygdx.shapewars.model.system;
 
-import com.mygdx.shapewars.types.Launcher;
-import com.mygdx.shapewars.types.Role;
+import com.mygdx.shapewars.config.Launcher;
+import com.mygdx.shapewars.config.Role;
 
 public class SystemFactory {
     private Role role;

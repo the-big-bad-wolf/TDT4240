@@ -3,7 +3,7 @@ package com.mygdx.shapewars;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.types.Launcher;
+import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
 import com.mygdx.shapewars.view.HostView;

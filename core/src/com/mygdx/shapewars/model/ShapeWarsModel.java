@@ -1,5 +1,8 @@
 package com.mygdx.shapewars.model;
 
+import static com.mygdx.shapewars.config.GameConfig.TANK_HEIGHT;
+import static com.mygdx.shapewars.config.GameConfig.TANK_WIDTH;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -21,8 +24,8 @@ import com.mygdx.shapewars.model.system.InputSystemMobile;
 import com.mygdx.shapewars.model.system.MovementSystem;
 import com.mygdx.shapewars.model.system.SpriteSystem;
 import com.mygdx.shapewars.model.system.RicochetSystem;
-import com.mygdx.shapewars.types.Launcher;
-import com.mygdx.shapewars.types.Role;
+import com.mygdx.shapewars.config.Launcher;
+import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 import java.util.ArrayList;
@@ -31,9 +34,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class ShapeWarsModel {
-
-    public static final int TANK_WIDTH = 75;
-    public static final int TANK_HEIGHT = 75;
     public static final int NUM_PLAYERS = 2; // todo add lobby
     public SpriteBatch batch;
     public static Engine engine;
