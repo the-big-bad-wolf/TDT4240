@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
@@ -122,6 +123,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     controller.setScreen(controller.getJoinView());
+                    model.setRole(Role.Client);
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
@@ -133,6 +135,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     controller.setScreen(controller.getHostView());
+                    model.setRole(Role.Server);
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }            }

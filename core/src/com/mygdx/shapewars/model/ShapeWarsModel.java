@@ -128,4 +128,7 @@ public class ShapeWarsModel {
     public static TiledMapTileLayer getLayer(int layerId) {
       return (TiledMapTileLayer) getMap().getLayers().get(layerId);
     }
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }
