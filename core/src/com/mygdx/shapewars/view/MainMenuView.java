@@ -121,7 +121,7 @@ public class MainMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    controller.setScreen(controller.getHostView());
+                    controller.setScreen(controller.getJoinView());
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
@@ -131,8 +131,11 @@ public class MainMenuView implements Screen {
         hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to HostView (has to be decided and implemented)
-            }
+                try {
+                    controller.setScreen(controller.getHostView());
+                } catch (NullPointerException nullPointerException) {
+                    System.out.println("No Controller found");
+                }            }
         });
     }
 }

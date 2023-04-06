@@ -3,6 +3,7 @@ package com.mygdx.shapewars.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.view.HostView;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
 import com.mygdx.shapewars.view.JoinView;
@@ -13,13 +14,16 @@ public class ShapeWarsController {
     private final ShapeWarsView shapeWarsView;
     private final MainMenuView mainMenuView;
     private final JoinView joinView;
+    private final HostView hostView;
+
     private Screen currentScreen;
     
-    public ShapeWarsController(ShapeWarsModel model, ShapeWarsView shapeWarsView, MainMenuView mainMenuView, JoinView joinView) {
+    public ShapeWarsController(ShapeWarsModel model, ShapeWarsView shapeWarsView, MainMenuView mainMenuView, JoinView joinView, HostView hostView) {
       this.model = model;
       this.mainMenuView = mainMenuView;
       this.shapeWarsView = shapeWarsView;
       this.joinView = joinView;
+      this.hostView = hostView;
       this.currentScreen = mainMenuView;
       currentScreen.show();
     }
@@ -51,7 +55,11 @@ public class ShapeWarsController {
         return shapeWarsView;
     }
 
-    public JoinView getHostView() {
+    public JoinView getJoinView() {
         return joinView;
     }
+    public HostView getHostView() {
+        return hostView;
+    }
+
 }
