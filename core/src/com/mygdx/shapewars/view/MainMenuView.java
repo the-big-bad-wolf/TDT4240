@@ -13,6 +13,8 @@ import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
+import java.net.UnknownHostException;
+
 public class MainMenuView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
@@ -137,7 +139,7 @@ public class MainMenuView implements Screen {
                 try {
                     controller.model.setRole(Role.Server);
                     controller.setScreen(new HostView(controller));
-                } catch (NullPointerException nullPointerException) {
+                } catch (NullPointerException | UnknownHostException nullPointerException) {
                     System.out.println("No Controller found");
                 }
             }
