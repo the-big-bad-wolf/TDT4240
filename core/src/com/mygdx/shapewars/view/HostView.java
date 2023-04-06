@@ -13,7 +13,11 @@ import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
 import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 public class HostView implements Screen {
     private final Stage stage;
@@ -49,7 +53,7 @@ public class HostView implements Screen {
 
     @Override
     public void show() {
-        System.out.println("Join view showing");
+        System.out.println("Host view showing");
         Gdx.input.setInputProcessor(stage);
         render(0);
     }
@@ -104,7 +108,7 @@ public class HostView implements Screen {
         float backButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
-        ipAddress = Inet4Address.getLocalHost().getHostAddress();
+        ipAddress = getIpAddress();
         ipAddressField = uiBuilder.buildButton(ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
         startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
@@ -130,6 +134,32 @@ public class HostView implements Screen {
                 // Has to be decided and implemented
             }
         });
+    }
+
+    private String getIpAddress() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface iface = interfaces.nextElement();
+
+                // Filter out localhost and inactive interfaces
+                if (iface.isLoopback() || !iface.isUp())
+                    continue;
+
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while(addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+
+                    final String ip = addr.getHostAddress();
+
+                    if(Inet4Address.class == addr.getClass()) return ip;
+                }
+            }
+        } catch (SocketException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+
     }
 
 }
