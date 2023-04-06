@@ -114,7 +114,7 @@ public class JoinView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    controller.setScreen(controller.getMainMenuView());
+                    controller.setScreen(new MainMenuView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No controller found");
                 }
