@@ -9,6 +9,8 @@ import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
 import com.mygdx.shapewars.view.JoinView;
 
+import java.net.UnknownHostException;
+
 public class ShapeWars extends ApplicationAdapter {
 
 	private Launcher launcher;
@@ -24,7 +26,13 @@ public class ShapeWars extends ApplicationAdapter {
 		ShapeWarsView shapeWarsView = new ShapeWarsView(model);
 		MainMenuView mainMenuView = new MainMenuView(model);
 		JoinView joinView = new JoinView(model);
-		HostView hostView = new HostView(model);
+		HostView hostView = null;
+		try {
+			hostView = new HostView(model);
+		} catch (UnknownHostException e) {
+			System.out.println("Unable to acquire IP address");
+			throw new RuntimeException(e);
+		}
 		controller = new ShapeWarsController(model, shapeWarsView, mainMenuView, joinView, hostView);
 		mainMenuView.setController(controller);
 		shapeWarsView.setController(controller);

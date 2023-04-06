@@ -12,6 +12,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+
 public class HostView implements Screen {
     private final Stage stage;
     private final ShapeWarsModel model;
@@ -24,11 +27,10 @@ public class HostView implements Screen {
 
 
 
-    public HostView(ShapeWarsModel model) {
+    public HostView(ShapeWarsModel model) throws UnknownHostException {
         this.model = model;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
-        ipAddress = "IP Address";
 
         // make menu resizable
         OrthographicCamera camera = new OrthographicCamera();
@@ -91,7 +93,7 @@ public class HostView implements Screen {
 
     }
 
-    private void buildUI() {
+    private void buildUI() throws UnknownHostException {
         float ipAddressWidth = 500;
         float ipAddressHeight = 100;
         float allButtonsWidth = 250f;
@@ -102,7 +104,7 @@ public class HostView implements Screen {
         float backButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
-
+        ipAddress = Inet4Address.getLocalHost().getHostAddress();
         ipAddressField = uiBuilder.buildButton(ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
         startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
