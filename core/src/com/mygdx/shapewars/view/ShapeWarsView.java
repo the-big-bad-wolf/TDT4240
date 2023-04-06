@@ -33,7 +33,7 @@ public class ShapeWarsView implements Screen {
 
     public ShapeWarsView(ShapeWarsController controller) {
         System.out.println(controller);
-        this.model = controller.model;
+        this.model = controller.shapeWarsModel;
         this.stage = new Stage(); // todo check if we need to change that
         map = model.getMap();
     }
@@ -108,7 +108,7 @@ public class ShapeWarsView implements Screen {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        if (model.launcher == Launcher.Mobile) {
+        if (model.gameModel.launcher == Launcher.Mobile) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(new Color(135 / 255f, 206 / 255f, 235 / 255f, 0.3f));
             shapeRenderer.circle(model.getJoystick().getOuterCircle().x, model.getJoystick().getOuterCircle().y, model.getJoystick().getOuterCircle().radius);

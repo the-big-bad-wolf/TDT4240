@@ -21,7 +21,6 @@ public class ServerConnector {
     public ServerConnector(ShapeWarsModel model) {
         this.server = new Server();
         this.server.start();
-        this.kryo = kryo;
 
         try {
             server.bind(25444, 25666);

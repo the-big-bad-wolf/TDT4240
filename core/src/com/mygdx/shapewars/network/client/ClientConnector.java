@@ -17,8 +17,8 @@ public class ClientConnector {
     private Kryo kryo;
 
     public ClientConnector(ShapeWarsModel model) {
-       this(model, "10.22.10.149");
-    } // todo get ip address from client screen
+        this(model, model.serverIpAddress);
+    }
 
     public ClientConnector(ShapeWarsModel model, String ipAddress) {
         this.client = new com.esotericsoftware.kryonet.Client();

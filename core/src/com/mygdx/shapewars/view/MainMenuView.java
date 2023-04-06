@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
 import java.net.UnknownHostException;
@@ -33,9 +32,6 @@ public class MainMenuView implements Screen {
         buildUI();
     }
 
-    public void setController(ShapeWarsController controller) {
-        this.controller = controller;
-    }
     @Override
     public void show() {
         // make menu resizable
@@ -56,8 +52,8 @@ public class MainMenuView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        controller.model.batch.begin();
-        controller.model.batch.end();
+        controller.gameModel.batch.begin();
+        controller.gameModel.batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -112,6 +108,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
+                    controller.generateShapeWarsModel(Role.Server, "");
                     controller.setScreen(new ShapeWarsView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
@@ -124,7 +121,6 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.model.setRole(Role.Client);
                     controller.setScreen(new ClientView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
@@ -137,7 +133,6 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.model.setRole(Role.Server);
                     controller.setScreen(new HostView(controller));
                 } catch (NullPointerException | UnknownHostException nullPointerException) {
                     System.out.println("No Controller found");

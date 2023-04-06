@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -61,8 +62,8 @@ public class HostView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        controller.model.batch.begin();
-        controller.model.batch.end();
+        controller.gameModel.batch.begin();
+        controller.gameModel.batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -127,7 +128,9 @@ public class HostView implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // todo go to some kind of lobby?
+                // todo add some kind of lobby?
+                controller.generateShapeWarsModel(Role.Server, ipAddress);
+                controller.setScreen(new ShapeWarsView(controller));
             }
         });
     }

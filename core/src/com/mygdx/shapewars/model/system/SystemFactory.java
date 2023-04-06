@@ -3,19 +3,22 @@ package com.mygdx.shapewars.model.system;
 import com.badlogic.ashley.core.EntitySystem;
 import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.controller.Joystick;
-import com.mygdx.shapewars.network.client.ClientConnector;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SystemFactory {
-    public static List<EntitySystem> generateSystems(Role role, Launcher launcher, Joystick joystick, ClientConnector clientConnector, String clientId) {
+    public static List<EntitySystem> generateSystems(ShapeWarsModel model) {
+        Role role = model.role;
+        Launcher launcher = model.gameModel.launcher;
+        String deviceId = model.gameModel.deviceId;
+
         List<EntitySystem> systems = new ArrayList<>();
 
         systems.add(SpriteSystem.getInstance());
         systems.add(launcher == Launcher.Desktop ?
-                InputSystemDesktop.getInstance(role, clientConnector, clientId) :
-                InputSystemMobile.getInstance(role, clientConnector, clientId, joystick));
+                InputSystemDesktop.getInstance(role, model.clientConnector, deviceId) :
+                InputSystemMobile.getInstance(role, model.clientConnector, deviceId, model.joystick));
 
         if (role == Role.Server) {
             systems.add(MovementSystem.getInstance());

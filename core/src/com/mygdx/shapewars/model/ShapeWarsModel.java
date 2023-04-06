@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -18,7 +17,6 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.system.SystemFactory;
 import com.mygdx.shapewars.network.client.ClientConnector;
@@ -26,23 +24,24 @@ import com.mygdx.shapewars.network.server.ServerConnector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 public class ShapeWarsModel {
     public static final int NUM_PLAYERS = 2; // todo add lobby
-    public SpriteBatch batch;
     public static Engine engine;
     private static TiledMap map;
-    private Role role = Role.Server; // todo change with client/ hosts screens
+    public Role role;
     public ServerConnector serverConnector; // todo implement strategy pattern
     public ClientConnector clientConnector;
-    public String clientId;
     public HashMap<String, Integer> clientTankMapping = new HashMap<>();
     public Joystick joystick;
-    public Launcher launcher;
+    public GameModel gameModel;
+    public String serverIpAddress; // field needed?
 
-    public ShapeWarsModel(Launcher launcher) {
-        this.launcher = launcher;
+    public ShapeWarsModel(GameModel gameModel, Role role, String serverIpAddress) {
+        this.role = role;
+        this.serverIpAddress = serverIpAddress;
+        this.gameModel = gameModel;
+
         TmxMapLoader loader = new TmxMapLoader();
         /*
             current map structure:
@@ -54,13 +53,11 @@ public class ShapeWarsModel {
          */
 
         map = loader.load("maps/map2.tmx"); // make server send this AFTER sophie is done
-        batch = new SpriteBatch();
         engine = new Engine();
 
         joystick = new Joystick(400, 400, 300, 150);
 
         if (this.role == Role.Server) {
-            this.serverConnector = new ServerConnector(this);
             TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
 
             List<Vector2> spawnCells = new ArrayList<>();
@@ -83,9 +80,9 @@ public class ShapeWarsModel {
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }
-        } else if (this.role == Role.Client) {
+            this.serverConnector = new ServerConnector(this);
+        } else {
             this.clientConnector = new ClientConnector(this);
-            this.clientId = UUID.randomUUID().toString();
             // todo send initial request (initial position <int, int>; map name <string>; tank sprite files <string[]>)
 
             for (int i = 0; i < NUM_PLAYERS; i++) {
@@ -99,8 +96,7 @@ public class ShapeWarsModel {
             }
         }
 
-        // todo reduce parameters
-        for (EntitySystem system : SystemFactory.generateSystems(role, launcher, joystick, clientConnector, clientId)) {
+        for (EntitySystem system : SystemFactory.generateSystems(this)) {
             engine.addSystem(system);
         }
     }
@@ -127,8 +123,5 @@ public class ShapeWarsModel {
 
     public static TiledMapTileLayer getLayer(int layerId) {
       return (TiledMapTileLayer) getMap().getLayers().get(layerId);
-    }
-    public void setRole(Role role) {
-        this.role = role;
     }
 }

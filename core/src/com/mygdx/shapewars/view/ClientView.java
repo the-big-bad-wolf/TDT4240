@@ -12,12 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
 public class ClientView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
-    private ShapeWarsController controller;
+    private final ShapeWarsController controller;
     private TextField inputField;
     private TextButton backButton;
     private TextButton okButton;
@@ -52,8 +53,8 @@ public class ClientView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        controller.model.batch.begin();
-        controller.model.batch.end();
+        controller.gameModel.batch.begin();
+        controller.gameModel.batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -118,7 +119,9 @@ public class ClientView implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println(inputField.getText()); // ip address input
+                System.out.println(inputField.getText());
+                // todo sanitise ip address input
+                controller.generateShapeWarsModel(Role.Client, inputField.getText());
                 controller.setScreen(new ShapeWarsView(controller));
             }
         });
