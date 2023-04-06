@@ -4,30 +4,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.ShapeWarsController;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Enumeration;
 
-public class HostView implements Screen {
+public class ClientView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
+    private TextField inputField;
     private TextButton backButton;
-    private TextButton startButton;
-    private TextButton ipAddressField;
-    private String ipAddress;
+    private TextButton okButton;
 
-
-    public HostView(ShapeWarsController controller) throws UnknownHostException {
+    public ClientView(ShapeWarsController controller) {
         this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
@@ -41,10 +36,6 @@ public class HostView implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         buildUI();
-    }
-
-    public void setController(ShapeWarsController controller) {
-        this.controller = controller;
     }
 
     @Override
@@ -93,21 +84,21 @@ public class HostView implements Screen {
         stage.dispose();
     }
 
-    private void buildUI() throws UnknownHostException {
-        float ipAddressWidth = 500;
-        float ipAddressHeight = 100;
+    private void buildUI() {
+        float inputFieldWidth = 500;
+        float inputFieldHeight = 100;
         float allButtonsWidth = 250f;
         float allButtonsHeight = 100f;
-        float ipAddressXPos = Gdx.graphics.getWidth() / 2f - ipAddressWidth / 2;
-        float ipAddressYPos = Gdx.graphics.getHeight() / 2f - ipAddressHeight / 2 + 100f;
+        float inputFieldXPos = Gdx.graphics.getWidth() / 2f - inputFieldWidth / 2;
+        float inputFieldYPos = Gdx.graphics.getHeight() / 2f + inputFieldHeight / 2 + 100f;
         float backButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth - 50f;
         float backButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
-        float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
-        float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
-        ipAddress = getIpAddress();
-        ipAddressField = uiBuilder.buildButton(ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
+        float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
+        float okButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
+
+        inputField = uiBuilder.buildTextField("Enter your code", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
-        startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
+        okButton = uiBuilder.buildButton("OK", allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos);
 
         addActionsToUI();
     }
@@ -124,38 +115,23 @@ public class HostView implements Screen {
             }
         });
 
-        startButton.addListener(new ClickListener() {
+        okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // todo go to some kind of lobby?
+                System.out.println(inputField.getText()); // ip address input
+                controller.setScreen(new ShapeWarsView(controller));
+            }
+        });
+
+        inputField.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                // removes text once input is received
+                if (focused) {
+                    inputField.setText("");
+                    inputField.setCursorPosition(0);
+                }
             }
         });
     }
-
-    private String getIpAddress() {
-        try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()) {
-                NetworkInterface iface = interfaces.nextElement();
-
-                // Filter out localhost and inactive interfaces
-                if (iface.isLoopback() || !iface.isUp())
-                    continue;
-
-                Enumeration<InetAddress> addresses = iface.getInetAddresses();
-                while(addresses.hasMoreElements()) {
-                    InetAddress addr = addresses.nextElement();
-
-                    final String ip = addr.getHostAddress();
-
-                    if(Inet4Address.class == addr.getClass()) return ip;
-                }
-            }
-        } catch (SocketException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-
-    }
-
 }

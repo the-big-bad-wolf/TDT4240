@@ -31,14 +31,19 @@ public class ShapeWarsView implements Screen {
     private ExtendViewport extendViewport;
     private ShapeWarsController controller;
 
-    public ShapeWarsView(ShapeWarsModel model) {
-        this.model = model;
+    public ShapeWarsView(ShapeWarsController controller) {
+        System.out.println(controller);
+        this.model = controller.model;
         this.stage = new Stage(); // todo check if we need to change that
         map = model.getMap();
     }
 
     public void setController(ShapeWarsController controller) {
         this.controller = controller;
+    }
+
+    public ShapeWarsController getController() {
+        return controller;
     }
 
     @Override

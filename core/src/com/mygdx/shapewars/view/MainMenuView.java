@@ -15,16 +15,15 @@ import com.mygdx.shapewars.controller.ShapeWarsController;
 
 public class MainMenuView implements Screen {
     private final Stage stage;
-    private final ShapeWarsModel model;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
     private TextButton startButton;
     private TextButton hostButton;
     private TextButton joinButton;
 
-    public MainMenuView(ShapeWarsModel model) {
-        this.model = model;
+    public MainMenuView(ShapeWarsController controller) {
         this.stage = new Stage();
+        this.controller = controller;
         this.uiBuilder = new UIBuilder(this.stage);
 
         Gdx.input.setInputProcessor(stage);
@@ -55,8 +54,8 @@ public class MainMenuView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        model.batch.begin();
-        model.batch.end();
+        controller.model.batch.begin();
+        controller.model.batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -111,7 +110,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.setScreen(controller.getShapeWarsView());
+                    controller.setScreen(new ShapeWarsView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
@@ -121,24 +120,27 @@ public class MainMenuView implements Screen {
         joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
-                    controller.setScreen(controller.getJoinView());
-                    model.setRole(Role.Client);
+                    controller.model.setRole(Role.Client);
+                    controller.setScreen(new ClientView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
             }
-        }); 
+        });
 
         hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
-                    controller.setScreen(controller.getHostView());
-                    model.setRole(Role.Server);
+                    controller.model.setRole(Role.Server);
+                    controller.setScreen(new HostView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
-                }            }
+                }
+            }
         });
     }
 }

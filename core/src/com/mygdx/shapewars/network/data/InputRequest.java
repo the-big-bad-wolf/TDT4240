@@ -12,5 +12,6 @@ public class InputRequest {
         this.directionInput = directionInput;
     }
 
-    public InputRequest() {}
+    public InputRequest() {
+    }
 }
