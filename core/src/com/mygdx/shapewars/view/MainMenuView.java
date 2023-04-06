@@ -97,8 +97,8 @@ public class MainMenuView implements Screen {
         float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
 
         startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
-        hostButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
-        joinButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
+        joinButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
+        hostButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
 
         addActionsToUI();
     }
@@ -117,7 +117,7 @@ public class MainMenuView implements Screen {
             }
         });
 
-        hostButton.addListener(new ClickListener() {
+        joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
@@ -128,10 +128,10 @@ public class MainMenuView implements Screen {
             }
         }); 
 
-        joinButton.addListener(new ClickListener() {
+        hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to JoinView (has to be decided and implemented)
+                // Switch to HostView (has to be decided and implemented)
             }
         });
     }

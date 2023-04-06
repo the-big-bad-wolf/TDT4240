@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
-public class HostView implements Screen {
+public class JoinView implements Screen {
     private final Stage stage;
     private final ShapeWarsModel model;
     private final UIBuilder uiBuilder;
@@ -24,7 +24,7 @@ public class HostView implements Screen {
     private TextButton backButton;
     private TextButton okButton;
 
-    public HostView(ShapeWarsModel model) {
+    public JoinView(ShapeWarsModel model) {
         this.model = model;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
