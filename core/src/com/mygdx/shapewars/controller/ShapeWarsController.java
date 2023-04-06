@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.view.ShapeWarsView;
-import com.mygdx.shapewars.view.HostView;
 
 public class ShapeWarsController {
 

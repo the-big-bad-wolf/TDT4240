@@ -35,9 +35,7 @@ public class ShapeWarsView implements Screen {
         System.out.println(controller);
         this.model = controller.model; // todo leo remove
         this.stage = new Stage(); // todo check if we need to change that
-        System.out.println("lol");
         map = model.getMap();
-        System.out.println("no longer lol");
     }
 
     public void setController(ShapeWarsController controller) {
