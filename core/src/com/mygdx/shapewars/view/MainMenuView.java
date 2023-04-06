@@ -9,21 +9,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
 public class MainMenuView implements Screen {
     private final Stage stage;
-    private final ShapeWarsModel model;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
     private TextButton startButton;
     private TextButton hostButton;
     private TextButton joinButton;
 
-    public MainMenuView(ShapeWarsModel model) {
-        this.model = model;
+    public MainMenuView(ShapeWarsController controller) {
         this.stage = new Stage();
+        this.controller = controller;
         this.uiBuilder = new UIBuilder(this.stage);
 
         Gdx.input.setInputProcessor(stage);
@@ -54,8 +52,8 @@ public class MainMenuView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        model.batch.begin();
-        model.batch.end();
+        controller.model.batch.begin();
+        controller.model.batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -97,8 +95,8 @@ public class MainMenuView implements Screen {
         float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
 
         startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
-        hostButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
-        joinButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
+        joinButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
+        hostButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
 
         addActionsToUI();
     }
@@ -110,7 +108,19 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.setScreen(controller.getShapeWarsView());
+                    controller.setScreen(new ShapeWarsView(controller));
+                } catch (NullPointerException nullPointerException) {
+                    System.out.println("No Controller found");
+                }
+            }
+        });
+
+        joinButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dispose();
+                try {
+                    controller.setScreen(new ClientView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
@@ -120,19 +130,14 @@ public class MainMenuView implements Screen {
         hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
-                    controller.setScreen(controller.getHostView());
+                    controller.setScreen(new HostView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
             }
-        }); 
-
-        joinButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Switch to JoinView (has to be decided and implemented)
-            }
         });
+
     }
 }

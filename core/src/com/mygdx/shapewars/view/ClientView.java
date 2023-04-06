@@ -5,16 +5,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
-public class HostView implements Screen {
+public class ClientView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
@@ -22,7 +22,7 @@ public class HostView implements Screen {
     private TextButton backButton;
     private TextButton okButton;
 
-    public HostView(ShapeWarsController controller) {
+    public ClientView(ShapeWarsController controller) {
         this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
@@ -36,10 +36,6 @@ public class HostView implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         buildUI();
-    }
-
-    public void setController(ShapeWarsController controller) {
-        this.controller = controller;
     }
 
     @Override
@@ -90,7 +86,7 @@ public class HostView implements Screen {
 
     private void buildUI() {
         float inputFieldWidth = 500;
-        float inputFieldHeight= 100;
+        float inputFieldHeight = 100;
         float allButtonsWidth = 250f;
         float allButtonsHeight = 100f;
         float inputFieldXPos = Gdx.graphics.getWidth() / 2f - inputFieldWidth / 2;
@@ -122,7 +118,8 @@ public class HostView implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // todo go to some kind of lobby?
+                System.out.println(inputField.getText()); // ip address input
+                controller.setScreen(new ShapeWarsView(controller));
             }
         });
 
