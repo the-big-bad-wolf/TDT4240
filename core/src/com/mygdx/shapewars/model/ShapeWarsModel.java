@@ -19,6 +19,7 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
+import com.mygdx.shapewars.model.system.FiringSystem;
 import com.mygdx.shapewars.model.system.SystemFactory;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
@@ -40,6 +41,7 @@ public class ShapeWarsModel {
     public boolean isGameActive;
     public ShapeWarsController controller;
     public boolean createEntitiesFlag;
+    public List<Entity> unshotBullets; // needed as a kind of "flag"
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
         this.role = role;
@@ -64,6 +66,7 @@ public class ShapeWarsModel {
             this.deviceTankMapping = new HashMap<>();
             deviceTankMapping.put(this.gameModel.deviceId, tankId);
             this.serverConnector = new ServerConnector(this);
+            this.unshotBullets = new ArrayList<>();
         } else {
             System.out.println("i am in the client part of shape wars model");
             this.clientConnector = new ClientConnector(this, serverIpAddress);
@@ -126,6 +129,11 @@ public class ShapeWarsModel {
                 createEntitiesFlag = false;
                 generateEntities();
             }
+        } else {
+            for (Entity e : unshotBullets) {
+                FiringSystem.spawnBullet(e);
+            }
+            unshotBullets.removeAll(unshotBullets);
         }
         engine.update(Gdx.graphics.getDeltaTime());
     }

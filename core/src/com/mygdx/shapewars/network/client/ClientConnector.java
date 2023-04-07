@@ -57,8 +57,8 @@ public class ClientConnector {
         client.addListener(new ClientListener(model));
     }
 
-    public void sendInputRequest(String clientId, float valueInput, float directionInput) {
-        client.sendUDP(new InputRequest(clientId, valueInput, directionInput));
+    public void sendInputRequest(String clientId, float valueInput, float directionInput, boolean firingFlag) {
+        client.sendUDP(new InputRequest(clientId, valueInput, directionInput, firingFlag));
     }
 
     public void sendLobbyRequest(String clientId) {

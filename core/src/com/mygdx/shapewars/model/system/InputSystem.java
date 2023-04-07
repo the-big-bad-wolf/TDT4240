@@ -45,7 +45,7 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
             if (firingFlag)
                FiringSystem.spawnBullet(entity);
         } else {
-            shapeWarsModel.clientConnector.sendInputRequest(shapeWarsModel.gameModel.deviceId, inputValue, inputDirection); // todo add firing
+            shapeWarsModel.clientConnector.sendInputRequest(shapeWarsModel.gameModel.deviceId, inputValue, inputDirection, firingFlag);
         }
         firingFlag = false;
     }

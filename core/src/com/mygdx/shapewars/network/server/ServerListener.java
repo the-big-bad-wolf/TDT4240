@@ -49,7 +49,8 @@ public class ServerListener extends Listener {
             Entity entity = model.engine.getEntities().get(model.deviceTankMapping.get(request.clientId));
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
             velocityComponent.setVelocity(request.valueInput, request.directionInput);
-
+            if (request.firingFlag)
+                model.unshotBullets.add(entity); // cannot call firing system directly from this thread
             ArrayList<VelocityComponent> velocityComponentsNew = new ArrayList<>();
             ArrayList<PositionComponent> positionComponentsNew = new ArrayList<>();
             ArrayList<HealthComponent> healthComponentsNew = new ArrayList<>();
