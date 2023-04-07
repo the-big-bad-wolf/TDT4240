@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ShapeWarsModel {
-    public int numPlayers = 2; // todo add lobby
+    public int numPlayers;
     public static Engine engine;
     private static TiledMap map;
     public Role role;
@@ -39,7 +39,7 @@ public class ShapeWarsModel {
     public GameModel gameModel;
     public boolean isGameActive;
     public ShapeWarsController controller;
-    public boolean flag;
+    public boolean createEntitiesFlag;
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
         this.role = role;
@@ -60,11 +60,10 @@ public class ShapeWarsModel {
         joystick = new Joystick(400, 400, 300, 150);
 
         if (this.role == Role.Server) {
-            // set number of players, map deviceIds to tankIds
+            this.tankId = 0;
             this.deviceTankMapping = new HashMap<>();
-            deviceTankMapping.put(this.gameModel.deviceId, 0);
+            deviceTankMapping.put(this.gameModel.deviceId, tankId);
             this.serverConnector = new ServerConnector(this);
-            // generateEntities();
         } else {
             System.out.println("i am in the client part of shape wars model");
             this.clientConnector = new ClientConnector(this, serverIpAddress);
@@ -94,7 +93,7 @@ public class ShapeWarsModel {
                 Vector2 cell = spawnCells.get(i);
                 tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // change to support multiple colors
+                tank.add(new SpriteComponent(i == tankId ? "tank_graphics.png" : "tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
                 tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
@@ -106,7 +105,7 @@ public class ShapeWarsModel {
                 Entity tank = new Entity();
                 tank.add(new PositionComponent(0, 0));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent("tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo change to support multiple colors
+                tank.add(new SpriteComponent(i == tankId ? "tank_graphics.png" : "tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
                 tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
@@ -118,13 +117,15 @@ public class ShapeWarsModel {
     }
 
     public void update() {
-        if (!isGameActive && role == Role.Client) {
-            // here send the keep alive requests
-            clientConnector.sendInput(gameModel.deviceId, 0, 0);
-        }
-        if (flag) {
-            flag = false;
-            generateEntities();
+        if (role == Role.Client) {
+            if (!isGameActive) {
+                // here send the keep alive requests
+                clientConnector.sendLobbyRequest(gameModel.deviceId);
+            }
+            if (createEntitiesFlag) {
+                createEntitiesFlag = false;
+                generateEntities();
+            }
         }
         engine.update(Gdx.graphics.getDeltaTime());
     }

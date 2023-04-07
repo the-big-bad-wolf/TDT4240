@@ -49,7 +49,7 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
             if (firing)
                FiringSystem.spawnBullet(entity);
         } else {
-            clientConnector.sendInput(clientId, inputValue, inputDirection); // todo update clientId, add firing
+            clientConnector.sendInputRequest(clientId, inputValue, inputDirection); // todo update clientId, add firing
         }
         firing = false;
     }

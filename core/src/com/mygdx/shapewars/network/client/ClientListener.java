@@ -9,6 +9,7 @@ import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.data.GameResponse;
+import com.mygdx.shapewars.network.data.LobbyResponse;
 
 
 public class ClientListener extends Listener {
@@ -31,38 +32,38 @@ public class ClientListener extends Listener {
 
     @Override
     public void received(Connection connection, Object object) {
+        if (object instanceof LobbyResponse) {
+            LobbyResponse response = (LobbyResponse) object;
+            model.numPlayers = response.numPlayers;
+            model.tankId = response.clientTankId;
+            // the ordering here is important!
+            model.createEntitiesFlag = !model.isGameActive && response.isGameActive;
+            model.isGameActive = response.isGameActive;
+        }
         if (object instanceof GameResponse) {
-            GameResponse gameResponse = (GameResponse) object;
-            if (gameResponse.isGameActive) {
-                if (!model.isGameActive) {
-                    model.numPlayers = gameResponse.numPlayers;
-                    model.tankId = gameResponse.clientTankId;
-                    model.isGameActive = true;
-                    model.flag = true;
-                }
-                for (int i = 0; i < model.engine.getEntities().size(); i++) {
-                    Entity entity = model.engine.getEntities().get(i);
+            GameResponse response = (GameResponse) object;
+            for (int i = 0; i < model.engine.getEntities().size(); i++) {
+                Entity entity = model.engine.getEntities().get(i);
 
-                    // update position
-                    PositionComponent[] positionComponents = gameResponse.positionComponents;
-                    float x = positionComponents[i].getPosition().x;
-                    float y = positionComponents[i].getPosition().y;
-                    PositionComponent positionComponent = ComponentMappers.position.get(entity);
-                    positionComponent.setPosition(x, y);
+                // update position
+                PositionComponent[] positionComponents = response.positionComponents;
+                float x = positionComponents[i].getPosition().x;
+                float y = positionComponents[i].getPosition().y;
+                PositionComponent positionComponent = ComponentMappers.position.get(entity);
+                positionComponent.setPosition(x, y);
 
-                    // update velocity
-                    VelocityComponent[] velocityComponents = gameResponse.velocityComponents;
-                    float direction = velocityComponents[i].getDirection();
-                    float magnitude = velocityComponents[i].getValue();
-                    VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-                    velocityComponent.setVelocity(magnitude, direction);
+                // update velocity
+                VelocityComponent[] velocityComponents = response.velocityComponents;
+                float direction = velocityComponents[i].getDirection();
+                float magnitude = velocityComponents[i].getValue();
+                VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
+                velocityComponent.setVelocity(magnitude, direction);
 
-                    // update health
-                    HealthComponent[] healthComponents = gameResponse.healthComponents;
-                    int health = healthComponents[i].getHealth();
-                    HealthComponent healthComponent = ComponentMappers.health.get(entity);
-                    healthComponent.setHealth(health);
-                }
+                // update health
+                HealthComponent[] healthComponents = response.healthComponents;
+                int health = healthComponents[i].getHealth();
+                HealthComponent healthComponent = ComponentMappers.health.get(entity);
+                healthComponent.setHealth(health);
             }
         }
     }

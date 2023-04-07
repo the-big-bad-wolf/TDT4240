@@ -10,6 +10,8 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
+import com.mygdx.shapewars.network.data.LobbyRequest;
+import com.mygdx.shapewars.network.data.LobbyResponse;
 import com.mygdx.shapewars.view.MainMenuView;
 
 import java.io.IOException;
@@ -36,6 +38,8 @@ public class ServerConnector {
         // register messages
         this.kryo.register(InputRequest.class);
         this.kryo.register(GameResponse.class);
+        this.kryo.register(LobbyRequest.class);
+        this.kryo.register(LobbyResponse.class);
 
         // register components
         this.kryo.register(PositionComponent.class);
