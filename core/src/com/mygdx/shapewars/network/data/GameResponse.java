@@ -6,6 +6,9 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 
 public class GameResponse {
 
+    public boolean isGameActive;
+    public int numPlayers;
+    public int clientTankId;
     public VelocityComponent[] velocityComponents;
     public PositionComponent[] positionComponents;
 
@@ -13,7 +16,10 @@ public class GameResponse {
 
     public GameResponse() {}
 
-    public GameResponse(VelocityComponent[] velocityComponents, PositionComponent[] positionComponents, HealthComponent[] healthComponents) {
+    public GameResponse(boolean isGameActive, int numPlayers, int clientTankId, VelocityComponent[] velocityComponents, PositionComponent[] positionComponents, HealthComponent[] healthComponents) {
+        this.isGameActive = isGameActive;
+        this.numPlayers = numPlayers;
+        this.clientTankId = clientTankId;
         this.velocityComponents = velocityComponents;
         this.positionComponents = positionComponents;
         this.healthComponents = healthComponents;

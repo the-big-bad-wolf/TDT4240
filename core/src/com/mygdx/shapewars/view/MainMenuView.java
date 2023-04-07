@@ -108,6 +108,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     controller.generateShapeWarsModel(Role.Server, "");
+                    controller.shapeWarsModel.generateEntities();
                     controller.setScreen(new ShapeWarsView(controller));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
@@ -130,6 +131,7 @@ public class MainMenuView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
+                    controller.generateShapeWarsModel(Role.Server, "");
                     controller.setScreen(new HostView(controller));
                 } catch (NullPointerException | UnknownHostException nullPointerException) {
                     System.out.println("No Controller found");

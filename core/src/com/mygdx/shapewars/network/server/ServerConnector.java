@@ -10,6 +10,7 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
+import com.mygdx.shapewars.view.MainMenuView;
 
 import java.io.IOException;
 
@@ -26,6 +27,8 @@ public class ServerConnector {
             server.bind(25444, 25666);
         } catch (IOException e) {
             e.printStackTrace();
+            model.controller.currentScreen = new MainMenuView(model.controller);
+            return;
         }
 
         this.kryo = server.getKryo();

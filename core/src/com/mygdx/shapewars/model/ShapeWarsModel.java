@@ -22,8 +22,6 @@ import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.system.SystemFactory;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
-import com.mygdx.shapewars.view.ShapeWarsView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,11 +33,13 @@ public class ShapeWarsModel {
     public Role role;
     public ServerConnector serverConnector; // todo implement strategy pattern
     public ClientConnector clientConnector;
-    public HashMap<String, Integer> clientTankMapping = new HashMap<>();
+    public HashMap<String, Integer> deviceTankMapping = new HashMap<>();
+    public int tankId; // todo put this in a model just for clients
     public Joystick joystick;
     public GameModel gameModel;
     public boolean isGameActive;
     public ShapeWarsController controller;
+    public boolean flag;
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
         this.role = role;
@@ -61,21 +61,22 @@ public class ShapeWarsModel {
 
         if (this.role == Role.Server) {
             // set number of players, map deviceIds to tankIds
+            this.deviceTankMapping = new HashMap<>();
+            deviceTankMapping.put(this.gameModel.deviceId, 0);
             this.serverConnector = new ServerConnector(this);
-            generateEntities();
+            // generateEntities();
         } else {
+            System.out.println("i am in the client part of shape wars model");
             this.clientConnector = new ClientConnector(this, serverIpAddress);
+            System.out.println("i have the clientconnector now");
             // todo send initial request? (initial position <int, int>; map name <string>; tank sprite files <string[]>)
-            // generateEntities(); // called when the game is active in the clientlistener
-       }
-
-        for (EntitySystem system : SystemFactory.generateSystems(this)) {
-            engine.addSystem(system);
         }
+
     }
 
     public void generateEntities() {
         if (this.role == Role.Server) {
+            numPlayers = deviceTankMapping.size();
             TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
 
             List<Vector2> spawnCells = new ArrayList<>();
@@ -98,7 +99,9 @@ public class ShapeWarsModel {
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }
+            isGameActive = true;
         } else {
+            System.out.println("generating the entities");
             for (int i = 0; i < numPlayers; i++) {
                 Entity tank = new Entity();
                 tank.add(new PositionComponent(0, 0));
@@ -109,9 +112,20 @@ public class ShapeWarsModel {
                 engine.addEntity(tank);
             }
         }
+        for (EntitySystem system : SystemFactory.generateSystems(this)) {
+            engine.addSystem(system);
+        }
     }
 
-    public static void update() {
+    public void update() {
+        if (!isGameActive && role == Role.Client) {
+            // here send the keep alive requests
+            clientConnector.sendInput(gameModel.deviceId, 0, 0);
+        }
+        if (flag) {
+            flag = false;
+            generateEntities();
+        }
         engine.update(Gdx.graphics.getDeltaTime());
     }
 

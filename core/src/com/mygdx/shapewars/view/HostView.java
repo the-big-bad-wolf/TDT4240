@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -128,8 +127,7 @@ public class HostView implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // todo add some kind of lobby?
-                controller.generateShapeWarsModel(Role.Server, ipAddress);
+                controller.shapeWarsModel.generateEntities();
                 controller.setScreen(new ShapeWarsView(controller));
             }
         });

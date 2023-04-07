@@ -41,7 +41,7 @@ public class ClientView implements Screen {
 
     @Override
     public void show() {
-        System.out.println("Host view showing");
+        System.out.println("Client view showing");
         Gdx.input.setInputProcessor(stage);
         render(0);
     }
@@ -123,7 +123,7 @@ public class ClientView implements Screen {
                 // todo sanitise ip address input
                 // todo can this code be improved?
                 controller.generateShapeWarsModel(Role.Client, inputField.getText());
-                if (controller.currentScreen == null)
+                if (!(controller.currentScreen instanceof MainMenuView))
                     controller.currentScreen = new ShapeWarsView(controller);
                 controller.currentScreen.show();
             }
