@@ -21,6 +21,7 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.system.FiringSystem;
 import com.mygdx.shapewars.model.system.SystemFactory;
+import com.mygdx.shapewars.model.system.UpdateSystemClient;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class ShapeWarsModel {
     public boolean isGameActive;
     public ShapeWarsController controller;
     public boolean createEntitiesFlag;
+    public UpdateSystemClient updateSystemClient;
     public List<Entity> unshotBullets; // needed as a kind of "flag" (only for server side)
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
@@ -103,7 +105,6 @@ public class ShapeWarsModel {
             }
             isGameActive = true;
         } else {
-            System.out.println("generating the entities");
             for (int i = 0; i < numPlayers; i++) {
                 Entity tank = new Entity();
                 tank.add(new PositionComponent(0, 0));
@@ -113,6 +114,8 @@ public class ShapeWarsModel {
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }
+            this.updateSystemClient = UpdateSystemClient.getInstance(this);
+            engine.addSystem(updateSystemClient);
         }
         for (EntitySystem system : SystemFactory.generateSystems(this)) {
             engine.addSystem(system);
