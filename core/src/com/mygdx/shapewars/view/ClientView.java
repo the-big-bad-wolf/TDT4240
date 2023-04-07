@@ -121,8 +121,11 @@ public class ClientView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println(inputField.getText());
                 // todo sanitise ip address input
+                // todo can this code be improved?
                 controller.generateShapeWarsModel(Role.Client, inputField.getText());
-                controller.setScreen(new ShapeWarsView(controller));
+                if (controller.currentScreen == null)
+                    controller.currentScreen = new ShapeWarsView(controller);
+                controller.currentScreen.show();
             }
         });
 

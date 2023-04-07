@@ -106,7 +106,6 @@ public class MainMenuView implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                dispose();
                 try {
                     controller.generateShapeWarsModel(Role.Server, "");
                     controller.setScreen(new ShapeWarsView(controller));
@@ -119,7 +118,6 @@ public class MainMenuView implements Screen {
         joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                dispose();
                 try {
                     controller.setScreen(new ClientView(controller));
                 } catch (NullPointerException nullPointerException) {
@@ -131,7 +129,6 @@ public class MainMenuView implements Screen {
         hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                dispose();
                 try {
                     controller.setScreen(new HostView(controller));
                 } catch (NullPointerException | UnknownHostException nullPointerException) {

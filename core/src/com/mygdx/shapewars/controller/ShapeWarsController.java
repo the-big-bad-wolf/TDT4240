@@ -12,7 +12,7 @@ public class ShapeWarsController {
 
     public ShapeWarsModel shapeWarsModel;
     public final GameModel gameModel;
-    private Screen currentScreen;
+    public Screen currentScreen;
     public Launcher launcher;
 
     public ShapeWarsController(Launcher launcher) {
@@ -21,7 +21,7 @@ public class ShapeWarsController {
     }
 
     public void generateShapeWarsModel(Role role, String serverIpAddress) {
-        this.shapeWarsModel = new ShapeWarsModel(this.gameModel, role, serverIpAddress);
+        this.shapeWarsModel = new ShapeWarsModel(this, this.gameModel, role, serverIpAddress);
     }
 
     public void update() {
@@ -37,6 +37,8 @@ public class ShapeWarsController {
 
     public void setScreen(Screen screen) {
         if (screen != null) {
+            if (this.currentScreen != null)
+                this.currentScreen.dispose();
             this.currentScreen = screen;
             this.currentScreen.show();
         }

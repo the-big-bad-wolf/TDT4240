@@ -141,6 +141,7 @@ public class ShapeWarsView implements Screen {
 
     @Override
     public void dispose() {
+        stage.dispose();
         map.dispose();
         mapRenderer.dispose();
     }
