@@ -11,14 +11,12 @@ public class SystemFactory {
     public static List<EntitySystem> generateSystems(ShapeWarsModel model) {
         Role role = model.role;
         Launcher launcher = model.gameModel.launcher;
-        String deviceId = model.gameModel.deviceId;
 
         List<EntitySystem> systems = new ArrayList<>();
 
         systems.add(SpriteSystem.getInstance());
         systems.add(launcher == Launcher.Desktop ?
-                InputSystemDesktop.getInstance(role, model.clientConnector, deviceId) :
-                InputSystemMobile.getInstance(role, model.clientConnector, deviceId, model.joystick));
+                InputSystemDesktop.getInstance(model) : InputSystemMobile.getInstance(model));
 
         if (role == Role.Server) {
             systems.add(MovementSystem.getInstance());

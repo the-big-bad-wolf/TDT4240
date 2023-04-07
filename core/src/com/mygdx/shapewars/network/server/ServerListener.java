@@ -48,7 +48,7 @@ public class ServerListener extends Listener {
             InputRequest request = (InputRequest) object;
             Entity entity = model.engine.getEntities().get(model.deviceTankMapping.get(request.clientId));
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-            velocityComponent.setMagnitudeAndDirection(request.valueInput, request.directionInput);
+            velocityComponent.setVelocity(request.valueInput, request.directionInput);
 
             ArrayList<VelocityComponent> velocityComponentsNew = new ArrayList<>();
             ArrayList<PositionComponent> positionComponentsNew = new ArrayList<>();

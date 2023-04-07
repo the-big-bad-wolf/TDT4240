@@ -5,10 +5,9 @@ import static com.mygdx.shapewars.config.GameConfig.MAX_TURN_RATE;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
-import com.mygdx.shapewars.config.GameConfig;
 import com.mygdx.shapewars.controller.Joystick;
-import com.mygdx.shapewars.network.client.ClientConnector;
-import com.mygdx.shapewars.config.Role;
+import com.mygdx.shapewars.model.ShapeWarsModel;
+
 
 public class InputSystemMobile extends InputSystem {
     private Joystick joystick;
@@ -16,17 +15,17 @@ public class InputSystemMobile extends InputSystem {
     private boolean movingJoystick;
     private static volatile InputSystemMobile instance;
 
-    private InputSystemMobile(Role role, ClientConnector clientConnector, String clientId, Joystick joystick) {
-        super(role, clientConnector, clientId);
-        this.joystick = joystick;
+    private InputSystemMobile(ShapeWarsModel shapeWarsModel) {
+        super(shapeWarsModel);
+        this.joystick = shapeWarsModel.joystick;
         this.outerCircleRadius = Math.round(joystick.getOuterCircle().radius);
     }
 
-    public static InputSystemMobile getInstance(Role role, ClientConnector clientConnector, String clientId, Joystick joystick) {
+    public static InputSystemMobile getInstance(ShapeWarsModel shapeWarsModel) {
         if (instance == null) {
             synchronized (InputSystemMobile.class) {
                 if (instance == null) {
-                    instance = new InputSystemMobile(role, clientConnector, clientId, joystick);
+                    instance = new InputSystemMobile(shapeWarsModel);
                 }
             }
         }

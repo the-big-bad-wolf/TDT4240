@@ -5,21 +5,21 @@ import static com.mygdx.shapewars.config.GameConfig.MAX_TURN_RATE;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.mygdx.shapewars.network.client.ClientConnector;
-import com.mygdx.shapewars.config.Role;
+import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.model.components.ComponentMappers;
 
 public class InputSystemDesktop extends InputSystem {
     private static volatile InputSystemDesktop instance;
 
-    private InputSystemDesktop(Role role, ClientConnector clientConnector, String clientId) {
-        super(role, clientConnector, clientId);
+    private InputSystemDesktop(ShapeWarsModel shapeWarsModel) {
+        super(shapeWarsModel);
     }
 
-    public static InputSystemDesktop getInstance(Role role, ClientConnector clientConnector, String clientId) {
+    public static InputSystemDesktop getInstance(ShapeWarsModel shapeWarsModel) {
         if (instance == null) {
             synchronized (InputSystemDesktop.class) {
                 if (instance == null) {
-                    instance = new InputSystemDesktop(role, clientConnector, clientId);
+                    instance = new InputSystemDesktop(shapeWarsModel);
                 }
             }
         }
@@ -51,23 +51,25 @@ public class InputSystemDesktop extends InputSystem {
     }
 
     private int getInputDirection() {
+        int currentDir = (int) ComponentMappers.velocity.get(entities.get(shapeWarsModel.tankId)).getDirection();
+
         boolean left = isKeyPressed(Input.Keys.A) || isKeyPressed(Input.Keys.LEFT);
         boolean right = isKeyPressed(Input.Keys.D) || isKeyPressed(Input.Keys.RIGHT);
 
         if (left && right)
-            return 0;
+            return currentDir;
         else if (left)
-            return MAX_TURN_RATE;
+            return MAX_TURN_RATE + currentDir;
         else if (right)
-            return  -MAX_TURN_RATE;
-        return 0;
+            return  -MAX_TURN_RATE + currentDir;
+        return currentDir;
     }
 
     @Override
     public boolean keyDown(int keycode) {
         // keyDown is only used for firing as spamming bullets should not be allowed
         if (keycode == Input.Keys.SPACE)
-            firing = true;
+            firingFlag = true;
 
         return false; // standard return value
     }

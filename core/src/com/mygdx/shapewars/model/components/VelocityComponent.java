@@ -26,25 +26,7 @@ public class VelocityComponent implements Component{
     this.direction = d;
   }
 
-  public void setVelocityJoystick(float v, float d) {
-    this.value = v;
-    this.direction = d;
-  }
-
-  public void setMagnitudeAndDirection(float v, float d) {
-    value = v;
-    direction += d;
-  }
-
-  public void setValue(float v) {
-    this.setVelocity(v, direction);
-  }
-
   public void setDirection(float d) {
     this.setVelocity(value, d);
-  }
-
-  public void addDirection(float d) {
-    direction += d;
   }
 }

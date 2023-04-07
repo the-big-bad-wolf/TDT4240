@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
@@ -14,23 +15,18 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.network.client.ClientConnector;
 
 public abstract class InputSystem extends EntitySystem implements InputProcessor {
 
     protected float inputDirection;
     protected float inputValue;
-    private ImmutableArray<Entity> entities;
-    private Role role;
-    private ClientConnector clientConnector;
-    private String clientId; // find a way to remove all of these fields
+    protected ImmutableArray<Entity> entities;
+    protected ShapeWarsModel shapeWarsModel;
 
-    protected boolean firing;
+    protected boolean firingFlag;
 
-    public InputSystem(Role role, ClientConnector clientConnector, String clientId) {
-        this.role = role;
-        this.clientConnector = clientConnector;
-        this.clientId = clientId;
+    public InputSystem(ShapeWarsModel shapeWarsModel) {
+        this.shapeWarsModel = shapeWarsModel;
     }
 
     public void addedToEngine(Engine engine) {
@@ -41,17 +37,17 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
 
     public void update(float deltaTime) {
         Gdx.input.setInputProcessor(this);
-        if (role == Role.Server) {
+        if (shapeWarsModel.role == Role.Server) {
             Entity entity = entities.get(0);
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-            velocityComponent.setVelocity(inputValue, velocityComponent.getDirection() + inputDirection);
+            velocityComponent.setVelocity(inputValue, inputDirection);
 
-            if (firing)
+            if (firingFlag)
                FiringSystem.spawnBullet(entity);
         } else {
-            clientConnector.sendInputRequest(clientId, inputValue, inputDirection); // todo update clientId, add firing
+            shapeWarsModel.clientConnector.sendInputRequest(shapeWarsModel.gameModel.deviceId, inputValue, inputDirection); // todo add firing
         }
-        firing = false;
+        firingFlag = false;
     }
 
     @Override
