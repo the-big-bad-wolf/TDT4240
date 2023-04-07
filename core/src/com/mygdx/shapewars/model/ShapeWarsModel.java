@@ -41,7 +41,7 @@ public class ShapeWarsModel {
     public boolean isGameActive;
     public ShapeWarsController controller;
     public boolean createEntitiesFlag;
-    public List<Entity> unshotBullets; // needed as a kind of "flag"
+    public List<Entity> unshotBullets; // needed as a kind of "flag" (only for server side)
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
         this.role = role;

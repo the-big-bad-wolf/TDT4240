@@ -63,7 +63,7 @@ public class ServerListener extends Listener {
             PositionComponent[] positionComponentsArray = positionComponentsNew.toArray(new PositionComponent[positionComponentsNew.size()]);
             VelocityComponent[] velocityComponentsArray = velocityComponentsNew.toArray(new VelocityComponent[velocityComponentsNew.size()]);
             HealthComponent[] healthComponentsArray = healthComponentsNew.toArray(new HealthComponent[healthComponentsNew.size()]);
-            GameResponse response = new GameResponse(true, model.deviceTankMapping.size(), model.deviceTankMapping.get(request.clientId), velocityComponentsArray, positionComponentsArray, healthComponentsArray);
+            GameResponse response = new GameResponse(velocityComponentsArray, positionComponentsArray, healthComponentsArray);
             connection.sendUDP(response);
         }
     }

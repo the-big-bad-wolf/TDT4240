@@ -28,7 +28,7 @@ public class FiringSystem extends EntitySystem {
         + (distanceFromTank * Math.sin(rotation)));
     bullet.add(new PositionComponent(x, y));
     bullet.add(new VelocityComponent(10, velocityComponent.getDirection()));
-    bullet.add(new SpriteComponent("tank_graphics.png", 10, 10));
+    bullet.add(new SpriteComponent("tank_graphics.png", 10, 10)); // todo why does a bullet have an image file??
     bullet.add(new HealthComponent(3));
     ShapeWarsModel.addToEngine(bullet);
   }
