@@ -36,9 +36,22 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
     }
 
     public void update(float deltaTime) {
+        // get the current entity
+        Entity entity = null;
+        for (Entity e : entities) {
+            if (ComponentMappers.identity.get(e).getId() == shapeWarsModel.deviceTankMapping.get(shapeWarsModel.gameModel.deviceId)) {
+                entity = e;
+                break;
+            }
+        }
+        if (entity == null) {
+            shapeWarsModel.engine.removeSystem(this);
+            return;
+        }
+        
         Gdx.input.setInputProcessor(this);
         if (shapeWarsModel.role == Role.Server) {
-            Entity entity = entities.get(0);
+            // Entity entity = entities.get(shapeWarsModel.deviceTankMapping.get(shapeWarsModel.gameModel.deviceId));
             VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
             velocityComponent.setVelocity(inputValue, inputDirection);
 

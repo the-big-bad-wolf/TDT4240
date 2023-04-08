@@ -51,7 +51,14 @@ public class InputSystemDesktop extends InputSystem {
     }
 
     private int getInputDirection() {
-        int currentDir = (int) ComponentMappers.velocity.get(entities.get(shapeWarsModel.tankId)).getDirection();
+        // todo absolutely remove this. this is for when the tank the movement system belongs to has been destroyed
+        int currentDir;
+        try {
+            currentDir = (int) ComponentMappers.velocity.get(entities.get(shapeWarsModel.tankId)).getDirection();
+        } catch (Exception e) {
+            return 0;
+        }
+
 
         boolean left = isKeyPressed(Input.Keys.A) || isKeyPressed(Input.Keys.LEFT);
         boolean right = isKeyPressed(Input.Keys.D) || isKeyPressed(Input.Keys.RIGHT);

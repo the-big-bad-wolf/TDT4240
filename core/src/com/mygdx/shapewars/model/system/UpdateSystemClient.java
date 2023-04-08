@@ -17,7 +17,6 @@ public class UpdateSystemClient extends EntitySystem {
     private static volatile UpdateSystemClient instance;
     protected ImmutableArray<Entity> entities;
     protected ShapeWarsModel shapeWarsModel;
-
     public VelocityComponent[] velocityComponents;
     public PositionComponent[] positionComponents;
     public HealthComponent[] healthComponents;
@@ -70,8 +69,7 @@ public class UpdateSystemClient extends EntitySystem {
             }
         }
 
-        for (int i = 0; i < shapeWarsModel.engine.getEntities().size() &&
-                i < positionComponents.length && i < healthComponents.length && i < velocityComponents.length; i++) {
+        for (int i = 0; i < shapeWarsModel.engine.getEntities().size(); i++) {
             Entity entity = shapeWarsModel.engine.getEntities().get(i);
 
             // update position

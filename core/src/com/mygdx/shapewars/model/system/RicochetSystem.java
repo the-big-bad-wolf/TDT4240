@@ -46,7 +46,7 @@ public class RicochetSystem extends EntitySystem {
         HealthComponent tankHealthComponent = ComponentMappers.health.get(tank);
 
         if (checkCollisionWithTank(bulletPositionComponent, tankPositionComponent, tankSpriteComponent)) {
-          tankHealthComponent.takeDamage(1);
+          tankHealthComponent.takeDamage(40);
           bulletHealthComponent.takeDamage(100);
           break;
         }
