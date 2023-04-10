@@ -59,7 +59,6 @@ public class InputSystemDesktop extends InputSystem {
             return 0;
         }
 
-
         boolean left = isKeyPressed(Input.Keys.A) || isKeyPressed(Input.Keys.LEFT);
         boolean right = isKeyPressed(Input.Keys.D) || isKeyPressed(Input.Keys.RIGHT);
 

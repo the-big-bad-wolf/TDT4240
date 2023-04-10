@@ -1,5 +1,7 @@
 package com.mygdx.shapewars.model;
 
+import static com.mygdx.shapewars.config.GameConfig.ENEMY_TANK_SKIN;
+import static com.mygdx.shapewars.config.GameConfig.FRIENDLY_TANK_SKIN;
 import static com.mygdx.shapewars.config.GameConfig.TANK_HEIGHT;
 import static com.mygdx.shapewars.config.GameConfig.TANK_WIDTH;
 
@@ -19,9 +21,9 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.model.system.FiringSystem;
 import com.mygdx.shapewars.model.system.SystemFactory;
 import com.mygdx.shapewars.model.system.UpdateSystemClient;
+import com.mygdx.shapewars.model.system.UpdateSystemServer;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class ShapeWarsModel {
     public ShapeWarsController controller;
     public boolean createEntitiesFlag;
     public UpdateSystemClient updateSystemClient;
-    public List<Entity> unshotBullets; // needed as a kind of "flag" (only for server side)
+    public UpdateSystemServer updateSystemServer;
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
         this.role = role;
@@ -68,12 +70,8 @@ public class ShapeWarsModel {
             this.deviceTankMapping = new HashMap<>();
             deviceTankMapping.put(this.gameModel.deviceId, tankId);
             this.serverConnector = new ServerConnector(this);
-            this.unshotBullets = new ArrayList<>();
         } else {
-            System.out.println("i am in the client part of shape wars model");
             this.clientConnector = new ClientConnector(this, serverIpAddress);
-            System.out.println("i have the clientconnector now");
-            // todo send initial request? (initial position <int, int>; map name <string>; tank sprite files <string[]>)
         }
 
     }
@@ -98,18 +96,20 @@ public class ShapeWarsModel {
                 Vector2 cell = spawnCells.get(i);
                 tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent(i == tankId ? "tank_graphics.png" : "tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
+                tank.add(new SpriteComponent(i == tankId ? FRIENDLY_TANK_SKIN : ENEMY_TANK_SKIN, TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
                 tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
             }
+            this.updateSystemServer = UpdateSystemServer.getInstance(this);
+            engine.addSystem(updateSystemServer);
             isGameActive = true;
         } else {
             for (int i = 0; i < numPlayers; i++) {
                 Entity tank = new Entity();
                 tank.add(new PositionComponent(0, 0));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent(i == tankId ? "tank_graphics.png" : "tank_graphics.png", TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
+                tank.add(new SpriteComponent(i == tankId ? FRIENDLY_TANK_SKIN : ENEMY_TANK_SKIN, TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
                 tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
@@ -132,11 +132,6 @@ public class ShapeWarsModel {
                 createEntitiesFlag = false;
                 generateEntities();
             }
-        } else {
-            for (Entity e : unshotBullets) {
-                FiringSystem.spawnBullet(e);
-            }
-            unshotBullets.removeAll(unshotBullets);
         }
         engine.update(Gdx.graphics.getDeltaTime());
     }

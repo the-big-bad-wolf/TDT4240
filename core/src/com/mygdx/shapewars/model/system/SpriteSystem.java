@@ -32,7 +32,6 @@ public class SpriteSystem extends EntitySystem {
             float direction = velocityComponent.getDirection();
             ComponentMappers.sprite.get(entity).getSprite().setRotation(direction);
         }
-
     }
 
     public static SpriteSystem getInstance() {

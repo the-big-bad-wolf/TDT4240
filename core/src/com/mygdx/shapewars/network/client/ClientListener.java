@@ -38,9 +38,8 @@ public class ClientListener extends Listener {
         if (object instanceof GameResponse) {
             GameResponse response = (GameResponse) object;
             if (!model.updateSystemClient.updated) {
-                model.updateSystemClient.velocityComponents = response.velocityComponents;
-                model.updateSystemClient.positionComponents = response.positionComponents;
-                model.updateSystemClient.healthComponents = response.healthComponents;
+                model.updateSystemClient.tanksServer = response.tanks;
+                model.updateSystemClient.bulletsServer = response.bullets;
                 model.updateSystemClient.updated = true;
             }
         }

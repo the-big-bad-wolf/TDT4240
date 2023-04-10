@@ -10,6 +10,8 @@ public class IdentityComponent implements Component {
         this.id = id;
     }
 
+    public IdentityComponent() { }
+
     public int getId() {
         return id;
     }
