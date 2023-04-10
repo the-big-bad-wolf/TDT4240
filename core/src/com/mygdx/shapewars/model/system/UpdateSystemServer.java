@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.mygdx.shapewars.model.ShapeWarsModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class UpdateSystemServer extends EntitySystem {
     private static volatile UpdateSystemServer instance;
     protected ShapeWarsModel shapeWarsModel;
 
-    public List<Entity> unshotBullets; // needed as a kind of "flag" (only for server side)
+    public List<Entity> unshotBullets;
 
     public UpdateSystemServer(ShapeWarsModel shapeWarsModel) {
         this.unshotBullets = new ArrayList<>();
@@ -33,11 +32,10 @@ public class UpdateSystemServer extends EntitySystem {
     public void addedToEngine(Engine engine) { }
 
     public void update(float deltaTime) {
-        // todo use while has next instead
-        for (Entity e : unshotBullets) {
-            FiringSystem.spawnBullet(e);
+        // no iterator can be used here as the list gets accessed by the server thread
+        for (int i = 0; i < unshotBullets.size(); i++) {
+            FiringSystem.spawnBullet(unshotBullets.get(i));
         }
         unshotBullets.removeAll(unshotBullets);
-        // updated = false;
     }
 }

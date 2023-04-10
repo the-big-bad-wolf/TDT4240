@@ -1,5 +1,7 @@
 package com.mygdx.shapewars.model.system;
 
+import static com.mygdx.shapewars.config.GameConfig.TANK_FAMILY;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -47,49 +49,42 @@ public class UpdateSystemClient extends EntitySystem {
 
         // synchronize tank entities
         try {
-            // todo move family to config file
-            Family tankFamily = Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class, IdentityComponent.class).get();
-            ImmutableArray<Entity> tanksClient = shapeWarsModel.engine.getEntitiesFor(tankFamily);
+            ImmutableArray<Entity> tanksClient = shapeWarsModel.engine.getEntitiesFor(TANK_FAMILY);
 
-            int numberOfTanksServer = tanksServer.length;
-            int numberOfTanksClient = tanksClient.size();
-            int diff = numberOfTanksServer - numberOfTanksClient;
-            if (diff < 0) {
-                // client has more tank entities -> client needs to delete #diff tanks
-                // todo delete the correct tank not just the last one like with bullets
-                diff = Math.abs(diff);
-                for (int i = 0; i < diff; i++) {
-                    Entity e = shapeWarsModel.engine.getEntities().get(numberOfTanksClient - i - 1);
-                    shapeWarsModel.engine.removeEntity(e); // not at once?
-                }
-            }
-
-            tanksClient = shapeWarsModel.engine.getEntitiesFor(tankFamily);
-
-            for (int i = 0; i < tanksClient.size() && i < tanksServer.length; i++) {
-                // todo update the correct tank again
+            for (int i = 0; i < tanksClient.size(); i++) {
+                boolean toRemove = true;
                 Entity tankClient = tanksClient.get(i);
-                TankData tankDataServer = tanksServer[i];
+                for (int j = 0; j < tanksServer.length; j++) {
+                    TankData tankDataServer = tanksServer[j];
+                    // i = index client side, j = index server side
+                    if (tankDataServer.identityComponent.getId() == ComponentMappers.identity.get(tankClient).getId()) {
+                        toRemove = false;
 
-                // update position
-                float x = tankDataServer.positionComponent.getPosition().x;
-                float y = tankDataServer.positionComponent.getPosition().y;
-                ComponentMappers.position.get(tankClient).setPosition(x, y);
+                        // update position
+                        float x = tankDataServer.positionComponent.getPosition().x;
+                        float y = tankDataServer.positionComponent.getPosition().y;
+                        ComponentMappers.position.get(tankClient).setPosition(x, y);
 
-                // update velocity
-                float direction = tankDataServer.velocityComponent.getDirection();
-                float magnitude = tankDataServer.velocityComponent.getValue();
-                ComponentMappers.velocity.get(tankClient).setVelocity(magnitude, direction);
+                        // update velocity
+                        float direction = tankDataServer.velocityComponent.getDirection();
+                        float magnitude = tankDataServer.velocityComponent.getValue();
+                        ComponentMappers.velocity.get(tankClient).setVelocity(magnitude, direction);
 
-                // update health
-                int health = tankDataServer.healthComponent.getHealth();
-                ComponentMappers.health.get(tankClient).setHealth(health);
+                        // update health
+                        int health = tankDataServer.healthComponent.getHealth();
+                        ComponentMappers.health.get(tankClient).setHealth(health);
+
+                        break;
+                    }
+                }
+                if (toRemove) {
+                    // tank existing in client ecs does not exist on server ecs -> remove it
+                    shapeWarsModel.engine.removeEntity(tankClient);
+                }
             }
         } catch (NullPointerException | ArrayIndexOutOfBoundsException exception) {
             System.out.println(exception);
         }
-
-
 
         // synchronize bullet entities
         try {
@@ -113,7 +108,7 @@ public class UpdateSystemClient extends EntitySystem {
                 // client has more entities -> client needs to delete #diff bullets
                 diff = Math.abs(diff);
                 for (int i = 0; i < diff; i++) {
-                    Entity e = shapeWarsModel.engine.getEntities().get(numberOfBulletsClient - i - 1);
+                    Entity e = bulletsClient.get(numberOfBulletsClient - i - 1);
                     shapeWarsModel.engine.removeEntity(e); // not at once?
                 }
             }

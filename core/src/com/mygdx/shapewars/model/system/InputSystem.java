@@ -1,23 +1,19 @@
 package com.mygdx.shapewars.model.system;
 
+import static com.mygdx.shapewars.config.GameConfig.TANK_FAMILY;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
 
 public abstract class InputSystem extends EntitySystem implements InputProcessor {
-
     protected float inputDirection;
     protected float inputValue;
     protected ImmutableArray<Entity> entities;
@@ -29,36 +25,27 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
         this.shapeWarsModel = shapeWarsModel;
     }
 
-    public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(
-                Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
-                        IdentityComponent.class).get());
-    }
+    public void addedToEngine(Engine engine) { }
 
     public void update(float deltaTime) {
-        // todo this needs to change!
-        // get the current entity
-        Entity entity = null;
-        try {
-            for (Entity e : entities) {
-                if (ComponentMappers.identity.get(e).getId() == shapeWarsModel.deviceTankMapping.get(shapeWarsModel.gameModel.deviceId)) {
-                    entity = e;
-                    break;
-                }
-            }
-            if (entity == null) {
-                shapeWarsModel.engine.removeSystem(this);
-                return;
-            }
-        } catch (NullPointerException e) {}
-        Gdx.input.setInputProcessor(this);
-        if (shapeWarsModel.role == Role.Server) {
-            // Entity entity = entities.get(shapeWarsModel.deviceTankMapping.get(shapeWarsModel.gameModel.deviceId));
-            VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-            velocityComponent.setVelocity(inputValue, inputDirection);
+        entities = shapeWarsModel.engine.getEntitiesFor(TANK_FAMILY);
 
-            if (firingFlag)
-               FiringSystem.spawnBullet(entity);
+        Gdx.input.setInputProcessor(this);
+        // todo can this be coded simpler?
+        if (shapeWarsModel.role == Role.Server) {
+            try {
+                Entity entity = null;
+                for (int i = 0; i < entities.size(); i++) {
+                    Entity e = entities.get(i);
+                    if (ComponentMappers.identity.get(e).getId() == 0) {
+                        entity = e;
+                    }
+                    VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
+                    velocityComponent.setVelocity(inputValue, inputDirection);
+                    if (firingFlag)
+                        FiringSystem.spawnBullet(entity);
+                }
+            } catch (NullPointerException e) { }
         } else {
             shapeWarsModel.clientConnector.sendInputRequest(shapeWarsModel.gameModel.deviceId, inputValue, inputDirection, firingFlag);
         }

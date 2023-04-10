@@ -2,7 +2,9 @@ package com.mygdx.shapewars.model.system;
 
 import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
 import static com.mygdx.shapewars.config.GameConfig.MAX_TURN_RATE;
+import static com.mygdx.shapewars.config.GameConfig.TANK_FAMILY;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.mygdx.shapewars.model.ShapeWarsModel;
@@ -51,13 +53,15 @@ public class InputSystemDesktop extends InputSystem {
     }
 
     private int getInputDirection() {
-        // todo absolutely remove this. this is for when the tank the movement system belongs to has been destroyed
-        int currentDir;
+        entities = shapeWarsModel.engine.getEntitiesFor(TANK_FAMILY);
+        int currentDir = 0;
         try {
-            currentDir = (int) ComponentMappers.velocity.get(entities.get(shapeWarsModel.tankId)).getDirection();
-        } catch (Exception e) {
-            return 0;
-        }
+            for (int i = 0; i < entities.size(); i++) {
+                Entity e = entities.get(i);
+                if (ComponentMappers.identity.get(e).getId() == shapeWarsModel.tankId)
+                    currentDir = (int) ComponentMappers.velocity.get(e).getDirection();
+            }
+        } catch (Exception e) { }
 
         boolean left = isKeyPressed(Input.Keys.A) || isKeyPressed(Input.Keys.LEFT);
         boolean right = isKeyPressed(Input.Keys.D) || isKeyPressed(Input.Keys.RIGHT);
@@ -81,6 +85,6 @@ public class InputSystemDesktop extends InputSystem {
     }
 
     /*
-    * todo: implement the shooting on mouse click and point the gun to the mouse pointer
-    */
+     * todo: implement the shooting on mouse click and point the gun to the mouse pointer
+     */
 }
