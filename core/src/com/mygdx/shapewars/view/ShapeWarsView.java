@@ -133,6 +133,14 @@ public class ShapeWarsView implements Screen {
 
         shapeRenderer.end();
         stage.draw();
+        if (Gdx.input.justTouched()) {
+            if (Gdx.input.getX() >= Gdx.graphics.getWidth() - 150f
+                    && Gdx.input.getY() <= 60f) {
+                dispose();
+                controller.setScreen(new MainMenuView(controller));
+            }
+        }
+
     }
 
     @Override
