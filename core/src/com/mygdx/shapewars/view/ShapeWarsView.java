@@ -42,8 +42,8 @@ public class ShapeWarsView implements Screen {
         this.stage = new Stage(); // todo check if we need to change that
         map = model.getMap();
         this.uiBuilder = new UIBuilder(this.stage);
-        menuButton = uiBuilder.buildButton("Menu", 200f, 100f, Gdx.graphics.getWidth() - 1000f,
-                Gdx.graphics.getHeight() - 100f);
+        menuButton = uiBuilder.buildButton("Menu", 150f, 60f, Gdx.graphics.getWidth() - 150f,
+                Gdx.graphics.getHeight() - 60f);
         addActionsToUI();
         Gdx.input.setInputProcessor(stage);
 
