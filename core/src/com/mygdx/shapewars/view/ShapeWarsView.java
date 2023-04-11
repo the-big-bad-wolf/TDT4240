@@ -10,7 +10,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.config.Launcher;
@@ -30,16 +33,20 @@ public class ShapeWarsView implements Screen {
     private Sprite backgroundSprite;
     private ExtendViewport extendViewport;
     private ShapeWarsController controller;
+    private UIBuilder uiBuilder;
+    private TextButton menuButton;
 
     public ShapeWarsView(ShapeWarsController controller) {
-        System.out.println(controller);
+        this.controller = controller;
         this.model = controller.shapeWarsModel;
         this.stage = new Stage(); // todo check if we need to change that
         map = model.getMap();
-    }
+        this.uiBuilder = new UIBuilder(this.stage);
+        menuButton = uiBuilder.buildButton("Menu", 200f, 100f, Gdx.graphics.getWidth() - 1000f,
+                Gdx.graphics.getHeight() - 100f);
+        addActionsToUI();
+        Gdx.input.setInputProcessor(stage);
 
-    public void setController(ShapeWarsController controller) {
-        this.controller = controller;
     }
 
     public ShapeWarsController getController() {
@@ -48,20 +55,26 @@ public class ShapeWarsView implements Screen {
 
     @Override
     public void show() {
-        // create a render object to easily render all layers, objects, etc. of our TileMap
+        // create a render object to easily render all layers, objects, etc. of our
+        // TileMap
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         shapeRenderer = new ShapeRenderer();
 
-        // creation and setting of map to make sure dimensions are set right and whole map is shown
+        // creation and setting of map to make sure dimensions are set right and whole
+        // map is shown
         OrthographicCamera camera = new OrthographicCamera();
-        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
-        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
+        float mapWidth = map.getProperties().get("width", Integer.class)
+                * map.getProperties().get("tilewidth", Integer.class);
+        float mapHeight = map.getProperties().get("height", Integer.class)
+                * map.getProperties().get("tileheight", Integer.class);
         camera.setToOrtho(false, mapWidth, mapHeight);
         camera.update();
 
-        // fitViewport scales the game world to fit on screen with the correct dimensions
+        // fitViewport scales the game world to fit on screen with the correct
+        // dimensions
         fitViewport = new FitViewport(mapWidth, mapHeight, camera);
-        // extendViewport allows for a scalable background that shows when fitViewport doesn't use the whole screen
+        // extendViewport allows for a scalable background that shows when fitViewport
+        // doesn't use the whole screen
         extendViewport = new ExtendViewport(mapWidth, mapHeight);
 
         // Background that shows around the actual playing field
@@ -111,11 +124,15 @@ public class ShapeWarsView implements Screen {
         if (model.gameModel.launcher == Launcher.Mobile) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(new Color(135 / 255f, 206 / 255f, 235 / 255f, 0.3f));
-            shapeRenderer.circle(model.getJoystick().getOuterCircle().x, model.getJoystick().getOuterCircle().y, model.getJoystick().getOuterCircle().radius);
+            shapeRenderer.circle(model.getJoystick().getOuterCircle().x, model.getJoystick().getOuterCircle().y,
+                    model.getJoystick().getOuterCircle().radius);
             shapeRenderer.setColor(new Color(0, 0, 139 / 255f, 0.3f));
-            shapeRenderer.circle(model.getJoystick().getInnerCircle().x, model.getJoystick().getInnerCircle().y, model.getJoystick().getInnerCircle().radius);
+            shapeRenderer.circle(model.getJoystick().getInnerCircle().x, model.getJoystick().getInnerCircle().y,
+                    model.getJoystick().getInnerCircle().radius);
         }
+
         shapeRenderer.end();
+        stage.draw();
     }
 
     @Override
@@ -144,5 +161,19 @@ public class ShapeWarsView implements Screen {
         stage.dispose();
         map.dispose();
         mapRenderer.dispose();
+    }
+
+    private void addActionsToUI() {
+        menuButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    dispose();
+                    controller.setScreen(new MainMenuView(controller));
+                } catch (NullPointerException nullPointerException) {
+                    System.out.println("No Controller found");
+                }
+            }
+        });
     }
 }
