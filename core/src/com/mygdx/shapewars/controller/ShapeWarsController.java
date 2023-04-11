@@ -1,7 +1,6 @@
 package com.mygdx.shapewars.controller;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
 import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.GameModel;
