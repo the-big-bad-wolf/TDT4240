@@ -1,14 +1,16 @@
 package com.mygdx.shapewars.controller;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.GameModel;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
 
-public class ShapeWarsController {
+public class ShapeWarsController extends Game {
 
     public ShapeWarsModel shapeWarsModel;
     public final GameModel gameModel;
@@ -26,7 +28,7 @@ public class ShapeWarsController {
 
     public void update() {
         if (currentScreen instanceof ShapeWarsView) {
-          shapeWarsModel.update();
+            shapeWarsModel.update();
         }
         currentScreen.render(Gdx.graphics.getDeltaTime());
     }
@@ -35,12 +37,16 @@ public class ShapeWarsController {
         gameModel.batch.dispose();
     }
 
-    public void setScreen(Screen screen) {
-        if (screen != null) {
-            if (this.currentScreen != null)
-                this.currentScreen.dispose();
-            this.currentScreen = screen;
-            this.currentScreen.show();
+    @Override
+    public void create() {
+        this.setScreen(new MainMenuView(this));
+    }
+
+    @Override
+    public void render() {
+        if (this.screen instanceof ShapeWarsView) {
+            shapeWarsModel.update();
         }
+        super.render();
     }
 }
