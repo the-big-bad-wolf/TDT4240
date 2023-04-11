@@ -140,23 +140,22 @@ public class HostView implements Screen {
                 NetworkInterface iface = interfaces.nextElement();
 
                 // Filter out localhost and inactive interfaces
-                if (iface.isLoopback() || !iface.isUp())
+                if (iface.isLoopback() || !iface.isUp() || iface.isVirtual() || iface.getName().equals("en0") || !iface.getName().startsWith("wlan")) {
                     continue;
+                }
 
                 Enumeration<InetAddress> addresses = iface.getInetAddresses();
-                while(addresses.hasMoreElements()) {
+                while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
 
                     final String ip = addr.getHostAddress();
 
-                    if(Inet4Address.class == addr.getClass()) return ip;
+                    if (Inet4Address.class == addr.getClass()) return ip;
                 }
             }
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
         return null;
-
     }
-
 }
