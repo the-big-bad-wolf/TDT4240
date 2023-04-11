@@ -26,10 +26,8 @@ public class MainMenuView implements Screen {
         this.stage = new Stage();
         this.controller = controller;
         this.uiBuilder = new UIBuilder(this.stage);
-
-        Gdx.input.setInputProcessor(stage);
-
         buildUI();
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -39,8 +37,6 @@ public class MainMenuView implements Screen {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         stage.setViewport(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
-
-        System.out.println("Main menu view showing");
         Gdx.input.setInputProcessor(stage);
         render(0);
     }
@@ -94,15 +90,15 @@ public class MainMenuView implements Screen {
         float joinButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
         float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
 
-        startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
+        startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos,
+                startButtonYPos);
         joinButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
         hostButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
 
         addActionsToUI();
     }
 
-    private void addActionsToUI()
-    {
+    private void addActionsToUI() {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

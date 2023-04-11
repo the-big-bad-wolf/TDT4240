@@ -3,14 +3,15 @@ package com.mygdx.shapewars;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.mygdx.shapewars.config.Launcher;
+import com.mygdx.shapewars.controller.ShapeWarsController;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
-	public static void main (String[] arg) {
+	public static void main(String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("ShapeWars");
 		config.setWindowedMode(1920, 1080);
-		new Lwjgl3Application(new ShapeWars(Launcher.Desktop), config);
+		new Lwjgl3Application(new ShapeWarsController(Launcher.Desktop), config);
 	}
 }
