@@ -32,7 +32,7 @@ public class ServerConnector {
             server.bind(25444, 25666);
         } catch (IOException e) {
             e.printStackTrace();
-            model.controller.currentScreen = new MainMenuView(model.controller);
+            model.controller.setScreen(new MainMenuView(model.controller));
             return;
         }
 
@@ -60,12 +60,10 @@ public class ServerConnector {
         this.kryo.register(HealthComponent[].class);
         this.kryo.register(IdentityComponent[].class);
 
-
         // register helper classes
         this.kryo.register(Array.class);
         this.kryo.register(Vector2.class);
         this.kryo.register(float[].class);
-
 
         this.server.addListener(new ServerListener(model));
     }

@@ -97,7 +97,8 @@ public class ClientView implements Screen {
         float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float okButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
 
-        inputField = uiBuilder.buildTextField("Enter your code", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
+        inputField = uiBuilder.buildTextField("Enter your code", inputFieldWidth, inputFieldHeight, inputFieldXPos,
+                inputFieldYPos);
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
         okButton = uiBuilder.buildButton("OK", allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos);
 
@@ -123,9 +124,8 @@ public class ClientView implements Screen {
                 // todo sanitise ip address input
                 // todo can this code be improved?
                 controller.generateShapeWarsModel(Role.Client, inputField.getText());
-                if (!(controller.currentScreen instanceof MainMenuView))
-                    controller.currentScreen = new ShapeWarsView(controller);
-                controller.currentScreen.show();
+                if (!(controller.getScreen() instanceof MainMenuView))
+                    controller.setScreen(new ShapeWarsView(controller));
             }
         });
 

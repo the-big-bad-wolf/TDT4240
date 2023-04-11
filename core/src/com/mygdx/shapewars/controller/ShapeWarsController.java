@@ -13,7 +13,6 @@ public class ShapeWarsController extends Game {
 
     public ShapeWarsModel shapeWarsModel;
     public GameModel gameModel;
-    public Screen currentScreen;
     public Launcher launcher;
 
     public ShapeWarsController(Launcher launcher) {
