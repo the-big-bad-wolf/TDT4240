@@ -44,9 +44,6 @@ public class ShapeWarsView implements Screen {
         this.uiBuilder = new UIBuilder(this.stage);
         menuButton = uiBuilder.buildButton("Menu", 150f, 60f, Gdx.graphics.getWidth() - 150f,
                 Gdx.graphics.getHeight() - 60f);
-        addActionsToUI();
-        Gdx.input.setInputProcessor(stage);
-
     }
 
     public ShapeWarsController getController() {
@@ -169,19 +166,5 @@ public class ShapeWarsView implements Screen {
         stage.dispose();
         map.dispose();
         mapRenderer.dispose();
-    }
-
-    private void addActionsToUI() {
-        menuButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                try {
-                    dispose();
-                    controller.setScreen(new MainMenuView(controller));
-                } catch (NullPointerException nullPointerException) {
-                    System.out.println("No Controller found");
-                }
-            }
-        });
     }
 }
