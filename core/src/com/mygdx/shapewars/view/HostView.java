@@ -135,8 +135,11 @@ public class HostView implements Screen {
 
     private String getIpAddress() {
         try {
+            int i = 0;
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
+                i++;
+                System.out.println("interface number " + i);
                 NetworkInterface iface = interfaces.nextElement();
 
                 // Filter out localhost and inactive interfaces
@@ -145,11 +148,12 @@ public class HostView implements Screen {
                 }
 
                 Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                int j = 0;
                 while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
 
                     final String ip = addr.getHostAddress();
-
+                    System.out.println(ip);
                     if (Inet4Address.class == addr.getClass()) return ip;
                 }
             }
