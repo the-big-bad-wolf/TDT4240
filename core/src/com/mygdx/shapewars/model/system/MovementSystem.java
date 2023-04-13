@@ -6,19 +6,24 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import java.util.ArrayList;
+
 
 public class MovementSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
+	private ArrayList<Polygon> obstacles;
 
   	private static volatile MovementSystem instance;
 
-	private MovementSystem() {
+	private MovementSystem(ArrayList<Polygon> obstacles) {
+		this.obstacles = obstacles;
 	}
 
 	public void addedToEngine(Engine engine) {
@@ -41,7 +46,7 @@ public class MovementSystem extends EntitySystem {
 			float newY = position.getPosition().y + MathUtils.sin(radians) * velocity.getValue();
 
 			// update position and rotation
-			Vector2 overlapVector = CollisionSystem.getCollisionWithWall(entity, newX, newY);
+			Vector2 overlapVector = CollisionSystem.getCollisionWithWall(entity, obstacles, newX, newY);
 			newX += overlapVector.x;
 			newY += overlapVector.y;
 			position.setPosition(newX, newY);
@@ -49,11 +54,11 @@ public class MovementSystem extends EntitySystem {
 		}
 	}
 
-	public static MovementSystem getInstance() {
+	public static MovementSystem getInstance(ArrayList<Polygon> obstacles) {
 		if (instance == null) {
 			synchronized (MovementSystem.class) {
 				if (instance == null) {
-					instance = new MovementSystem();
+					instance = new MovementSystem(obstacles);
 				}
 			}
 		}
