@@ -1,9 +1,9 @@
 package com.mygdx.shapewars.model;
 
-import static com.mygdx.shapewars.config.GameConfig.ENEMY_TANK_SKIN;
-import static com.mygdx.shapewars.config.GameConfig.FRIENDLY_TANK_SKIN;
-import static com.mygdx.shapewars.config.GameConfig.TANK_HEIGHT;
-import static com.mygdx.shapewars.config.GameConfig.TANK_WIDTH;
+import static com.mygdx.shapewars.config.GameConfig.ENEMY_FULL_HEALTH;
+import static com.mygdx.shapewars.config.GameConfig.PLAYER_FULL_HEALTH;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -96,7 +96,7 @@ public class ShapeWarsModel {
                 Vector2 cell = spawnCells.get(i);
                 tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent(i == tankId ? FRIENDLY_TANK_SKIN : ENEMY_TANK_SKIN, TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
+                tank.add(new SpriteComponent(i == tankId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own tank its own color
                 tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
@@ -109,7 +109,7 @@ public class ShapeWarsModel {
                 Entity tank = new Entity();
                 tank.add(new PositionComponent(0, 0));
                 tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent(i == tankId ? FRIENDLY_TANK_SKIN : ENEMY_TANK_SKIN, TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
+                tank.add(new SpriteComponent(i == tankId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own tank its own color
                 tank.add(new HealthComponent(100));
                 tank.add(new IdentityComponent(i));
                 engine.addEntity(tank);
