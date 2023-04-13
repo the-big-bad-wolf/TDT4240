@@ -18,5 +18,6 @@ public abstract class GameConfig {
     public static final String ENEMY_FULL_HEALTH = "enemy_full_health.png";
     public static final String ENEMY_DAMAGE_ONE = "enemy_damage_one.png";
     public static final String ENEMY_DAMAGE_TWO = "enemy_damage_two.png";
+    public static final String CANNON_BALL = "cannon_ball.png";
     public static final Family TANK_FAMILY = Family.all(PositionComponent .class, VelocityComponent .class, SpriteComponent .class, HealthComponent .class, IdentityComponent.class).get();
 }

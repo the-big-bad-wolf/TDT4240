@@ -1,5 +1,10 @@
 package com.mygdx.shapewars.model.system;
 
+import static com.mygdx.shapewars.config.GameConfig.PLAYER_DAMAGE_ONE;
+import static com.mygdx.shapewars.config.GameConfig.PLAYER_DAMAGE_TWO;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -46,6 +51,13 @@ public class RicochetSystem extends EntitySystem {
         HealthComponent tankHealthComponent = ComponentMappers.health.get(tank);
 
         if (checkCollisionWithTank(bulletPositionComponent, tankPositionComponent, tankSpriteComponent)) {
+          tank.remove(SpriteComponent.class);
+          if (tankHealthComponent.getHealth() >= 100) {
+            tank.add(new SpriteComponent(PLAYER_DAMAGE_ONE, SHIP_WIDTH, SHIP_HEIGHT));
+          }
+          else if (tankHealthComponent.getHealth() >= 60) {
+            tank.add(new SpriteComponent(PLAYER_DAMAGE_TWO, SHIP_WIDTH, SHIP_HEIGHT));
+          }
           tankHealthComponent.takeDamage(40);
           bulletHealthComponent.takeDamage(100);
           break;
