@@ -6,10 +6,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.shapewars.controller.Joystick;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.shapewars.config.GameConfig;
+import com.mygdx.shapewars.controller.Firebutton;
+import com.mygdx.shapewars.network.client.ClientConnector;
+import com.mygdx.shapewars.config.Role;
 
 
 public class InputSystemMobile extends InputSystem {
     private Joystick joystick;
+    private Firebutton firebutton;
+    private FitViewport fitViewport;
     private final int outerCircleRadius;
     private boolean movingJoystick;
     private static volatile InputSystemMobile instance;
@@ -17,6 +25,8 @@ public class InputSystemMobile extends InputSystem {
     private InputSystemMobile(ShapeWarsModel shapeWarsModel) {
         super(shapeWarsModel);
         this.joystick = shapeWarsModel.joystick;
+        this.firebutton = shapeWarsModel.firebutton;
+        this.fitViewport = shapeWarsModel.shapeWarsViewport;
         this.outerCircleRadius = Math.round(joystick.getOuterCircle().radius);
     }
 
@@ -33,8 +43,12 @@ public class InputSystemMobile extends InputSystem {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        movingJoystick = joystick.getOuterCircle().contains(screenX, Gdx.graphics.getHeight() - screenY);
-        return false; // standard return value
+        Vector2 worldCoordinates = new Vector2(screenX, screenY);
+        fitViewport.unproject(worldCoordinates);
+        movingJoystick = joystick.getOuterCircle().contains(worldCoordinates);
+        if (firebutton.getOuterCircle().contains(worldCoordinates))
+            firingFlag = true;
+        return false;
     }
 
     @Override
@@ -47,9 +61,12 @@ public class InputSystemMobile extends InputSystem {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        Vector2 worldCoordinates = new Vector2(screenX, screenY);
+        fitViewport.unproject(worldCoordinates);
+
         if (movingJoystick) {
-            float deltaX = screenX - 275 - joystick.getOuterCircle().x;
-            float deltaY = Gdx.graphics.getHeight() - screenY - joystick.getOuterCircle().y;
+            float deltaX = worldCoordinates.x - joystick.getOuterCircle().x;
+            float deltaY = worldCoordinates.y - joystick.getOuterCircle().y;
             float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
             deltaX = MathUtils.clamp(deltaX, -outerCircleRadius, outerCircleRadius);

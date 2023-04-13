@@ -13,14 +13,20 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.badlogic.gdx.math.Polygon;
+import java.util.ArrayList;
+
 
 public class RicochetSystem extends EntitySystem {
   private ImmutableArray<Entity> bullets;
   private ImmutableArray<Entity> tanks;
+  private ArrayList<Polygon> obstacles;
+
 
   private static volatile RicochetSystem instance;
 
-  private RicochetSystem() {
+  private RicochetSystem(ArrayList<Polygon> obstacles) {
+    this.obstacles = obstacles;
   };
 
   public void addedToEngine(Engine engine) {
@@ -61,8 +67,9 @@ public class RicochetSystem extends EntitySystem {
       boolean hasHitX = false;
       boolean hasHitY = false;
 
-      Rectangle wallsRect = CollisionSystem.<Rectangle>getCollisionWithWall(bullet, newX, newY);
-      if (wallsRect.area() != 0) {
+      Polygon rect = CollisionSystem.<Polygon>getCollisionWithWall(bullet, obstacles, newX, newY);
+      if (rect.getVertices().length > 0) {
+        Rectangle wallsRect = rect.getBoundingRectangle();
         // adjust newX and newY based on collision direction
         if (bulletPositionComponent.getPosition().x <= wallsRect.getX()) {
           hasHitX = true;
@@ -133,11 +140,11 @@ public class RicochetSystem extends EntitySystem {
     return x2 >= x1 && x2 <= x1 + width && y2 >= y1 && y2 <= y1 + height;
   }
 
-  public static RicochetSystem getInstance() {
+  public static RicochetSystem getInstance(ArrayList<Polygon> obstacles) {
     if (instance == null) {
       synchronized (FiringSystem.class) {
         if (instance == null) {
-          instance = new RicochetSystem();
+          instance = new RicochetSystem(obstacles);
         }
       }
     }

@@ -26,6 +26,14 @@ import com.mygdx.shapewars.model.system.UpdateSystemClient;
 import com.mygdx.shapewars.model.system.UpdateSystemServer;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.shapewars.controller.Firebutton;
+import com.mygdx.shapewars.config.Launcher;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +48,9 @@ public class ShapeWarsModel {
     public HashMap<String, Integer> deviceTankMapping = new HashMap<>();
     public int tankId; // todo put this in a model just for clients
     public Joystick joystick;
+    public Firebutton firebutton;
+    public ArrayList<Polygon> obstacles;
+    public FitViewport shapeWarsViewport;
     public GameModel gameModel;
     public boolean isGameActive;
     public ShapeWarsController controller;
@@ -59,11 +70,31 @@ public class ShapeWarsModel {
             1 = collisionLayer
             2 = bulletLayer
             3 = spawnLayer
-            4, 5, ... = non-existent yet
+            4 = collisionObjectLayer (defines the Polygons for collision detection)
+            5, 6 ... = non-existent yet
          */
-        map = loader.load("maps/map2.tmx"); // make server send this AFTER sophie is done
+        map = loader.load("maps/mobileMap2.tmx"); // make server send this AFTER sophie is done
         engine = new Engine();
         joystick = new Joystick(400, 400, 300, 150);
+
+        obstacles = new ArrayList<Polygon>();
+        // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
+        for (MapObject object : map.getLayers().get(4).getObjects()) {
+            if (object instanceof PolygonMapObject) {
+                Polygon rect = ((PolygonMapObject) object).getPolygon();
+                obstacles.add(rect);
+            }
+        }
+
+        OrthographicCamera camera = new OrthographicCamera();
+        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
+        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
+        camera.setToOrtho(false, mapWidth, mapHeight);
+        camera.update();
+        // fitViewport scales the game world to fit on screen with the correct dimensions
+        shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
+        joystick = new Joystick(100, 100, 100, 50);
+        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-100, 100, 50);
 
         if (this.role == Role.Server) {
             this.tankId = 0;
@@ -154,5 +185,9 @@ public class ShapeWarsModel {
 
     public static TiledMapTileLayer getLayer(int layerId) {
       return (TiledMapTileLayer) getMap().getLayers().get(layerId);
+    }
+
+    public Firebutton getFirebutton() {
+        return firebutton;
     }
 }
