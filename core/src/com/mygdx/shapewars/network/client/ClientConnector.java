@@ -32,7 +32,7 @@ public class ClientConnector {
             client.connect(5000, ipAddress, 25444, 25666);
         } catch (IOException e) {
             e.printStackTrace();
-            model.controller.currentScreen = new MainMenuView(model.controller);
+            model.controller.setScreen(new MainMenuView(model.controller));
             return;
         }
 
