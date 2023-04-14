@@ -44,7 +44,6 @@ public class UIBuilder {
 
     public TextButton buildButton(String text, float width, float height, float xPos, float yPos) {
         textButton = new TextButton(text, skin);
-
         buildButtonStyle(skin);
         textButton.setSize(width, height);
         textButton.setPosition(xPos, yPos);
@@ -56,7 +55,7 @@ public class UIBuilder {
     private void buildTextFieldStyle(Skin skin) {
         fieldStyle = new TextFieldStyle();
         fieldStyle.font = skin.getFont("default-font");
-        fieldStyle.font.getData().setScale(3f);
+        fieldStyle.font.getData().setScale(1f);
         fieldStyle.background = skin.getDrawable("default-scroll");
         fieldStyle.cursor = skin.getDrawable("default-round");
     }
@@ -64,7 +63,7 @@ public class UIBuilder {
     private void buildButtonStyle(Skin skin) {
         buttonStyle = new TextButtonStyle();
         buttonStyle.font = skin.getFont("default-font");
-        buttonStyle.font.getData().setScale(3f);
+        buttonStyle.font.getData().setScale(1f);
         buttonStyle.up = skin.getDrawable("default-round");
         buttonStyle.down = skin.getDrawable("default-round-down");
     }

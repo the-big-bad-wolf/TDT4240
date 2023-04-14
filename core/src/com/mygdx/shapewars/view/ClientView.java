@@ -86,7 +86,7 @@ public class ClientView implements Screen {
     }
 
     private void buildUI() {
-        float inputFieldWidth = 600;
+        float inputFieldWidth = 800;
         float inputFieldHeight = 100;
         float allButtonsWidth = 250f;
         float allButtonsHeight = 100f;
