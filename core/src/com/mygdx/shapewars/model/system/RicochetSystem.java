@@ -6,6 +6,7 @@ import static com.mygdx.shapewars.config.GameConfig.PLAYER_DAMAGE_ONE;
 import static com.mygdx.shapewars.config.GameConfig.PLAYER_DAMAGE_TWO;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
+import static com.mygdx.shapewars.config.GameConfig.MAX_BULLET_HEALTH;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
+import com.mygdx.shapewars.model.components.ParentComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
@@ -60,6 +62,12 @@ public class RicochetSystem extends EntitySystem {
         IdentityComponent tankIdentityComponent = ComponentMappers.identity.get(tank);
 
         if (checkCollisionWithTank(bulletPositionComponent, tankPositionComponent, tankSpriteComponent)) {
+          ParentComponent bulletParentComponent = ComponentMappers.parent.get(bullet);
+          if (tank.equals(bulletParentComponent.getParent())) {
+            if (bulletHealthComponent.getHealth() == MAX_BULLET_HEALTH) {
+              break;
+            }
+          }
           tank.remove(SpriteComponent.class);
           if (tankIdentityComponent.getId() == 0) {
             if (tankHealthComponent.getHealth() >= 100) {
