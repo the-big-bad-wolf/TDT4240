@@ -5,8 +5,12 @@ import java.net.UnknownHostException;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.shapewars.controller.ShapeWarsController;
@@ -17,12 +21,15 @@ public class TutorialView implements Screen {
 	private final UIBuilder uiBuilder;
 	private TextButton nextButton;
 	private int sourceInt;
+	private Sprite imageSprite;
+	private SpriteBatch batch;
 
 	public TutorialView(ShapeWarsController controller, int sourceInt) {
 		this.controller = controller;
 		this.stage = new Stage();
 		this.uiBuilder = new UIBuilder(this.stage);
 		this.sourceInt = sourceInt;
+		batch = new SpriteBatch();
 		buildUI();
 
 	}
@@ -63,6 +70,10 @@ public class TutorialView implements Screen {
 
 	@Override
 	public void show() {
+		Texture image = new Texture(Gdx.files.internal("maps/mapExpansionGrass.png"));
+		imageSprite = new Sprite(image);
+		imageSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 100);
+		imageSprite.setY(150);
 		Gdx.input.setInputProcessor(stage);
 		render(0);
 	}
@@ -74,6 +85,14 @@ public class TutorialView implements Screen {
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		stage.getViewport().apply();
 
+		controller.gameModel.batch.begin();
+		controller.gameModel.batch.end();
+
+		batch.begin();
+		imageSprite.draw(batch);
+		batch.end();
+
+		stage.act(delta);
 		stage.draw();
 	}
 
