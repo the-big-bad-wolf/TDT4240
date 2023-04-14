@@ -37,8 +37,8 @@ public class ShapeWarsModel {
     public Role role;
     public ServerConnector serverConnector; // todo implement strategy pattern
     public ClientConnector clientConnector;
-    public HashMap<String, Integer> deviceTankMapping = new HashMap<>();
-    public int tankId; // todo put this in a model just for clients
+    public HashMap<String, Integer> deviceShipMapping = new HashMap<>();
+    public int shipId; // todo put this in a model just for clients
     public Joystick joystick;
     public GameModel gameModel;
     public boolean isGameActive;
@@ -66,9 +66,9 @@ public class ShapeWarsModel {
         joystick = new Joystick(400, 400, 300, 150);
 
         if (this.role == Role.Server) {
-            this.tankId = 0;
-            this.deviceTankMapping = new HashMap<>();
-            deviceTankMapping.put(this.gameModel.deviceId, tankId);
+            this.shipId = 0;
+            this.deviceShipMapping = new HashMap<>();
+            deviceShipMapping.put(this.gameModel.deviceId, shipId);
             this.serverConnector = new ServerConnector(this);
         } else {
             this.clientConnector = new ClientConnector(this, serverIpAddress);
@@ -78,7 +78,7 @@ public class ShapeWarsModel {
 
     public void generateEntities() {
         if (this.role == Role.Server) {
-            numPlayers = deviceTankMapping.size();
+            numPlayers = deviceShipMapping.size();
             TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
 
             List<Vector2> spawnCells = new ArrayList<>();
@@ -92,27 +92,27 @@ public class ShapeWarsModel {
             }
 
             for (int i = 0; i < numPlayers; i++) {
-                Entity tank = new Entity();
+                Entity ship = new Entity();
                 Vector2 cell = spawnCells.get(i);
-                tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
-                tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent(i == tankId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own tank its own color
-                tank.add(new HealthComponent(100));
-                tank.add(new IdentityComponent(i));
-                engine.addEntity(tank);
+                ship.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
+                ship.add(new VelocityComponent(0, 0));
+                ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
+                ship.add(new HealthComponent(100));
+                ship.add(new IdentityComponent(i));
+                engine.addEntity(ship);
             }
             this.updateSystemServer = UpdateSystemServer.getInstance(this);
             engine.addSystem(updateSystemServer);
             isGameActive = true;
         } else {
             for (int i = 0; i < numPlayers; i++) {
-                Entity tank = new Entity();
-                tank.add(new PositionComponent(0, 0));
-                tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent(i == tankId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own tank its own color
-                tank.add(new HealthComponent(100));
-                tank.add(new IdentityComponent(i));
-                engine.addEntity(tank);
+                Entity ship = new Entity();
+                ship.add(new PositionComponent(0, 0));
+                ship.add(new VelocityComponent(0, 0));
+                ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
+                ship.add(new HealthComponent(100));
+                ship.add(new IdentityComponent(i));
+                engine.addEntity(ship);
             }
             this.updateSystemClient = UpdateSystemClient.getInstance(this);
             engine.addSystem(updateSystemClient);

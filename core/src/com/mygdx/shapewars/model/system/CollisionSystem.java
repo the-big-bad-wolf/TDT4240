@@ -31,7 +31,7 @@ public class CollisionSystem extends EntitySystem {
     private static Polygon getEntityBounds(Entity entity, float newX, float newY) {
         SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
         VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-        // calculate the tank's bounding box
+        // calculate the ship's bounding box
         Polygon entityBounds = new Polygon(new float[] {
                 0, 0,
                 spriteComponent.getSprite().getWidth(), 0,
@@ -87,7 +87,7 @@ public class CollisionSystem extends EntitySystem {
     private static Vector2 getOverlapVector(Polygon entityBounds, Polygon tileBounds) {
         Vector2 overlapVector = new Vector2();
         if (Intersector.overlapConvexPolygons(entityBounds, tileBounds)) {
-            // tank collides with wall, adjust position
+            // ship collides with wall, adjust position
             Intersector.MinimumTranslationVector mtv = new Intersector.MinimumTranslationVector();
             Intersector.overlapConvexPolygons(entityBounds, tileBounds, mtv);
             overlapVector.set(mtv.normal.x * mtv.depth, mtv.normal.y * mtv.depth);
@@ -118,7 +118,7 @@ public class CollisionSystem extends EntitySystem {
             for (int y = 0; y < collisionLayer.getHeight(); y++) {
                 TiledMapTileLayer.Cell cell = collisionLayer.getCell(x, y);
                 if (cell != null) {
-                    // Checks if the entity is tank or not
+                    // Checks if the entity is ship or not
                     if (entity.getComponent(IdentityComponent.class) != null) {
                         tileBounds = getTileBounds(x, y);
                         Vector2 tempVector = getOverlapVector(entityBounds, tileBounds);

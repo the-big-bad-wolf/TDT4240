@@ -53,7 +53,7 @@ public class SpriteSystem extends EntitySystem {
             IdentityComponent shipIdentityComponent = ComponentMappers.identity.get(ship);
             SpriteComponent shipSpriteComponent = ComponentMappers.sprite.get(ship);
 
-            if (shipIdentityComponent.getId() == shapeWarsModel.tankId) {
+            if (shipIdentityComponent.getId() == shapeWarsModel.shipId) {
                 String expectedSkin;
                 if (shipHealthComponent.getHealth() >= 100) {
                     expectedSkin = PLAYER_FULL_HEALTH;

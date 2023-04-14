@@ -1,6 +1,6 @@
 package com.mygdx.shapewars.network.server;
 
-import static com.mygdx.shapewars.config.GameConfig.TANK_FAMILY;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -19,7 +19,7 @@ import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
 import com.mygdx.shapewars.network.data.LobbyRequest;
 import com.mygdx.shapewars.network.data.LobbyResponse;
-import com.mygdx.shapewars.network.data.TankData;
+import com.mygdx.shapewars.network.data.ShipData;
 import java.util.ArrayList;
 
 public class ServerListener extends Listener {
@@ -44,23 +44,23 @@ public class ServerListener extends Listener {
     public void received(Connection connection, Object object) {
         if (object instanceof LobbyRequest) {
             LobbyRequest request = (LobbyRequest) object;
-            if (!model.deviceTankMapping.containsKey(request.deviceId))
-                model.deviceTankMapping.put(request.deviceId, model.deviceTankMapping.size());
-            connection.sendUDP(new LobbyResponse(model.deviceTankMapping.size(),
-                    model.deviceTankMapping.get(request.deviceId), model.isGameActive));
+            if (!model.deviceShipMapping.containsKey(request.deviceId))
+                model.deviceShipMapping.put(request.deviceId, model.deviceShipMapping.size());
+            connection.sendUDP(new LobbyResponse(model.deviceShipMapping.size(),
+                    model.deviceShipMapping.get(request.deviceId), model.isGameActive));
         }
 
         if (object instanceof InputRequest) {
             // first get input from the client
             InputRequest request = (InputRequest) object;
-            ImmutableArray<Entity> tanks = model.engine.getEntitiesFor(TANK_FAMILY);
+            ImmutableArray<Entity> ships = model.engine.getEntitiesFor(SHIP_FAMILY);
             try {
-                for (int i = 0; i < tanks.size(); i++) {
-                    if (ComponentMappers.identity.get(tanks.get(i)).getId() == model.deviceTankMapping.get(request.clientId)) {
-                        VelocityComponent velocityComponent = ComponentMappers.velocity.get(tanks.get(i));
+                for (int i = 0; i < ships.size(); i++) {
+                    if (ComponentMappers.identity.get(ships.get(i)).getId() == model.deviceShipMapping.get(request.clientId)) {
+                        VelocityComponent velocityComponent = ComponentMappers.velocity.get(ships.get(i));
                         velocityComponent.setVelocity(request.valueInput, request.directionInput);
                         if (request.firingFlag) {
-                            model.updateSystemServer.unshotBullets.add(tanks.get(i)); // cannot call firing system directly from this thread
+                            model.updateSystemServer.unshotBullets.add(ships.get(i)); // cannot call firing system directly from this thread
                         }
                     }
                 }
@@ -68,20 +68,20 @@ public class ServerListener extends Listener {
                 System.err.println(e);
             }
 
-            ArrayList<TankData> tankDataArrayList = new ArrayList<>();
+            ArrayList<ShipData> shipDataArrayList = new ArrayList<>();
             ArrayList<BulletData> bulletDataArrayList = new ArrayList<>();
 
 
             Family bulletFamily = Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class).exclude(IdentityComponent.class).get();
             ImmutableArray<Entity> bullets = model.engine.getEntitiesFor(bulletFamily);
 
-            for (int i = 0; i < tanks.size(); i++) {
-                Entity tank = tanks.get(i);
-                VelocityComponent velocityComponent = ComponentMappers.velocity.get(tank);
-                PositionComponent positionComponent = ComponentMappers.position.get(tank);
-                HealthComponent healthComponent = ComponentMappers.health.get(tank);
-                IdentityComponent identityComponent = ComponentMappers.identity.get(tank);
-                tankDataArrayList.add(new TankData(velocityComponent, positionComponent, healthComponent, identityComponent));
+            for (int i = 0; i < ships.size(); i++) {
+                Entity ship = ships.get(i);
+                VelocityComponent velocityComponent = ComponentMappers.velocity.get(ship);
+                PositionComponent positionComponent = ComponentMappers.position.get(ship);
+                HealthComponent healthComponent = ComponentMappers.health.get(ship);
+                IdentityComponent identityComponent = ComponentMappers.identity.get(ship);
+                shipDataArrayList.add(new ShipData(velocityComponent, positionComponent, healthComponent, identityComponent));
 
 
             }
@@ -92,9 +92,9 @@ public class ServerListener extends Listener {
                 HealthComponent healthComponent = ComponentMappers.health.get(bullet);
                 bulletDataArrayList.add(new BulletData(velocityComponent, positionComponent, healthComponent));
             }
-            TankData[] tankDataArray = tankDataArrayList.toArray(new TankData[tankDataArrayList.size()]);
+            ShipData[] shipDataArray = shipDataArrayList.toArray(new ShipData[shipDataArrayList.size()]);
             BulletData[] bulletDataArray = bulletDataArrayList.toArray(new BulletData[bulletDataArrayList.size()]);
-            GameResponse response = new GameResponse(tankDataArray, bulletDataArray);
+            GameResponse response = new GameResponse(shipDataArray, bulletDataArray);
             connection.sendUDP(response);
         }
     }

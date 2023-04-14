@@ -23,7 +23,7 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 
 public class RicochetSystem extends EntitySystem {
   private ImmutableArray<Entity> bullets;
-  private ImmutableArray<Entity> tanks;
+  private ImmutableArray<Entity> ships;
 
   private static volatile RicochetSystem instance;
 
@@ -34,9 +34,6 @@ public class RicochetSystem extends EntitySystem {
     bullets = engine.getEntitiesFor(
         Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class)
             .exclude(IdentityComponent.class).get());
-    tanks = engine.getEntitiesFor(
-        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
-            IdentityComponent.class).get());
   }
 
   public void update(float deltaTime) {

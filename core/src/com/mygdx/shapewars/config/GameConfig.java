@@ -21,5 +21,5 @@ public abstract class GameConfig {
     public static final String PLAYER_DEAD = "player_dead.png";
     public static final String ENEMY_DEAD = "enemy_dead.png";
     public static final String CANNON_BALL = "cannon_ball.png";
-    public static final Family TANK_FAMILY = Family.all(PositionComponent .class, VelocityComponent .class, SpriteComponent .class, HealthComponent .class, IdentityComponent.class).get();
+    public static final Family SHIP_FAMILY = Family.all(PositionComponent .class, VelocityComponent .class, SpriteComponent .class, HealthComponent .class, IdentityComponent.class).get();
 }

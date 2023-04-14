@@ -16,7 +16,7 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 public class DamageSystem extends EntitySystem {
 
     private ImmutableArray<Entity> bullets;
-    private ImmutableArray<Entity> tanks;
+    private ImmutableArray<Entity> ships;
 
 
     private static volatile DamageSystem instance;
@@ -27,7 +27,7 @@ public class DamageSystem extends EntitySystem {
         bullets = engine.getEntitiesFor(
                 Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class)
                         .exclude(IdentityComponent.class).get());
-        tanks = engine.getEntitiesFor(
+        ships = engine.getEntitiesFor(
                 Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
                         IdentityComponent.class).get());
     }
@@ -37,26 +37,26 @@ public class DamageSystem extends EntitySystem {
             PositionComponent bulletPositionComponent = ComponentMappers.position.get(bullet);
             HealthComponent bulletHealthComponent = ComponentMappers.health.get(bullet);
 
-            // Check if bullet hits tank
-            for (Entity tank : tanks) {
-                PositionComponent tankPositionComponent = ComponentMappers.position.get(tank);
-                SpriteComponent tankSpriteComponent = ComponentMappers.sprite.get(tank);
-                HealthComponent tankHealthComponent = ComponentMappers.health.get(tank);
+            // Check if bullet hits ship
+            for (Entity ship : ships) {
+                PositionComponent shipPositionComponent = ComponentMappers.position.get(ship);
+                SpriteComponent shipSpriteComponent = ComponentMappers.sprite.get(ship);
+                HealthComponent shipHealthComponent = ComponentMappers.health.get(ship);
 
-                if (checkCollisionWithTank(bulletPositionComponent, tankPositionComponent, tankSpriteComponent)) {
-                    tankHealthComponent.takeDamage(40);
+                if (checkCollisionWithShip(bulletPositionComponent, shipPositionComponent, shipSpriteComponent)) {
+                    shipHealthComponent.takeDamage(40);
                     bulletHealthComponent.takeDamage(100);
                     break;
                 }
             }
         }
     }
-    private boolean checkCollisionWithTank(PositionComponent bulletPosition, PositionComponent tankPositionComponent,
-                                           SpriteComponent tankSpriteComponent) {
-        float x1 = tankPositionComponent.getPosition().x;
-        float y1 = tankPositionComponent.getPosition().y;
-        float width = tankSpriteComponent.getSprite().getWidth();
-        float height = tankSpriteComponent.getSprite().getWidth();
+    private boolean checkCollisionWithShip(PositionComponent bulletPosition, PositionComponent shipPositionComponent,
+                                           SpriteComponent shipSpriteComponent) {
+        float x1 = shipPositionComponent.getPosition().x;
+        float y1 = shipPositionComponent.getPosition().y;
+        float width = shipSpriteComponent.getSprite().getWidth();
+        float height = shipSpriteComponent.getSprite().getWidth();
         float x2 = bulletPosition.getPosition().x;
         float y2 = bulletPosition.getPosition().y;
         return x2 >= x1 && x2 <= x1 + width && y2 >= y1 && y2 <= y1 + height;
