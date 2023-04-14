@@ -92,7 +92,7 @@ public class ShapeWarsModel {
         // TODO right layer
         bulletObstacles = new ArrayList<Polygon>();
         // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
-        for (MapObject object : map.getLayers().get(4).getObjects()) {
+        for (MapObject object : map.getLayers().get(5).getObjects()) {
             if (object instanceof PolygonMapObject) {
                 Polygon rect = ((PolygonMapObject) object).getPolygon();
                 bulletObstacles.add(rect);
