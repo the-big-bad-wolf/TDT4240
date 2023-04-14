@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -24,8 +25,8 @@ public class HostView implements Screen {
     private TextButton backButton;
     private TextButton startButton;
     private TextButton ipAddressField;
+    private Label ipLabel;
     private String ipAddress;
-
 
     public HostView(ShapeWarsController controller) throws UnknownHostException {
         this.controller = controller;
@@ -105,9 +106,13 @@ public class HostView implements Screen {
         float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         ipAddress = getIpAddress();
-        ipAddressField = uiBuilder.buildButton(ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
+        ipLabel = uiBuilder.buildTextLabel("Your IP address:", allButtonsWidth, allButtonsHeight, ipAddressXPos,
+                ipAddressYPos + 100);
+        ipAddressField = uiBuilder.buildButton(ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos,
+                ipAddressYPos);
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
-        startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
+        startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos,
+                startButtonYPos);
 
         addActionsToUI();
     }
@@ -140,7 +145,7 @@ public class HostView implements Screen {
                 NetworkInterface iface = interfaces.nextElement();
 
                 // Filter out localhost and inactive interfaces
-                if (iface.isLoopback() || !iface.isUp() || iface.isVirtual() ||iface.getName().equals("en1")) {
+                if (iface.isLoopback() || !iface.isUp() || iface.isVirtual() || iface.getName().equals("en1")) {
                     continue;
                 }
 

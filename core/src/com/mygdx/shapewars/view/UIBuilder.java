@@ -2,6 +2,7 @@ package com.mygdx.shapewars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -15,7 +16,7 @@ public class UIBuilder {
     private TextButtonStyle buttonStyle;
     private TextField textField;
     private TextButton textButton;
-    
+
     public UIBuilder(Stage stage) {
         this.stage = stage;
         this.skin = new Skin(Gdx.files.internal("data/uiskin.json"));
@@ -28,8 +29,17 @@ public class UIBuilder {
         textField.setSize(width, height);
         textField.setPosition(xPos, yPos);
         stage.addActor(textField);
-        
+
         return textField;
+    }
+
+    public Label buildTextLabel(String text, float width, float height, float xPos, float yPos) {
+        Label label = new Label(text, skin);
+        label.setWidth(width);
+        label.setHeight(height);
+        label.setPosition(xPos, yPos);
+        stage.addActor(label);
+        return label;
     }
 
     public TextButton buildButton(String text, float width, float height, float xPos, float yPos) {
@@ -39,7 +49,7 @@ public class UIBuilder {
         textButton.setSize(width, height);
         textButton.setPosition(xPos, yPos);
         stage.addActor(textButton);
-        
+
         return textButton;
     }
 
@@ -50,7 +60,7 @@ public class UIBuilder {
         fieldStyle.background = skin.getDrawable("default-scroll");
         fieldStyle.cursor = skin.getDrawable("default-round");
     }
-    
+
     private void buildButtonStyle(Skin skin) {
         buttonStyle = new TextButtonStyle();
         buttonStyle.font = skin.getFont("default-font");
