@@ -119,9 +119,9 @@ public class ShapeWarsView implements Screen {
             // draw joystick
             shapeRenderer.setProjectionMatrix(fitViewport.getCamera().combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(new Color(135 / 255f, 206 / 255f, 235 / 255f, 0.3f));
+            shapeRenderer.setColor(new Color(167 / 255f, 201 / 255f, 203 / 255f, 0.7f));
             shapeRenderer.circle(model.getJoystick().getOuterCircle().x, model.getJoystick().getOuterCircle().y, model.getJoystick().getOuterCircle().radius);
-            shapeRenderer.setColor(new Color(0, 0, 139 / 255f, 0.3f));
+            shapeRenderer.setColor(new Color(123 / 255f, 147 / 255f, 149 / 255f, 0.4f));
             shapeRenderer.circle(model.getJoystick().getInnerCircle().x, model.getJoystick().getInnerCircle().y, model.getJoystick().getInnerCircle().radius);
             // draw fireButton
             shapeRenderer.circle(model.getFirebutton().getOuterCircle().x, model.getFirebutton().getOuterCircle().y, model.getFirebutton().getOuterCircle().radius);

@@ -73,9 +73,9 @@ public class ShapeWarsModel {
             4 = collisionObjectLayer (defines the Polygons for collision detection)
             5, 6 ... = non-existent yet
          */
-        map = loader.load("maps/unbenannt1.tmx"); // make server send this AFTER sophie is done
+        map = loader.load("maps/pirateMap.tmx"); // make server send this AFTER sophie is done
         engine = new Engine();
-        joystick = new Joystick(400, 400, 300, 150);
+        joystick = new Joystick(180, 180, 120, 50);
 
         obstacles = new ArrayList<Polygon>();
         // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
@@ -93,8 +93,7 @@ public class ShapeWarsModel {
         camera.update();
         // fitViewport scales the game world to fit on screen with the correct dimensions
         shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
-        joystick = new Joystick(100, 100, 100, 50);
-        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-100, 100, 50);
+        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-180, 180, 120);
 
         if (this.role == Role.Server) {
             this.tankId = 0;
