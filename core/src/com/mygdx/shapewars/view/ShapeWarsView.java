@@ -38,7 +38,7 @@ public class ShapeWarsView implements Screen {
         this.controller = controller;
         this.model = controller.shapeWarsModel;
         this.stage = new Stage(); // todo check if we need to change that
-        map = model.getMap();
+        map = ShapeWarsModel.getMap();
         this.fitViewport = model.shapeWarsViewport;
         this.uiBuilder = new UIBuilder(this.stage);
         menuButton = uiBuilder.buildButton("Menu", 150f, 60f, Gdx.graphics.getWidth() - 150f,
@@ -129,6 +129,7 @@ public class ShapeWarsView implements Screen {
 
         shapeRenderer.end();
         stage.draw();
+        // TODO this for sure needs to be changed
         if (Gdx.input.justTouched()) {
             if (Gdx.input.getX() >= Gdx.graphics.getWidth() - 150f
                     && Gdx.input.getY() <= 60f) {

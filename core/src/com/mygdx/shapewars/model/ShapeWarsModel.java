@@ -73,7 +73,7 @@ public class ShapeWarsModel {
             4 = collisionObjectLayer (defines the Polygons for collision detection)
             5, 6 ... = non-existent yet
          */
-        map = loader.load("maps/mobileMap2.tmx"); // make server send this AFTER sophie is done
+        map = loader.load("maps/unbenannt1.tmx"); // make server send this AFTER sophie is done
         engine = new Engine();
         joystick = new Joystick(400, 400, 300, 150);
 

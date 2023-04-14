@@ -53,7 +53,8 @@ public class CollisionSystem extends EntitySystem {
      * @param y              the tile's y value.
      * @return the bounds of the tile as a Polygon.
      */
-    private static Polygon getTileBounds(int x, int y) {
+    // TODO figure out if needed
+    /*private static Polygon getTileBounds(int x, int y) {
         TiledMapTileLayer collisionLayer = ShapeWarsModel.getLayer(1);
         float tileSize = collisionLayer.getTileWidth();
         Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
@@ -64,7 +65,7 @@ public class CollisionSystem extends EntitySystem {
                 rect.x, rect.y + rect.height // top left corner
         });
         return tileBounds;
-    }
+    }*/
 
     /**
      * Makes a rectangle of the area an Entity covers.
@@ -84,7 +85,8 @@ public class CollisionSystem extends EntitySystem {
      *
      * @param entityBounds the bounds of an entity aka perimeter of sprite.
      * @param tileBounds   the bounds of the tile.
-     * @return the overlap between something... Please tell us Sophie.
+     * @return the overlap between the entityBounds and tileBounds as a Vector2 representing the minimum translation vector
+     *         needed to separate them
      */
     private static Vector2 getOverlapVector(Polygon entityBounds, Polygon tileBounds) {
         Vector2 overlapVector = new Vector2();
@@ -100,13 +102,14 @@ public class CollisionSystem extends EntitySystem {
     /**
      * Checks for a collision between an entity and a wall.
      *
-     * @param <T>            the type you want to return which must be a Rectangle
+     * @param <T>            the type you want to return which must be a Polygon
      *                       or Vector2.
      * @param entity         the entity to check collision on.
      * @param obstacles      the obstacles of the map.
      * @param newX           the new X value from the MovementSystem.
      * @param newY           the new Y value from the MovementSystem.
-     * @return the overlap between something... Please tell us Sophie.
+     * @return the overlap between the entity and the wall as an object of type T, depending on the
+     *         entity's IdentityComponent
      */
     @SuppressWarnings("unchecked")
     public static <T> T getCollisionWithWall(Entity entity, ArrayList<Polygon> obstacles, float newX, float newY) {
