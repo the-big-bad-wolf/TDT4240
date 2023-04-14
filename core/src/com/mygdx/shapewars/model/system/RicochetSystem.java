@@ -46,36 +46,6 @@ public class RicochetSystem extends EntitySystem {
       SpriteComponent bulletSpriteComponent = ComponentMappers.sprite.get(bullet);
       HealthComponent bulletHealthComponent = ComponentMappers.health.get(bullet);
 
-      // Check if bullet hits tank
-      for (Entity tank : tanks) {
-        PositionComponent tankPositionComponent = ComponentMappers.position.get(tank);
-        SpriteComponent tankSpriteComponent = ComponentMappers.sprite.get(tank);
-        HealthComponent tankHealthComponent = ComponentMappers.health.get(tank);
-        IdentityComponent tankIdentityComponent = ComponentMappers.identity.get(tank);
-
-        if (checkCollisionWithTank(bulletPositionComponent, tankPositionComponent, tankSpriteComponent)) {
-          tank.remove(SpriteComponent.class);
-          if (tankIdentityComponent.getId() == 0) {
-            if (tankHealthComponent.getHealth() >= 100) {
-              tank.add(new SpriteComponent(PLAYER_DAMAGE_ONE, SHIP_WIDTH, SHIP_HEIGHT));
-            }
-            else if (tankHealthComponent.getHealth() >= 60) {
-              tank.add(new SpriteComponent(PLAYER_DAMAGE_TWO, SHIP_WIDTH, SHIP_HEIGHT));
-            }
-          } else {
-            if (tankHealthComponent.getHealth() >= 100) {
-              tank.add(new SpriteComponent(ENEMY_DAMAGE_ONE, SHIP_WIDTH, SHIP_HEIGHT));
-            }
-            else if (tankHealthComponent.getHealth() >= 60) {
-              tank.add(new SpriteComponent(ENEMY_DAMAGE_TWO, SHIP_WIDTH, SHIP_HEIGHT));
-            }
-          }
-          tankHealthComponent.takeDamage(40);
-          bulletHealthComponent.takeDamage(100);
-          break;
-        }
-      }
-
       // calculate and set position
       float radians = MathUtils.degreesToRadians * bulletVelocityComponent.getDirection();
 
@@ -144,17 +114,6 @@ public class RicochetSystem extends EntitySystem {
 
       bulletSpriteComponent.getSprite().setPosition(bulletPositionComponent.getPosition().x, bulletPositionComponent.getPosition().y);
     }
-  }
-
-  private boolean checkCollisionWithTank(PositionComponent bulletPosition, PositionComponent tankPositionComponent,
-      SpriteComponent tankSpriteComponent) {
-    float x1 = tankPositionComponent.getPosition().x;
-    float y1 = tankPositionComponent.getPosition().y;
-    float width = tankSpriteComponent.getSprite().getWidth();
-    float height = tankSpriteComponent.getSprite().getWidth();
-    float x2 = bulletPosition.getPosition().x;
-    float y2 = bulletPosition.getPosition().y;
-    return x2 >= x1 && x2 <= x1 + width && y2 >= y1 && y2 <= y1 + height;
   }
 
   public static RicochetSystem getInstance() {
