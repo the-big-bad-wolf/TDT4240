@@ -49,7 +49,9 @@ public class ShapeWarsModel {
     public int tankId; // todo put this in a model just for clients
     public Joystick joystick;
     public Firebutton firebutton;
-    public ArrayList<Polygon> obstacles;
+    public ArrayList<Polygon> shipObstacles;
+    public ArrayList<Polygon> bulletObstacles;
+
     public FitViewport shapeWarsViewport;
     public GameModel gameModel;
     public boolean isGameActive;
@@ -77,12 +79,23 @@ public class ShapeWarsModel {
         engine = new Engine();
         joystick = new Joystick(180, 180, 120, 50);
 
-        obstacles = new ArrayList<Polygon>();
+        // TODO right layer
+        shipObstacles = new ArrayList<Polygon>();
         // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
         for (MapObject object : map.getLayers().get(4).getObjects()) {
             if (object instanceof PolygonMapObject) {
                 Polygon rect = ((PolygonMapObject) object).getPolygon();
-                obstacles.add(rect);
+                shipObstacles.add(rect);
+            }
+        }
+
+        // TODO right layer
+        bulletObstacles = new ArrayList<Polygon>();
+        // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
+        for (MapObject object : map.getLayers().get(4).getObjects()) {
+            if (object instanceof PolygonMapObject) {
+                Polygon rect = ((PolygonMapObject) object).getPolygon();
+                bulletObstacles.add(rect);
             }
         }
 

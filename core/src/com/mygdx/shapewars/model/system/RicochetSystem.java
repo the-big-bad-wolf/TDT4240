@@ -27,13 +27,13 @@ import java.util.ArrayList;
 public class RicochetSystem extends EntitySystem {
   private ImmutableArray<Entity> bullets;
   private ImmutableArray<Entity> tanks;
-  private ArrayList<Polygon> obstacles;
+  private ArrayList<Polygon> bulletObstacles;
 
 
   private static volatile RicochetSystem instance;
 
-  private RicochetSystem(ArrayList<Polygon> obstacles) {
-    this.obstacles = obstacles;
+  private RicochetSystem(ArrayList<Polygon> bulletObstacles) {
+    this.bulletObstacles = bulletObstacles;
   };
 
   public void addedToEngine(Engine engine) {
@@ -91,7 +91,7 @@ public class RicochetSystem extends EntitySystem {
       boolean hasHitX = false;
       boolean hasHitY = false;
 
-      Polygon rect = CollisionSystem.<Polygon>getCollisionWithWall(bullet, obstacles, newX, newY);
+      Polygon rect = CollisionSystem.<Polygon>getCollisionWithWall(bullet, bulletObstacles, newX, newY);
       if (rect.getVertices().length > 0) {
         Rectangle wallsRect = rect.getBoundingRectangle();
         // adjust newX and newY based on collision direction

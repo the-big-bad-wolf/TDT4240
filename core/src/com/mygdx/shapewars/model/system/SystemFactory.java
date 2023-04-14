@@ -19,8 +19,8 @@ public class SystemFactory {
                 InputSystemDesktop.getInstance(model) : InputSystemMobile.getInstance(model));
 
         if (role == Role.Server) {
-            systems.add(MovementSystem.getInstance(model.obstacles));
-            systems.add(RicochetSystem.getInstance(model.obstacles));
+            systems.add(MovementSystem.getInstance(model.shipObstacles));
+            systems.add(RicochetSystem.getInstance(model.bulletObstacles));
             systems.add(DeathSystem.getInstance());
         }
         return systems;

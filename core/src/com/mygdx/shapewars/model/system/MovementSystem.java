@@ -18,12 +18,12 @@ import java.util.ArrayList;
 
 public class MovementSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
-	private ArrayList<Polygon> obstacles;
+	private ArrayList<Polygon> shipObstacles;
 
   	private static volatile MovementSystem instance;
 
-	private MovementSystem(ArrayList<Polygon> obstacles) {
-		this.obstacles = obstacles;
+	private MovementSystem(ArrayList<Polygon> shipObstacles) {
+		this.shipObstacles = shipObstacles;
 	}
 
 	public void addedToEngine(Engine engine) {
@@ -46,7 +46,7 @@ public class MovementSystem extends EntitySystem {
 			float newY = position.getPosition().y + MathUtils.sin(radians) * velocity.getValue();
 
 			// update position and rotation
-			Vector2 overlapVector = CollisionSystem.getCollisionWithWall(entity, obstacles, newX, newY);
+			Vector2 overlapVector = CollisionSystem.getCollisionWithWall(entity, shipObstacles, newX, newY);
 			newX += overlapVector.x;
 			newY += overlapVector.y;
 			position.setPosition(newX, newY);
@@ -54,11 +54,11 @@ public class MovementSystem extends EntitySystem {
 		}
 	}
 
-	public static MovementSystem getInstance(ArrayList<Polygon> obstacles) {
+	public static MovementSystem getInstance(ArrayList<Polygon> shipObstacles) {
 		if (instance == null) {
 			synchronized (MovementSystem.class) {
 				if (instance == null) {
-					instance = new MovementSystem(obstacles);
+					instance = new MovementSystem(shipObstacles);
 				}
 			}
 		}
