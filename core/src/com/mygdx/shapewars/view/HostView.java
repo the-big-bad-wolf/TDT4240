@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -21,16 +24,20 @@ public class HostView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
-    private TextButton backButton;
-    private TextButton startButton;
-    private TextButton ipAddressField;
+    private ImageButton backButton;
+    private ImageButton startButton;
+    private ImageButton ipAddressField;
     private String ipAddress;
+    private Sprite backgroundSprite;
 
 
     public HostView(ShapeWarsController controller) throws UnknownHostException {
         this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
+
+        Texture background = new Texture(Gdx.files.internal("mainMenu/hostButtonBackground.png"));
+        backgroundSprite = new Sprite(background);
 
         // make menu resizable
         OrthographicCamera camera = new OrthographicCamera();
@@ -62,6 +69,9 @@ public class HostView implements Screen {
         stage.getViewport().apply();
 
         controller.gameModel.batch.begin();
+        backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
+        backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth())/2, (stage.getViewport().getWorldHeight()- backgroundSprite.getHeight()) / 2);
+        backgroundSprite.draw(controller.gameModel.batch);
         controller.gameModel.batch.end();
 
         stage.act(delta);
@@ -94,8 +104,8 @@ public class HostView implements Screen {
     }
 
     private void buildUI() throws UnknownHostException {
-        float ipAddressWidth = 500;
-        float ipAddressHeight = 100;
+        float ipAddressWidth = 512;
+        float ipAddressHeight = 128;
         float allButtonsWidth = 250f;
         float allButtonsHeight = 100f;
         float ipAddressXPos = Gdx.graphics.getWidth() / 2f - ipAddressWidth / 2;
@@ -105,9 +115,9 @@ public class HostView implements Screen {
         float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         ipAddress = getIpAddress();
-        ipAddressField = uiBuilder.buildButton(ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
-        backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
-        startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
+        ipAddressField = uiBuilder.buildImageButtonIP(new Texture("mainMenu/button3.png"), ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
+        startButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostStart.png"), allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
+        backButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
 
         addActionsToUI();
     }
