@@ -86,7 +86,7 @@ public class ClientView implements Screen {
     }
 
     private void buildUI() {
-        float inputFieldWidth = 500;
+        float inputFieldWidth = 600;
         float inputFieldHeight = 100;
         float allButtonsWidth = 250f;
         float allButtonsHeight = 100f;
@@ -97,7 +97,8 @@ public class ClientView implements Screen {
         float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float okButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
 
-        inputField = uiBuilder.buildTextField("Enter your code", inputFieldWidth, inputFieldHeight, inputFieldXPos,
+        inputField = uiBuilder.buildTextField("Enter the host IP address", inputFieldWidth, inputFieldHeight,
+                inputFieldXPos,
                 inputFieldYPos);
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
         okButton = uiBuilder.buildButton("OK", allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos);
