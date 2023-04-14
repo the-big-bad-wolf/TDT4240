@@ -102,6 +102,7 @@ public class MainMenuView implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
                     controller.generateShapeWarsModel(Role.Server, "");
                     controller.shapeWarsModel.generateEntities();
@@ -115,8 +116,9 @@ public class MainMenuView implements Screen {
         joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
-                    controller.setScreen(new ClientView(controller));
+                    controller.setScreen(new TutorialView(controller, 1));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
@@ -126,10 +128,11 @@ public class MainMenuView implements Screen {
         hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
                     controller.generateShapeWarsModel(Role.Server, "");
-                    controller.setScreen(new HostView(controller));
-                } catch (NullPointerException | UnknownHostException nullPointerException) {
+                    controller.setScreen(new TutorialView(controller, 0));
+                } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
             }

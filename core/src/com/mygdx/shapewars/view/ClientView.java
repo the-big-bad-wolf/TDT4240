@@ -110,6 +110,7 @@ public class ClientView implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
                     controller.setScreen(new MainMenuView(controller));
                 } catch (NullPointerException nullPointerException) {
@@ -121,6 +122,7 @@ public class ClientView implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 System.out.println(inputField.getText());
                 // todo sanitise ip address input
                 // todo can this code be improved?
