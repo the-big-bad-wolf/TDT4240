@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -56,7 +55,6 @@ public class HostView implements Screen {
 
     @Override
     public void show() {
-        System.out.println("Host view showing");
         Gdx.input.setInputProcessor(stage);
         render(0);
     }
@@ -106,7 +104,7 @@ public class HostView implements Screen {
     private void buildUI() throws UnknownHostException {
         float ipAddressWidth = 512;
         float ipAddressHeight = 128;
-        float allButtonsWidth = 250f;
+        float allButtonsWidth = 256f;
         float allButtonsHeight = 100f;
         float ipAddressXPos = Gdx.graphics.getWidth() / 2f - ipAddressWidth / 2;
         float ipAddressYPos = Gdx.graphics.getHeight() / 2f - ipAddressHeight / 2 + 100f;
@@ -115,7 +113,7 @@ public class HostView implements Screen {
         float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         ipAddress = getIpAddress();
-        ipAddressField = uiBuilder.buildImageButtonIP(new Texture("mainMenu/button3.png"), ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
+        ipAddressField = uiBuilder.buildImageButtonWithText(new Texture("mainMenu/button3.png"), ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
         startButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostStart.png"), allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
         backButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
 

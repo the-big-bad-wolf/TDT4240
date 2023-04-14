@@ -32,14 +32,43 @@ public class UIBuilder {
 
     public TextField buildTextField(String text, float width, float height, float xPos, float yPos) {
         textField = new TextField(text, skin);
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"));
 
         buildTextFieldStyle(skin);
         textField.setSize(width, height);
         textField.setPosition(xPos, yPos);
+        textField.setColor(Color.valueOf("7ba3b0"));
+        //textField.setStyle(textFieldStyle);
+
         stage.addActor(textField);
         
         return textField;
     }
+
+    /*public TextField buildTextField(String text, float width, float height, float xPos, float yPos, Drawable backgroundDrawable) {
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+
+        // Set up the font for the text field
+        BitmapFont font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"));
+        textFieldStyle.font = font;
+
+        // Set up the background image for the text field
+        textFieldStyle.background = backgroundDrawable;
+
+        // Create the text field with the text and style
+        TextField textField = new TextField(text, textFieldStyle);
+
+        // Set the size and position of the text field
+        textField.setSize(width, height);
+        textField.setPosition(xPos, yPos);
+
+        // Add the text field to your stage or UI table
+        stage.addActor(textField);
+
+        return textField;
+    }*/
+
 
     public TextButton buildButton(String text, float width, float height, float xPos, float yPos) {
         textButton = new TextButton(text, skin);
@@ -51,6 +80,27 @@ public class UIBuilder {
         
         return textButton;
     }
+
+    public TextButton buildInputButton(String text, float width, float height, float xPos, float yPos, TextureRegionDrawable background) {
+        TextButton textButton = new TextButton(text, skin);
+
+        TextButton.TextButtonStyle textButtonStyle = textButton.getStyle();
+
+        // Set the background image for the text button
+        textButtonStyle.up = background;
+
+        // Set the background image for the text button when pressed
+        textButtonStyle.down = background; // You can use a different image for pressed state if desired
+
+        textButton.setSize(width, height);
+        textButton.setPosition(xPos, yPos);
+        stage.addActor(textButton);
+
+        return textButton;
+    }
+
+
+
 
     public ImageButton buildImageButton(Texture texture, float width, float height, float xPos, float yPos) {
         Drawable drawableImage = new TextureRegionDrawable(new TextureRegion(texture));
@@ -79,17 +129,17 @@ public class UIBuilder {
         buttonStyle.down = skin.getDrawable("default-round-down");
     }
 
-    public ImageButton buildImageButtonIP(Texture texture, String ipAddress, float width, float height, float xPos, float yPos) {
+    public ImageButton buildImageButtonWithText(Texture texture, String text, float width, float height, float xPos, float yPos) {
         Drawable drawableImage = new TextureRegionDrawable(new TextureRegion(texture));
         ImageButton imageButton = new ImageButton(drawableImage);
 
-        // Create a Label for the ipAddress text
+        // Create a Label for the text
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"), Gdx.files.internal("data/verdana39.png"), false);
         //labelStyle.font.getData().setScale(1.8f);
         labelStyle.fontColor = Color.valueOf("7ba3b0");
 
-        Label ipAddressLabel = new Label(ipAddress, labelStyle);
+        Label ipAddressLabel = new Label(text, labelStyle);
         ipAddressLabel.setAlignment(Align.center);
         ipAddressLabel.setSize(width, height); // Set the size of the Label to match the ImageButton
         ipAddressLabel.setPosition((width - ipAddressLabel.getWidth()) / 2, (height - ipAddressLabel.getHeight()) / 2); // Set the position of the text within the ImageButton
