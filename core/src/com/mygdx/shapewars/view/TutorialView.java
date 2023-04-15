@@ -70,10 +70,10 @@ public class TutorialView implements Screen {
 
 	@Override
 	public void show() {
-		Texture image = new Texture(Gdx.files.internal("maps/mapExpansionGrass.png"));
+		Texture image = new Texture(Gdx.files.internal("mainMenu/tutorial.png"));
 		imageSprite = new Sprite(image);
 		imageSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 100);
-		imageSprite.setY(150);
+		imageSprite.setY(100);
 		Gdx.input.setInputProcessor(stage);
 		render(0);
 	}
