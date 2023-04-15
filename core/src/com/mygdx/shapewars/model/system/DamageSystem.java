@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
+import com.mygdx.shapewars.model.components.ParentComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
@@ -49,7 +50,13 @@ public class DamageSystem extends EntitySystem {
                 HealthComponent shipHealthComponent = ComponentMappers.health.get(ship);
 
                 if (CollisionSystem.checkCollisionWithEntity(bulletPositionComponent, bulletSpriteComponent,
-                        shipPositionComponent, shipSpriteComponent)) {
+                    shipPositionComponent, shipSpriteComponent)) {
+                    ParentComponent bulletParentComponent = ComponentMappers.parent.get(bullet);
+                    if (ship.equals(bulletParentComponent.getParent())) {
+                        if (bulletHealthComponent.getHealth() == MAX_BULLET_HEALTH) {
+                             break;
+                        }
+                    }
                     shipHealthComponent.takeDamage(40);
                     bulletHealthComponent.takeDamage(MAX_BULLET_HEALTH);
                     break;
