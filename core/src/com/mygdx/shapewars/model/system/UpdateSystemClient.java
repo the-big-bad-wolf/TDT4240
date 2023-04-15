@@ -2,7 +2,6 @@ package com.mygdx.shapewars.model.system;
 
 import static com.mygdx.shapewars.config.GameConfig.CANNON_BALL;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
-import static com.mygdx.shapewars.config.GameConfig.MAX_BULLET_HEALTH;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -51,7 +50,7 @@ public class UpdateSystemClient extends EntitySystem {
 
         // synchronize ship entities
         try {
-            ImmutableArray<Entity> shipsClient = ShapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
+            ImmutableArray<Entity> shipsClient = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
 
             for (int i = 0; i < shipsClient.size(); i++) {
                 boolean toRemove = true;
@@ -81,7 +80,7 @@ public class UpdateSystemClient extends EntitySystem {
                 }
                 if (toRemove) {
                     // ship existing in client ecs does not exist on server ecs -> remove it
-                    ShapeWarsModel.engine.removeEntity(shipClient);
+                    shapeWarsModel.engine.removeEntity(shipClient);
                 }
             }
         } catch (NullPointerException | ArrayIndexOutOfBoundsException exception) {
@@ -91,7 +90,7 @@ public class UpdateSystemClient extends EntitySystem {
         // synchronize bullet entities
         try {
             Family bulletFamily = Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class).exclude(IdentityComponent.class).get();
-            ImmutableArray<Entity> bulletsClient = ShapeWarsModel.engine.getEntitiesFor(bulletFamily);
+            ImmutableArray<Entity> bulletsClient = shapeWarsModel.engine.getEntitiesFor(bulletFamily);
 
             int numberOfBulletsServer = bulletsServer.length;
             int numberOfBulletsClient = bulletsClient.size();
@@ -103,19 +102,19 @@ public class UpdateSystemClient extends EntitySystem {
                     bullet.add(new PositionComponent(0, 0));
                     bullet.add(new VelocityComponent(0, 0));
                     bullet.add(new SpriteComponent(CANNON_BALL, 10, 10)); // todo why does a bullet have an image file??
-                    bullet.add(new HealthComponent(MAX_BULLET_HEALTH));
-                    ShapeWarsModel.engine.addEntity(bullet);
+                    bullet.add(new HealthComponent(3));
+                    shapeWarsModel.engine.addEntity(bullet);
                 }
             } else if (diff < 0) {
                 // client has more entities -> client needs to delete #diff bullets
                 diff = Math.abs(diff);
                 for (int i = 0; i < diff; i++) {
                     Entity e = bulletsClient.get(numberOfBulletsClient - i - 1);
-                    ShapeWarsModel.engine.removeEntity(e); // not at once?
+                    shapeWarsModel.engine.removeEntity(e); // not at once?
                 }
             }
 
-            bulletsClient = ShapeWarsModel.engine.getEntitiesFor(bulletFamily);
+            bulletsClient = shapeWarsModel.engine.getEntitiesFor(bulletFamily);
 
             for (int i = 0; i < bulletsClient.size() && i < bulletsServer.length; i++) {
                 Entity bulletClient = bulletsClient.get(i);

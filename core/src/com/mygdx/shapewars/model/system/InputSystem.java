@@ -28,7 +28,7 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
     public void addedToEngine(Engine engine) { }
 
     public void update(float deltaTime) {
-        entities = ShapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
+        entities = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
 
         Gdx.input.setInputProcessor(this);
         // todo can this be coded simpler?
