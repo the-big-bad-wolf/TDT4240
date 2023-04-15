@@ -30,7 +30,7 @@ public class ClientListener extends Listener {
         if (object instanceof LobbyResponse) {
             LobbyResponse response = (LobbyResponse) object;
             model.numPlayers = response.numPlayers;
-            model.tankId = response.clientTankId;
+            model.shipId = response.clientShipId;
             // the ordering here is important!
             model.createEntitiesFlag = !model.isGameActive && response.isGameActive;
             model.isGameActive = response.isGameActive;
@@ -38,7 +38,7 @@ public class ClientListener extends Listener {
         if (object instanceof GameResponse) {
             GameResponse response = (GameResponse) object;
             if (!model.updateSystemClient.updated) {
-                model.updateSystemClient.tanksServer = response.tanks;
+                model.updateSystemClient.shipsServer = response.ships;
                 model.updateSystemClient.bulletsServer = response.bullets;
                 model.updateSystemClient.updated = true;
             }

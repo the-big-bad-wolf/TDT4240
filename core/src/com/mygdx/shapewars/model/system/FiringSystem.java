@@ -22,12 +22,12 @@ public class FiringSystem extends EntitySystem {
     PositionComponent positionComponent = ComponentMappers.position.get(entity);
     VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
     Entity bullet = new Entity();
-    int distanceFromTank = 75;
+    int distanceFromShip = 75;
     float rotation = (float) Math.toRadians(spriteComponent.getSprite().getRotation());
     float x = (float) (positionComponent.getPosition().x + (spriteComponent.getSprite().getWidth() / 2)
-        + (distanceFromTank * Math.cos(rotation)));
+        + (distanceFromShip * Math.cos(rotation)));
     float y = (float) (positionComponent.getPosition().y + (spriteComponent.getSprite().getHeight() / 2)
-        + (distanceFromTank * Math.sin(rotation)));
+        + (distanceFromShip * Math.sin(rotation)));
     bullet.add(new PositionComponent(x, y));
     bullet.add(new VelocityComponent(10, velocityComponent.getDirection()));
     bullet.add(new SpriteComponent(CANNON_BALL, 10, 10)); // todo why does a bullet have an image file??

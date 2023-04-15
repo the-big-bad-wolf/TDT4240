@@ -1,13 +1,13 @@
 package com.mygdx.shapewars.network.data;
 
 public class GameResponse {
-    public TankData[] tanks;
+    public ShipData[] ships;
     public BulletData[] bullets;
 
     public GameResponse() {}
 
-    public GameResponse(TankData[] tanks, BulletData[] bullets) {
-        this.tanks = tanks;
+    public GameResponse(ShipData[] ships, BulletData[] bullets) {
+        this.ships = ships;
         this.bullets = bullets;
     }
 }
