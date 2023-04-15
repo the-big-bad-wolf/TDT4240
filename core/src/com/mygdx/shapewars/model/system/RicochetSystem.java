@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 public class RicochetSystem extends EntitySystem {
   private ImmutableArray<Entity> bullets;
-  private ImmutableArray<Entity> tanks;
   private ArrayList<Polygon> bulletObstacles;
 
   private static volatile RicochetSystem instance;
@@ -31,9 +30,6 @@ public class RicochetSystem extends EntitySystem {
     bullets = engine.getEntitiesFor(
         Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class)
             .exclude(IdentityComponent.class).get());
-    tanks = engine.getEntitiesFor(
-        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
-            IdentityComponent.class).get());
   }
 
   public void update(float deltaTime) {
@@ -42,36 +38,6 @@ public class RicochetSystem extends EntitySystem {
       VelocityComponent bulletVelocityComponent = ComponentMappers.velocity.get(bullet);
       SpriteComponent bulletSpriteComponent = ComponentMappers.sprite.get(bullet);
       HealthComponent bulletHealthComponent = ComponentMappers.health.get(bullet);
-
-      // Check if bullet hits tank
-      for (Entity tank : tanks) {
-        PositionComponent tankPositionComponent = ComponentMappers.position.get(tank);
-        SpriteComponent tankSpriteComponent = ComponentMappers.sprite.get(tank);
-        HealthComponent tankHealthComponent = ComponentMappers.health.get(tank);
-        IdentityComponent tankIdentityComponent = ComponentMappers.identity.get(tank);
-
-        if (checkCollisionWithTank(bulletPositionComponent, tankPositionComponent, tankSpriteComponent)) {
-          tank.remove(SpriteComponent.class);
-          if (tankIdentityComponent.getId() == 0) {
-            if (tankHealthComponent.getHealth() >= 100) {
-              tank.add(new SpriteComponent(PLAYER_DAMAGE_ONE, SHIP_WIDTH, SHIP_HEIGHT));
-            }
-            else if (tankHealthComponent.getHealth() >= 60) {
-              tank.add(new SpriteComponent(PLAYER_DAMAGE_TWO, SHIP_WIDTH, SHIP_HEIGHT));
-            }
-          } else {
-            if (tankHealthComponent.getHealth() >= 100) {
-              tank.add(new SpriteComponent(ENEMY_DAMAGE_ONE, SHIP_WIDTH, SHIP_HEIGHT));
-            }
-            else if (tankHealthComponent.getHealth() >= 60) {
-              tank.add(new SpriteComponent(ENEMY_DAMAGE_TWO, SHIP_WIDTH, SHIP_HEIGHT));
-            }
-          }
-          tankHealthComponent.takeDamage(40);
-          bulletHealthComponent.takeDamage(100);
-          break;
-        }
-      }
 
       // calculate and set position
       float radians = MathUtils.degreesToRadians * bulletVelocityComponent.getDirection();
