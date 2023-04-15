@@ -45,26 +45,6 @@ public class CollisionSystem extends EntitySystem {
     }
 
     /**
-     * Calculates all the entire area of a tile and returns it.
-     *
-     * @param x              the tile's x value.
-     * @param y              the tile's y value.
-     * @return the bounds of the tile as a Polygon.
-     */
-    private static Polygon getTileBounds(int x, int y) {
-        TiledMapTileLayer collisionLayer = ShapeWarsModel.getLayer(1);
-        float tileSize = collisionLayer.getTileWidth();
-        Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-        Polygon tileBounds = new Polygon(new float[] {
-                rect.x, rect.y, // bottom left corner
-                rect.x + rect.width, rect.y, // bottom right corner
-                rect.x + rect.width, rect.y + rect.height, // top right corner
-                rect.x, rect.y + rect.height // top left corner
-        });
-        return tileBounds;
-    }
-
-    /**
      * Makes a rectangle of the area an Entity covers.
      *
      * @param entity the entity to make a rectangle of.
