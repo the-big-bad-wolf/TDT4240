@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -24,7 +24,7 @@ public class UIBuilder {
     private TextButtonStyle buttonStyle;
     private TextField textField;
     private TextButton textButton;
-    
+
     public UIBuilder(Stage stage) {
         this.stage = stage;
         this.skin = new Skin(Gdx.files.internal("data/uiskin.json"));
@@ -39,49 +39,60 @@ public class UIBuilder {
         textField.setSize(width, height);
         textField.setPosition(xPos, yPos);
         textField.setColor(Color.valueOf("7ba3b0"));
-        //textField.setStyle(textFieldStyle);
+        // textField.setStyle(textFieldStyle);
 
         stage.addActor(textField);
-        
+
         return textField;
     }
 
-    /*public TextField buildTextField(String text, float width, float height, float xPos, float yPos, Drawable backgroundDrawable) {
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+    public Label buildTextLabel(String text, float width, float height, float xPos, float yPos) {
+        Label label = new Label(text, skin);
+        label.setWidth(width);
+        label.setHeight(height);
+        label.setPosition(xPos, yPos);
+        stage.addActor(label);
+        return label;
+    }
 
-        // Set up the font for the text field
-        BitmapFont font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"));
-        textFieldStyle.font = font;
-
-        // Set up the background image for the text field
-        textFieldStyle.background = backgroundDrawable;
-
-        // Create the text field with the text and style
-        TextField textField = new TextField(text, textFieldStyle);
-
-        // Set the size and position of the text field
-        textField.setSize(width, height);
-        textField.setPosition(xPos, yPos);
-
-        // Add the text field to your stage or UI table
-        stage.addActor(textField);
-
-        return textField;
-    }*/
-
+    /*
+     * public TextField buildTextField(String text, float width, float height, float
+     * xPos, float yPos, Drawable backgroundDrawable) {
+     * TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+     * 
+     * // Set up the font for the text field
+     * BitmapFont font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"));
+     * textFieldStyle.font = font;
+     * 
+     * // Set up the background image for the text field
+     * textFieldStyle.background = backgroundDrawable;
+     * 
+     * // Create the text field with the text and style
+     * TextField textField = new TextField(text, textFieldStyle);
+     * 
+     * // Set the size and position of the text field
+     * textField.setSize(width, height);
+     * textField.setPosition(xPos, yPos);
+     * 
+     * // Add the text field to your stage or UI table
+     * stage.addActor(textField);
+     * 
+     * return textField;
+     * }
+     */
 
     public TextButton buildButton(String text, float width, float height, float xPos, float yPos) {
         textButton = new TextButton(text, skin);
-
         buildButtonStyle(skin);
         textButton.setSize(width, height);
         textButton.setPosition(xPos, yPos);
         stage.addActor(textButton);
-        
+
         return textButton;
     }
 
-    public TextButton buildInputButton(String text, float width, float height, float xPos, float yPos, TextureRegionDrawable background) {
+    public TextButton buildInputButton(String text, float width, float height, float xPos, float yPos,
+            TextureRegionDrawable background) {
         TextButton textButton = new TextButton(text, skin);
 
         TextButton.TextButtonStyle textButtonStyle = textButton.getStyle();
@@ -99,9 +110,6 @@ public class UIBuilder {
         return textButton;
     }
 
-
-
-
     public ImageButton buildImageButton(Texture texture, float width, float height, float xPos, float yPos) {
         Drawable drawableImage = new TextureRegionDrawable(new TextureRegion(texture));
         ImageButton imageButton = new ImageButton(drawableImage);
@@ -116,33 +124,43 @@ public class UIBuilder {
     private void buildTextFieldStyle(Skin skin) {
         fieldStyle = new TextFieldStyle();
         fieldStyle.font = skin.getFont("default-font");
-        fieldStyle.font.getData().setScale(3f);
+        fieldStyle.font.getData().setScale(1f);
         fieldStyle.background = skin.getDrawable("default-scroll");
         fieldStyle.cursor = skin.getDrawable("default-round");
     }
-    
+
     private void buildButtonStyle(Skin skin) {
         buttonStyle = new TextButtonStyle();
         buttonStyle.font = skin.getFont("default-font");
-        buttonStyle.font.getData().setScale(3f);
+        buttonStyle.font.getData().setScale(1f);
         buttonStyle.up = skin.getDrawable("default-round");
         buttonStyle.down = skin.getDrawable("default-round-down");
     }
 
-    public ImageButton buildImageButtonWithText(Texture texture, String text, float width, float height, float xPos, float yPos) {
+    public ImageButton buildImageButtonWithText(Texture texture, String text, float width, float height, float xPos,
+            float yPos) {
         Drawable drawableImage = new TextureRegionDrawable(new TextureRegion(texture));
         ImageButton imageButton = new ImageButton(drawableImage);
 
         // Create a Label for the text
         Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"), Gdx.files.internal("data/verdana39.png"), false);
-        //labelStyle.font.getData().setScale(1.8f);
+        labelStyle.font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"),
+                Gdx.files.internal("data/verdana39.png"), false);
+        // labelStyle.font.getData().setScale(1.8f);
         labelStyle.fontColor = Color.valueOf("7ba3b0");
 
         Label ipAddressLabel = new Label(text, labelStyle);
         ipAddressLabel.setAlignment(Align.center);
         ipAddressLabel.setSize(width, height); // Set the size of the Label to match the ImageButton
-        ipAddressLabel.setPosition((width - ipAddressLabel.getWidth()) / 2, (height - ipAddressLabel.getHeight()) / 2); // Set the position of the text within the ImageButton
+        ipAddressLabel.setPosition((width - ipAddressLabel.getWidth()) / 2, (height - ipAddressLabel.getHeight()) / 2); // Set
+                                                                                                                        // the
+                                                                                                                        // position
+                                                                                                                        // of
+                                                                                                                        // the
+                                                                                                                        // text
+                                                                                                                        // within
+                                                                                                                        // the
+                                                                                                                        // ImageButton
 
         // Add the Label as a child actor to the ImageButton
         imageButton.addActor(ipAddressLabel);
@@ -153,6 +171,4 @@ public class UIBuilder {
 
         return imageButton;
     }
-
-
 }

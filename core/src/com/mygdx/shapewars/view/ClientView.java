@@ -28,7 +28,6 @@ public class ClientView implements Screen {
     private ImageButton okButton;
     private Sprite backgroundSprite;
 
-
     public ClientView(ShapeWarsController controller) {
         this.controller = controller;
         this.stage = new Stage();
@@ -63,7 +62,8 @@ public class ClientView implements Screen {
 
         controller.gameModel.batch.begin();
         backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
-        backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth())/2, (stage.getViewport().getWorldHeight()- backgroundSprite.getHeight()) / 2);
+        backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
+                (stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
         backgroundSprite.draw(controller.gameModel.batch);
         controller.gameModel.batch.end();
 
@@ -97,7 +97,7 @@ public class ClientView implements Screen {
     }
 
     private void buildUI() {
-        float inputFieldWidth = 500;
+        float inputFieldWidth = 800;
         float inputFieldHeight = 100;
         float allButtonsWidth = 250f;
         float allButtonsHeight = 100f;
@@ -108,9 +108,12 @@ public class ClientView implements Screen {
         float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float okButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
 
-        inputField = uiBuilder.buildTextField("Enter your code", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
-        backButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
-        okButton = uiBuilder.buildImageButton(new Texture("mainMenu/okButton.png"), allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos);
+        inputField = uiBuilder.buildTextField("Enter host IP address", inputFieldWidth, inputFieldHeight,
+                inputFieldXPos, inputFieldYPos);
+        backButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), allButtonsWidth, allButtonsHeight,
+                backButtonXPos, backButtonYPos);
+        okButton = uiBuilder.buildImageButton(new Texture("mainMenu/okButton.png"), allButtonsWidth, allButtonsHeight,
+                okButtonXPos, okButtonYPos);
 
         addActionsToUI();
     }
@@ -119,6 +122,7 @@ public class ClientView implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 try {
                     controller.setScreen(new MainMenuView(controller));
                 } catch (NullPointerException nullPointerException) {
@@ -130,6 +134,7 @@ public class ClientView implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 System.out.println(inputField.getText());
                 // todo sanitise ip address input
                 // todo can this code be improved?

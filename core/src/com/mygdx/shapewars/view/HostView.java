@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -26,9 +27,9 @@ public class HostView implements Screen {
     private ImageButton backButton;
     private ImageButton startButton;
     private ImageButton ipAddressField;
+    private Label ipLabel;
     private String ipAddress;
     private Sprite backgroundSprite;
-
 
     public HostView(ShapeWarsController controller) throws UnknownHostException {
         this.controller = controller;
@@ -68,7 +69,8 @@ public class HostView implements Screen {
 
         controller.gameModel.batch.begin();
         backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
-        backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth())/2, (stage.getViewport().getWorldHeight()- backgroundSprite.getHeight()) / 2);
+        backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
+                (stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
         backgroundSprite.draw(controller.gameModel.batch);
         controller.gameModel.batch.end();
 
@@ -113,9 +115,16 @@ public class HostView implements Screen {
         float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         ipAddress = getIpAddress();
-        ipAddressField = uiBuilder.buildImageButtonWithText(new Texture("mainMenu/button3.png"), ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
-        startButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostStart.png"), allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
-        backButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
+        ipLabel = uiBuilder.buildTextLabel("Your IP address:", allButtonsWidth, allButtonsHeight, ipAddressXPos,
+                ipAddressYPos + 100);
+        ipAddressField = uiBuilder.buildImageButtonWithText(new Texture("mainMenu/button3.png"), ipAddress,
+                ipAddressWidth, ipAddressHeight, ipAddressXPos,
+                ipAddressYPos);
+        startButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostStart.png"), allButtonsWidth,
+                allButtonsHeight, startButtonXPos, startButtonYPos);
+        backButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), allButtonsWidth, allButtonsHeight,
+                backButtonXPos,
+                backButtonYPos);
 
         addActionsToUI();
     }
@@ -148,7 +157,7 @@ public class HostView implements Screen {
                 NetworkInterface iface = interfaces.nextElement();
 
                 // Filter out localhost and inactive interfaces
-                if (iface.isLoopback() || !iface.isUp() || iface.isVirtual() ||iface.getName().equals("en1")) {
+                if (iface.isLoopback() || !iface.isUp() || iface.isVirtual() || iface.getName().equals("en1")) {
                     continue;
                 }
 
