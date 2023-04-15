@@ -24,7 +24,7 @@ public class FiringSystem extends EntitySystem {
     PositionComponent positionComponent = ComponentMappers.position.get(entity);
     VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
     Entity bullet = new Entity();
-    int distanceFromTank = 75;
+    int distanceFromShip = 75;
     float rotation = (float) Math.toRadians(spriteComponent.getSprite().getRotation());
     float x = (float) (positionComponent.getPosition().x + (spriteComponent.getSprite().getWidth() / 2));
     float y = (float) (positionComponent.getPosition().y + (spriteComponent.getSprite().getHeight() / 2));

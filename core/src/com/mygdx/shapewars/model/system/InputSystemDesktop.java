@@ -2,7 +2,7 @@ package com.mygdx.shapewars.model.system;
 
 import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
 import static com.mygdx.shapewars.config.GameConfig.MAX_TURN_RATE;
-import static com.mygdx.shapewars.config.GameConfig.TANK_FAMILY;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -53,12 +53,12 @@ public class InputSystemDesktop extends InputSystem {
     }
 
     private int getInputDirection() {
-        entities = shapeWarsModel.engine.getEntitiesFor(TANK_FAMILY);
+        entities = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
         int currentDir = 0;
         try {
             for (int i = 0; i < entities.size(); i++) {
                 Entity e = entities.get(i);
-                if (ComponentMappers.identity.get(e).getId() == shapeWarsModel.tankId)
+                if (ComponentMappers.identity.get(e).getId() == shapeWarsModel.shipId)
                     currentDir = (int) ComponentMappers.velocity.get(e).getDirection();
             }
         } catch (Exception e) { }

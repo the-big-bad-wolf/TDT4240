@@ -3,12 +3,12 @@ package com.mygdx.shapewars.network.data;
 public class LobbyResponse {
 
     public int numPlayers;
-    public int clientTankId;
+    public int clientShipId;
     public boolean isGameActive;
 
-    public LobbyResponse(int numPlayers, int clientTankId, boolean isGameActive) {
+    public LobbyResponse(int numPlayers, int clientShipId, boolean isGameActive) {
         this.numPlayers = numPlayers;
-        this.clientTankId = clientTankId;
+        this.clientShipId = clientShipId;
         this.isGameActive = isGameActive;
     }
 

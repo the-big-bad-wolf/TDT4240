@@ -33,7 +33,7 @@ public class CollisionSystem extends EntitySystem {
     private static Polygon getEntityBounds(Entity entity, float newX, float newY) {
         SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
         VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-        // calculate the tank's bounding box
+        // calculate the ship's bounding box
         Polygon entityBounds = new Polygon(new float[] {
                 0, 0,
                 spriteComponent.getSprite().getWidth(), 0,
@@ -45,30 +45,6 @@ public class CollisionSystem extends EntitySystem {
         entityBounds.setRotation(velocityComponent.getDirection());
         return entityBounds;
     }
-
-    /**
-     * Calculates all the entire area of a tile and returns it.
-     *
-     * @param x the tile's x value.
-     * @param y the tile's y value.
-     * @return the bounds of the tile as a Polygon.
-     */
-    // TODO figure out if needed
-    /*
-     * private static Polygon getTileBounds(int x, int y) {
-     * TiledMapTileLayer collisionLayer = ShapeWarsModel.getLayer(1);
-     * float tileSize = collisionLayer.getTileWidth();
-     * Rectangle rect = new Rectangle(x * tileSize, y * tileSize, tileSize,
-     * tileSize);
-     * Polygon tileBounds = new Polygon(new float[] {
-     * rect.x, rect.y, // bottom left corner
-     * rect.x + rect.width, rect.y, // bottom right corner
-     * rect.x + rect.width, rect.y + rect.height, // top right corner
-     * rect.x, rect.y + rect.height // top left corner
-     * });
-     * return tileBounds;
-     * }
-     */
 
     /**
      * Makes a rectangle of the area an Entity covers.
@@ -95,7 +71,7 @@ public class CollisionSystem extends EntitySystem {
     private static Vector2 getOverlapVector(Polygon entityBounds, Polygon tileBounds) {
         Vector2 overlapVector = new Vector2();
         if (Intersector.overlapConvexPolygons(entityBounds, tileBounds)) {
-            // tank collides with wall, adjust position
+            // ship collides with wall, adjust position
             Intersector.MinimumTranslationVector mtv = new Intersector.MinimumTranslationVector();
             Intersector.overlapConvexPolygons(entityBounds, tileBounds, mtv);
             overlapVector.set(mtv.normal.x * mtv.depth, mtv.normal.y * mtv.depth);

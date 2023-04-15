@@ -99,16 +99,9 @@ public class MainMenuView implements Screen {
         float joinButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
         float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
 
-        // TODO delete unnecessary comments
-        //startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos,startButtonYPos);
         startButton = uiBuilder.buildImageButton(new Texture("mainMenu/startButton.png"), allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
-        //joinButton = uiBuilder.buildImageButton(new Texture("mainMenu/joinButton.png"), allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
-
         joinButton = uiBuilder.buildImageButton(new Texture("mainMenu/JoinButton.png"), allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
-        //hostButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
-
         hostButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostButton.png"), allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
-
 
         addActionsToUI();
     }
