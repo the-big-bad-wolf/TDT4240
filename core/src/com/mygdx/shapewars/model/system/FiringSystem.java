@@ -24,13 +24,16 @@ public class FiringSystem extends EntitySystem {
     PositionComponent positionComponent = ComponentMappers.position.get(entity);
     VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
     Entity bullet = new Entity();
-    float x = (float) (positionComponent.getPosition().x + (spriteComponent.getSprite().getWidth() / 2));
-    float y = (float) (positionComponent.getPosition().y + (spriteComponent.getSprite().getHeight() / 2));
+    int distanceFromShip = 75;
+    float rotation = (float) Math.toRadians(spriteComponent.getSprite().getRotation());
+    float x = (float) (positionComponent.getPosition().x + (spriteComponent.getSprite().getWidth() / 2)
+        + (distanceFromShip * Math.cos(rotation)));
+    float y = (float) (positionComponent.getPosition().y + (spriteComponent.getSprite().getHeight() / 2)
+        + (distanceFromShip * Math.sin(rotation)));
     bullet.add(new PositionComponent(x, y));
     bullet.add(new VelocityComponent(10, velocityComponent.getDirection()));
-    bullet.add(new SpriteComponent(CANNON_BALL, 10, 10));
-    bullet.add(new HealthComponent(MAX_BULLET_HEALTH));
-    bullet.add(new ParentComponent(entity));
+    bullet.add(new SpriteComponent(CANNON_BALL, 10, 10)); // todo why does a bullet have an image file??
+    bullet.add(new HealthComponent(3));
     ShapeWarsModel.addToEngine(bullet);
   }
 

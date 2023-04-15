@@ -1,4 +1,5 @@
 package com.mygdx.shapewars.model.system;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 public class RicochetSystem extends EntitySystem {
   private ImmutableArray<Entity> bullets;
+  private ImmutableArray<Entity> tanks;
   private ArrayList<Polygon> bulletObstacles;
 
   private static volatile RicochetSystem instance;
@@ -29,6 +31,9 @@ public class RicochetSystem extends EntitySystem {
     bullets = engine.getEntitiesFor(
         Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class)
             .exclude(IdentityComponent.class).get());
+    tanks = engine.getEntitiesFor(
+        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
+            IdentityComponent.class).get());
   }
 
   public void update(float deltaTime) {
@@ -38,7 +43,37 @@ public class RicochetSystem extends EntitySystem {
       SpriteComponent bulletSpriteComponent = ComponentMappers.sprite.get(bullet);
       HealthComponent bulletHealthComponent = ComponentMappers.health.get(bullet);
 
-      // Calculate and set position
+      // Check if bullet hits tank
+      for (Entity tank : tanks) {
+        PositionComponent tankPositionComponent = ComponentMappers.position.get(tank);
+        SpriteComponent tankSpriteComponent = ComponentMappers.sprite.get(tank);
+        HealthComponent tankHealthComponent = ComponentMappers.health.get(tank);
+        IdentityComponent tankIdentityComponent = ComponentMappers.identity.get(tank);
+
+        if (checkCollisionWithTank(bulletPositionComponent, tankPositionComponent, tankSpriteComponent)) {
+          tank.remove(SpriteComponent.class);
+          if (tankIdentityComponent.getId() == 0) {
+            if (tankHealthComponent.getHealth() >= 100) {
+              tank.add(new SpriteComponent(PLAYER_DAMAGE_ONE, SHIP_WIDTH, SHIP_HEIGHT));
+            }
+            else if (tankHealthComponent.getHealth() >= 60) {
+              tank.add(new SpriteComponent(PLAYER_DAMAGE_TWO, SHIP_WIDTH, SHIP_HEIGHT));
+            }
+          } else {
+            if (tankHealthComponent.getHealth() >= 100) {
+              tank.add(new SpriteComponent(ENEMY_DAMAGE_ONE, SHIP_WIDTH, SHIP_HEIGHT));
+            }
+            else if (tankHealthComponent.getHealth() >= 60) {
+              tank.add(new SpriteComponent(ENEMY_DAMAGE_TWO, SHIP_WIDTH, SHIP_HEIGHT));
+            }
+          }
+          tankHealthComponent.takeDamage(40);
+          bulletHealthComponent.takeDamage(100);
+          break;
+        }
+      }
+
+      // calculate and set position
       float radians = MathUtils.degreesToRadians * bulletVelocityComponent.getDirection();
 
       float newX = bulletPositionComponent.getPosition().x
@@ -52,7 +87,7 @@ public class RicochetSystem extends EntitySystem {
       Polygon rect = CollisionSystem.<Polygon>getCollisionWithWall(bullet, bulletObstacles, newX, newY);
       if (rect.getVertices().length > 0) {
         Rectangle wallsRect = rect.getBoundingRectangle();
-        // Adjust newX and newY based on collision direction
+        // adjust newX and newY based on collision direction
         if (bulletPositionComponent.getPosition().x <= wallsRect.getX()) {
           hasHitX = true;
           if (bulletPositionComponent.getPosition().y + bulletSpriteComponent.getSprite().getHeight() <= wallsRect
@@ -64,7 +99,7 @@ public class RicochetSystem extends EntitySystem {
             newY = wallsRect.getY() + wallsRect.getHeight();
           }
           newX = wallsRect.getX() - bulletSpriteComponent.getSprite().getWidth();
-          // Left collision
+          // left collision
         } else if (bulletPositionComponent.getPosition().x >= wallsRect.getX() + wallsRect.getWidth()) {
           hasHitX = true;
           if (bulletPositionComponent.getPosition().y + bulletSpriteComponent.getSprite().getHeight() <= wallsRect
@@ -72,29 +107,29 @@ public class RicochetSystem extends EntitySystem {
             newY = wallsRect.getY() - bulletSpriteComponent.getSprite().getHeight();
             hasHitX = false;
             hasHitY = true;
-            // Right collision
+            // right collision
           } else if (bulletPositionComponent.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
             newY = wallsRect.getY() + wallsRect.getHeight();
             hasHitX = false;
             hasHitY = true;
           }
           newX = wallsRect.getX() + wallsRect.getWidth();
-          // Top collision
-        } else if (bulletPositionComponent.getPosition().y + bulletSpriteComponent.getSprite().getHeight() <= wallsRect
-            .getY()) {
+          // top collision
+        } else if (bulletPositionComponent.getPosition().y + bulletSpriteComponent.getSprite().getHeight() <= wallsRect.getY()) {
           newY = wallsRect.getY() - bulletSpriteComponent.getSprite().getHeight();
           hasHitY = true;
-          // Bottom collision
+          // bottom collision
         } else if (bulletPositionComponent.getPosition().y >= wallsRect.getY() + wallsRect.getHeight()) {
           newY = wallsRect.getY() + wallsRect.getHeight();
           hasHitY = true;
         }
       }
 
-      // Set new position
+
+      // set new position
       bulletPositionComponent.setPosition(newX, newY);
 
-      // Set direction
+      // set direction
       if (hasHitX || hasHitY) {
         bulletHealthComponent.takeDamage(1);
         if (hasHitX && hasHitY) {
@@ -104,6 +139,7 @@ public class RicochetSystem extends EntitySystem {
         } else {
           bulletVelocityComponent.setDirection(bulletVelocityComponent.getDirection() * -1);
         }
+        // System.out.println(velocity.getDirection());
       }
 
       bulletSpriteComponent.getSprite().setRotation(bulletVelocityComponent.getDirection() + 90);
