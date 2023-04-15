@@ -4,13 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.controller.ShapeWarsController;
@@ -20,13 +24,17 @@ public class ClientView implements Screen {
     private final UIBuilder uiBuilder;
     private final ShapeWarsController controller;
     private TextField inputField;
-    private TextButton backButton;
-    private TextButton okButton;
+    private ImageButton backButton;
+    private ImageButton okButton;
+    private Sprite backgroundSprite;
 
     public ClientView(ShapeWarsController controller) {
         this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
+
+        Texture background = new Texture(Gdx.files.internal("mainMenu/hostButtonBackground.png"));
+        backgroundSprite = new Sprite(background);
 
         // make menu resizable
         OrthographicCamera camera = new OrthographicCamera();
@@ -41,7 +49,6 @@ public class ClientView implements Screen {
 
     @Override
     public void show() {
-        System.out.println("Client view showing");
         Gdx.input.setInputProcessor(stage);
         render(0);
     }
@@ -54,6 +61,10 @@ public class ClientView implements Screen {
         stage.getViewport().apply();
 
         controller.gameModel.batch.begin();
+        backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
+        backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
+                (stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
+        backgroundSprite.draw(controller.gameModel.batch);
         controller.gameModel.batch.end();
 
         stage.act(delta);
@@ -97,11 +108,12 @@ public class ClientView implements Screen {
         float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float okButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
 
-        inputField = uiBuilder.buildTextField("Enter the host IP address", inputFieldWidth, inputFieldHeight,
-                inputFieldXPos,
-                inputFieldYPos);
-        backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
-        okButton = uiBuilder.buildButton("OK", allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos);
+        inputField = uiBuilder.buildTextField("Enter host IP address", inputFieldWidth, inputFieldHeight,
+                inputFieldXPos, inputFieldYPos);
+        backButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), allButtonsWidth, allButtonsHeight,
+                backButtonXPos, backButtonYPos);
+        okButton = uiBuilder.buildImageButton(new Texture("mainMenu/okButton.png"), allButtonsWidth, allButtonsHeight,
+                okButtonXPos, okButtonYPos);
 
         addActionsToUI();
     }

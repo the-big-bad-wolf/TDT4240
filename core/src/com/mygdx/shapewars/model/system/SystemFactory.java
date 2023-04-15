@@ -14,14 +14,15 @@ public class SystemFactory {
 
         List<EntitySystem> systems = new ArrayList<>();
 
-        systems.add(SpriteSystem.getInstance());
+        systems.add(SpriteSystem.getInstance(model));
         systems.add(launcher == Launcher.Desktop ?
                 InputSystemDesktop.getInstance(model) : InputSystemMobile.getInstance(model));
 
         if (role == Role.Server) {
-            systems.add(MovementSystem.getInstance(model.obstacles));
-            systems.add(RicochetSystem.getInstance(model.obstacles));
+            systems.add(MovementSystem.getInstance(model.shipObstacles));
+            systems.add(RicochetSystem.getInstance(model.bulletObstacles));
             systems.add(DeathSystem.getInstance());
+            systems.add(DamageSystem.getInstance());
         }
         return systems;
     }

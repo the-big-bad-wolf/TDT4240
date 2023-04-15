@@ -1,6 +1,6 @@
 package com.mygdx.shapewars.model.system;
 
-import static com.mygdx.shapewars.config.GameConfig.TANK_FAMILY;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -28,7 +28,7 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
     public void addedToEngine(Engine engine) { }
 
     public void update(float deltaTime) {
-        entities = shapeWarsModel.engine.getEntitiesFor(TANK_FAMILY);
+        entities = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
 
         Gdx.input.setInputProcessor(this);
         // todo can this be coded simpler?

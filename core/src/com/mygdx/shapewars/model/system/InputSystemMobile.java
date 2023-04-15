@@ -69,10 +69,13 @@ public class InputSystemMobile extends InputSystem {
             float deltaY = worldCoordinates.y - joystick.getOuterCircle().y;
             float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            deltaX = MathUtils.clamp(deltaX, -outerCircleRadius, outerCircleRadius);
-            deltaY = MathUtils.clamp(deltaY, -outerCircleRadius, outerCircleRadius);
             float angle = MathUtils.atan2(deltaY, deltaX) * MathUtils.radiansToDegrees;
 
+            float maxRadius = joystick.getOuterCircle().radius;
+            if (deltaLength > maxRadius) {
+                deltaX = deltaX * maxRadius / deltaLength;
+                deltaY = deltaY * maxRadius / deltaLength;
+            }
             joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x + deltaX, joystick.getOuterCircle().y + deltaY);
             inputDirection = angle;
             inputValue = MathUtils.clamp(deltaLength, 0, outerCircleRadius) / outerCircleRadius * MAX_SPEED;

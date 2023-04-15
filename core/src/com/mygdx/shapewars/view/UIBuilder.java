@@ -1,13 +1,21 @@
 package com.mygdx.shapewars.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 
 public class UIBuilder {
     private final Stage stage;
@@ -24,10 +32,15 @@ public class UIBuilder {
 
     public TextField buildTextField(String text, float width, float height, float xPos, float yPos) {
         textField = new TextField(text, skin);
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"));
 
         buildTextFieldStyle(skin);
         textField.setSize(width, height);
         textField.setPosition(xPos, yPos);
+        textField.setColor(Color.valueOf("7ba3b0"));
+        // textField.setStyle(textFieldStyle);
+
         stage.addActor(textField);
 
         return textField;
@@ -42,6 +55,32 @@ public class UIBuilder {
         return label;
     }
 
+    /*
+     * public TextField buildTextField(String text, float width, float height, float
+     * xPos, float yPos, Drawable backgroundDrawable) {
+     * TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+     * 
+     * // Set up the font for the text field
+     * BitmapFont font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"));
+     * textFieldStyle.font = font;
+     * 
+     * // Set up the background image for the text field
+     * textFieldStyle.background = backgroundDrawable;
+     * 
+     * // Create the text field with the text and style
+     * TextField textField = new TextField(text, textFieldStyle);
+     * 
+     * // Set the size and position of the text field
+     * textField.setSize(width, height);
+     * textField.setPosition(xPos, yPos);
+     * 
+     * // Add the text field to your stage or UI table
+     * stage.addActor(textField);
+     * 
+     * return textField;
+     * }
+     */
+
     public TextButton buildButton(String text, float width, float height, float xPos, float yPos) {
         textButton = new TextButton(text, skin);
         buildButtonStyle(skin);
@@ -50,6 +89,36 @@ public class UIBuilder {
         stage.addActor(textButton);
 
         return textButton;
+    }
+
+    public TextButton buildInputButton(String text, float width, float height, float xPos, float yPos,
+            TextureRegionDrawable background) {
+        TextButton textButton = new TextButton(text, skin);
+
+        TextButton.TextButtonStyle textButtonStyle = textButton.getStyle();
+
+        // Set the background image for the text button
+        textButtonStyle.up = background;
+
+        // Set the background image for the text button when pressed
+        textButtonStyle.down = background; // You can use a different image for pressed state if desired
+
+        textButton.setSize(width, height);
+        textButton.setPosition(xPos, yPos);
+        stage.addActor(textButton);
+
+        return textButton;
+    }
+
+    public ImageButton buildImageButton(Texture texture, float width, float height, float xPos, float yPos) {
+        Drawable drawableImage = new TextureRegionDrawable(new TextureRegion(texture));
+        ImageButton imageButton = new ImageButton(drawableImage);
+
+        imageButton.setSize(width, height);
+        imageButton.setPosition(xPos, yPos);
+        stage.addActor(imageButton);
+
+        return imageButton;
     }
 
     private void buildTextFieldStyle(Skin skin) {

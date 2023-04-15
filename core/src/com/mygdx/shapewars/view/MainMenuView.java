@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -18,15 +21,18 @@ public class MainMenuView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
-    private TextButton startButton;
-    private TextButton hostButton;
-    private TextButton joinButton;
+    private ImageButton startButton;
+    private ImageButton hostButton;
+    private ImageButton joinButton;
+    private Sprite backgroundSprite;
 
     public MainMenuView(ShapeWarsController controller) {
         this.stage = new Stage();
         this.controller = controller;
         this.uiBuilder = new UIBuilder(this.stage);
         buildUI();
+        Texture background = new Texture(Gdx.files.internal("mainMenu/background.png"));
+        backgroundSprite = new Sprite(background);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -49,6 +55,9 @@ public class MainMenuView implements Screen {
         stage.getViewport().apply();
 
         controller.gameModel.batch.begin();
+        backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
+        backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth())/2, (stage.getViewport().getWorldHeight()- backgroundSprite.getHeight()) / 2);
+        backgroundSprite.draw(controller.gameModel.batch);
         controller.gameModel.batch.end();
 
         stage.act(delta);
@@ -81,8 +90,8 @@ public class MainMenuView implements Screen {
     }
 
     private void buildUI() {
-        float allButtonsWidth = 750f;
-        float allButtonsHeight = 200f;
+        float allButtonsWidth = 768f;
+        float allButtonsHeight = 192f;
         float startButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 + 200;
         float hostButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
@@ -90,10 +99,9 @@ public class MainMenuView implements Screen {
         float joinButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
         float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
 
-        startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos,
-                startButtonYPos);
-        joinButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
-        hostButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
+        startButton = uiBuilder.buildImageButton(new Texture("mainMenu/startButton.png"), allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
+        joinButton = uiBuilder.buildImageButton(new Texture("mainMenu/JoinButton.png"), allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
+        hostButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostButton.png"), allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
 
         addActionsToUI();
     }

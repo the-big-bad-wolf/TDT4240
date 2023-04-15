@@ -14,7 +14,7 @@ import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.InputRequest;
 import com.mygdx.shapewars.network.data.LobbyRequest;
 import com.mygdx.shapewars.network.data.LobbyResponse;
-import com.mygdx.shapewars.network.data.TankData;
+import com.mygdx.shapewars.network.data.ShipData;
 import com.mygdx.shapewars.view.MainMenuView;
 
 import java.io.IOException;
@@ -46,9 +46,9 @@ public class ServerConnector {
 
         // register containers
         this.kryo.register(BulletData.class);
-        this.kryo.register(TankData.class);
+        this.kryo.register(ShipData.class);
         this.kryo.register(BulletData[].class);
-        this.kryo.register(TankData[].class);
+        this.kryo.register(ShipData[].class);
 
         // register components
         this.kryo.register(PositionComponent.class);

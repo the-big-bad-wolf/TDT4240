@@ -1,9 +1,9 @@
 package com.mygdx.shapewars.model;
 
-import static com.mygdx.shapewars.config.GameConfig.ENEMY_TANK_SKIN;
-import static com.mygdx.shapewars.config.GameConfig.FRIENDLY_TANK_SKIN;
-import static com.mygdx.shapewars.config.GameConfig.TANK_HEIGHT;
-import static com.mygdx.shapewars.config.GameConfig.TANK_WIDTH;
+import static com.mygdx.shapewars.config.GameConfig.ENEMY_FULL_HEALTH;
+import static com.mygdx.shapewars.config.GameConfig.PLAYER_FULL_HEALTH;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -45,11 +45,13 @@ public class ShapeWarsModel {
     public Role role;
     public ServerConnector serverConnector; // todo implement strategy pattern
     public ClientConnector clientConnector;
-    public HashMap<String, Integer> deviceTankMapping = new HashMap<>();
-    public int tankId; // todo put this in a model just for clients
+    public HashMap<String, Integer> deviceShipMapping = new HashMap<>();
+    public int shipId; // todo put this in a model just for clients
     public Joystick joystick;
     public Firebutton firebutton;
-    public ArrayList<Polygon> obstacles;
+    public ArrayList<Polygon> shipObstacles;
+    public ArrayList<Polygon> bulletObstacles;
+
     public FitViewport shapeWarsViewport;
     public GameModel gameModel;
     public boolean isGameActive;
@@ -73,18 +75,31 @@ public class ShapeWarsModel {
             4 = collisionObjectLayer (defines the Polygons for collision detection)
             5, 6 ... = non-existent yet
          */
-        map = loader.load("maps/mobileMap2.tmx"); // make server send this AFTER sophie is done
+        map = loader.load("maps/pirateMap.tmx"); // make server send this AFTER sophie is done
         engine = new Engine();
-        joystick = new Joystick(400, 400, 300, 150);
+        joystick = new Joystick(180, 180, 120, 50);
 
-        obstacles = new ArrayList<Polygon>();
+        // TODO right layer
+        shipObstacles = new ArrayList<Polygon>();
         // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
-        for (MapObject object : map.getLayers().get(4).getObjects()) {
+        for (MapObject object : map.getLayers().get(5).getObjects()) {
             if (object instanceof PolygonMapObject) {
                 Polygon rect = ((PolygonMapObject) object).getPolygon();
-                obstacles.add(rect);
+                shipObstacles.add(rect);
             }
         }
+
+        // TODO right layer
+        bulletObstacles = new ArrayList<Polygon>();
+
+        // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
+        for (MapObject object : map.getLayers().get(6).getObjects()) {
+            if (object instanceof PolygonMapObject) {
+                Polygon rect = ((PolygonMapObject) object).getPolygon();
+                bulletObstacles.add(rect);
+            }
+        }
+
 
         OrthographicCamera camera = new OrthographicCamera();
         float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
@@ -93,13 +108,12 @@ public class ShapeWarsModel {
         camera.update();
         // fitViewport scales the game world to fit on screen with the correct dimensions
         shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
-        joystick = new Joystick(100, 100, 100, 50);
-        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-100, 100, 50);
+        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-180, 180, 120);
 
         if (this.role == Role.Server) {
-            this.tankId = 0;
-            this.deviceTankMapping = new HashMap<>();
-            deviceTankMapping.put(this.gameModel.deviceId, tankId);
+            this.shipId = 0;
+            this.deviceShipMapping = new HashMap<>();
+            deviceShipMapping.put(this.gameModel.deviceId, shipId);
             this.serverConnector = new ServerConnector(this);
         } else {
             this.clientConnector = new ClientConnector(this, serverIpAddress);
@@ -109,7 +123,7 @@ public class ShapeWarsModel {
 
     public void generateEntities() {
         if (this.role == Role.Server) {
-            numPlayers = deviceTankMapping.size();
+            numPlayers = deviceShipMapping.size();
             TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
 
             List<Vector2> spawnCells = new ArrayList<>();
@@ -123,27 +137,27 @@ public class ShapeWarsModel {
             }
 
             for (int i = 0; i < numPlayers; i++) {
-                Entity tank = new Entity();
+                Entity ship = new Entity();
                 Vector2 cell = spawnCells.get(i);
-                tank.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
-                tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent(i == tankId ? FRIENDLY_TANK_SKIN : ENEMY_TANK_SKIN, TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
-                tank.add(new HealthComponent(100));
-                tank.add(new IdentityComponent(i));
-                engine.addEntity(tank);
+                ship.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
+                ship.add(new VelocityComponent(0, 0));
+                ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
+                ship.add(new HealthComponent(100));
+                ship.add(new IdentityComponent(i));
+                engine.addEntity(ship);
             }
             this.updateSystemServer = UpdateSystemServer.getInstance(this);
             engine.addSystem(updateSystemServer);
             isGameActive = true;
         } else {
             for (int i = 0; i < numPlayers; i++) {
-                Entity tank = new Entity();
-                tank.add(new PositionComponent(0, 0));
-                tank.add(new VelocityComponent(0, 0));
-                tank.add(new SpriteComponent(i == tankId ? FRIENDLY_TANK_SKIN : ENEMY_TANK_SKIN, TANK_WIDTH, TANK_HEIGHT)); // todo give own tank its own color
-                tank.add(new HealthComponent(100));
-                tank.add(new IdentityComponent(i));
-                engine.addEntity(tank);
+                Entity ship = new Entity();
+                ship.add(new PositionComponent(0, 0));
+                ship.add(new VelocityComponent(0, 0));
+                ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
+                ship.add(new HealthComponent(100));
+                ship.add(new IdentityComponent(i));
+                engine.addEntity(ship);
             }
             this.updateSystemClient = UpdateSystemClient.getInstance(this);
             engine.addSystem(updateSystemClient);
