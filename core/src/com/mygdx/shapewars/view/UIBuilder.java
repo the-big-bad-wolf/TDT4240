@@ -136,4 +136,39 @@ public class UIBuilder {
         buttonStyle.up = skin.getDrawable("default-round");
         buttonStyle.down = skin.getDrawable("default-round-down");
     }
+
+    public ImageButton buildImageButtonWithText(Texture texture, String text, float width, float height, float xPos,
+            float yPos) {
+        Drawable drawableImage = new TextureRegionDrawable(new TextureRegion(texture));
+        ImageButton imageButton = new ImageButton(drawableImage);
+
+        // Create a Label for the text
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"),
+                Gdx.files.internal("data/verdana39.png"), false);
+        // labelStyle.font.getData().setScale(1.8f);
+        labelStyle.fontColor = Color.valueOf("7ba3b0");
+
+        Label ipAddressLabel = new Label(text, labelStyle);
+        ipAddressLabel.setAlignment(Align.center);
+        ipAddressLabel.setSize(width, height); // Set the size of the Label to match the ImageButton
+        ipAddressLabel.setPosition((width - ipAddressLabel.getWidth()) / 2, (height - ipAddressLabel.getHeight()) / 2); // Set
+                                                                                                                        // the
+                                                                                                                        // position
+                                                                                                                        // of
+                                                                                                                        // the
+                                                                                                                        // text
+                                                                                                                        // within
+                                                                                                                        // the
+                                                                                                                        // ImageButton
+
+        // Add the Label as a child actor to the ImageButton
+        imageButton.addActor(ipAddressLabel);
+
+        imageButton.setSize(width, height);
+        imageButton.setPosition(xPos, yPos);
+        stage.addActor(imageButton);
+
+        return imageButton;
+    }
 }
