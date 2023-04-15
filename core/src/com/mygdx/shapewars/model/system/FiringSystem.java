@@ -1,12 +1,14 @@
 package com.mygdx.shapewars.model.system;
 
 import static com.mygdx.shapewars.config.GameConfig.CANNON_BALL;
+import static com.mygdx.shapewars.config.GameConfig.MAX_BULLET_HEALTH;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
+import com.mygdx.shapewars.model.components.ParentComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
