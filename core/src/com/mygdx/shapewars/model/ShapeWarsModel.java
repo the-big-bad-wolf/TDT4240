@@ -47,7 +47,8 @@ public class ShapeWarsModel {
     public ClientConnector clientConnector;
     public HashMap<String, Integer> deviceShipMapping = new HashMap<>();
     public int shipId; // todo put this in a model just for clients
-    public Joystick joystick;
+    public Joystick joystickShip;
+    public Joystick joystickGun;
     public Firebutton firebutton;
     public ArrayList<Polygon> shipObstacles;
     public ArrayList<Polygon> bulletObstacles;
@@ -77,7 +78,17 @@ public class ShapeWarsModel {
          */
         map = loader.load("maps/pirateMap.tmx"); // make server send this AFTER sophie is done
         engine = new Engine();
-        joystick = new Joystick(180, 180, 120, 50);
+
+        OrthographicCamera camera = new OrthographicCamera();
+        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
+        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
+        camera.setToOrtho(false, mapWidth, mapHeight);
+        camera.update();
+        // fitViewport scales the game world to fit on screen with the correct dimensions
+        shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
+        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-180, 480, 120);
+        joystickShip = new Joystick(180, 180, 120, 50);
+        joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth()-180, 180, 120, 50);
 
         // TODO right layer
         shipObstacles = new ArrayList<Polygon>();
@@ -99,16 +110,6 @@ public class ShapeWarsModel {
                 bulletObstacles.add(rect);
             }
         }
-
-
-        OrthographicCamera camera = new OrthographicCamera();
-        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
-        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
-        camera.setToOrtho(false, mapWidth, mapHeight);
-        camera.update();
-        // fitViewport scales the game world to fit on screen with the correct dimensions
-        shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
-        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-180, 180, 120);
 
         if (this.role == Role.Server) {
             this.shipId = 0;
@@ -193,8 +194,12 @@ public class ShapeWarsModel {
         return map;
     }
 
-    public Joystick getJoystick() {
-        return joystick;
+    public Joystick getJoystickShip() {
+        return joystickShip;
+    }
+
+    public Joystick getJoystickGun() {
+        return joystickGun;
     }
 
     public static TiledMapTileLayer getLayer(int layerId) {

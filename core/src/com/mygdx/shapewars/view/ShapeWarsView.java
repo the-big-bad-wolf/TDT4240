@@ -120,9 +120,11 @@ public class ShapeWarsView implements Screen {
             shapeRenderer.setProjectionMatrix(fitViewport.getCamera().combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(new Color(167 / 255f, 201 / 255f, 203 / 255f, 0.7f));
-            shapeRenderer.circle(model.getJoystick().getOuterCircle().x, model.getJoystick().getOuterCircle().y, model.getJoystick().getOuterCircle().radius);
+            shapeRenderer.circle(model.getJoystickShip().getOuterCircle().x, model.getJoystickShip().getOuterCircle().y, model.getJoystickShip().getOuterCircle().radius);
+            shapeRenderer.circle(model.getJoystickGun().getOuterCircle().x, model.getJoystickGun().getOuterCircle().y, model.getJoystickGun().getOuterCircle().radius);
             shapeRenderer.setColor(new Color(123 / 255f, 147 / 255f, 149 / 255f, 0.4f));
-            shapeRenderer.circle(model.getJoystick().getInnerCircle().x, model.getJoystick().getInnerCircle().y, model.getJoystick().getInnerCircle().radius);
+            shapeRenderer.circle(model.getJoystickShip().getInnerCircle().x, model.getJoystickShip().getInnerCircle().y, model.getJoystickShip().getInnerCircle().radius);
+            shapeRenderer.circle(model.getJoystickGun().getInnerCircle().x, model.getJoystickGun().getInnerCircle().y, model.getJoystickGun().getInnerCircle().radius);
             // draw fireButton
             shapeRenderer.circle(model.getFirebutton().getOuterCircle().x, model.getFirebutton().getOuterCircle().y, model.getFirebutton().getOuterCircle().radius);
         }

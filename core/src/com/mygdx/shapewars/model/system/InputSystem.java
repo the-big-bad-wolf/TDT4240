@@ -42,7 +42,6 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
                         entity = e;
                     }
                     VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-                    inputDirectionGun = 45; // todo control this with joystick
                     velocityComponent.setVelocity(inputValue, inputDirectionShip, inputDirectionGun);
                     if (firingFlag)
                         FiringSystem.spawnBullet(entity);

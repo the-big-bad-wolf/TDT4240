@@ -2,6 +2,8 @@ package com.mygdx.shapewars.model.system;
 
 import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.shapewars.controller.Joystick;
 import com.mygdx.shapewars.model.ShapeWarsModel;
@@ -10,19 +12,22 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.Firebutton;
 
 public class InputSystemMobile extends InputSystem {
-    private Joystick joystick;
+    private Joystick joystickShip;
+    private Joystick joystickGun;
     private Firebutton firebutton;
     private FitViewport fitViewport;
     private final int outerCircleRadius;
-    private boolean movingJoystick;
+    private boolean movingJoystickShip;
+    private boolean movingJoystickGun;
     private static volatile InputSystemMobile instance;
 
     private InputSystemMobile(ShapeWarsModel shapeWarsModel) {
         super(shapeWarsModel);
-        this.joystick = shapeWarsModel.joystick;
+        this.joystickShip = shapeWarsModel.joystickShip;
+        this.joystickGun = shapeWarsModel.joystickGun;
         this.firebutton = shapeWarsModel.firebutton;
         this.fitViewport = shapeWarsModel.shapeWarsViewport;
-        this.outerCircleRadius = Math.round(joystick.getOuterCircle().radius);
+        this.outerCircleRadius = Math.round(joystickShip.getOuterCircle().radius);
     }
 
     public static InputSystemMobile getInstance(ShapeWarsModel shapeWarsModel) {
@@ -40,17 +45,25 @@ public class InputSystemMobile extends InputSystem {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 worldCoordinates = new Vector2(screenX, screenY);
         fitViewport.unproject(worldCoordinates);
-        movingJoystick = joystick.getOuterCircle().contains(worldCoordinates);
-        if (firebutton.getOuterCircle().contains(worldCoordinates))
+
+        movingJoystickShip = isCircleTouched(joystickShip.getOuterCircle(), screenX, screenY);
+        movingJoystickGun = isCircleTouched(joystickGun.getOuterCircle(), screenX, screenY);
+        if (isCircleTouched(firebutton.getOuterCircle(), screenX, screenY))
             firingFlag = true;
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x, joystick.getOuterCircle().y);
-        inputValue = 0;
-        movingJoystick = false;
+        // check which joystick the finger was lifted off of
+        if (screenX < Gdx.graphics.getWidth() / 2) {
+            joystickShip.getInnerCircle().setPosition(joystickShip.getOuterCircle().x, joystickShip.getOuterCircle().y);
+            inputValue = 0;
+            movingJoystickShip = false;
+        } else {
+            joystickGun.getInnerCircle().setPosition(joystickGun.getOuterCircle().x, joystickGun.getOuterCircle().y);
+            movingJoystickGun = false;
+        }
         return false; // standard return value
     }
 
@@ -59,26 +72,44 @@ public class InputSystemMobile extends InputSystem {
         Vector2 worldCoordinates = new Vector2(screenX, screenY);
         fitViewport.unproject(worldCoordinates);
 
-        if (movingJoystick) {
-            float deltaX = worldCoordinates.x - joystick.getOuterCircle().x;
-            float deltaY = worldCoordinates.y - joystick.getOuterCircle().y;
+        // todo unite code?
+        if (movingJoystickShip) {
+            float deltaX = worldCoordinates.x - joystickShip.getOuterCircle().x;
+            float deltaY = worldCoordinates.y - joystickShip.getOuterCircle().y;
             float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
             float angle = MathUtils.atan2(deltaY, deltaX) * MathUtils.radiansToDegrees;
 
-            float maxRadius = joystick.getOuterCircle().radius;
+            float maxRadius = joystickShip.getOuterCircle().radius;
             if (deltaLength > maxRadius) {
                 deltaX = deltaX * maxRadius / deltaLength;
                 deltaY = deltaY * maxRadius / deltaLength;
             }
-            joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x + deltaX, joystick.getOuterCircle().y + deltaY);
+            joystickShip.getInnerCircle().setPosition(joystickShip.getOuterCircle().x + deltaX, joystickShip.getOuterCircle().y + deltaY);
             inputDirectionShip = angle;
             inputValue = MathUtils.clamp(deltaLength, 0, outerCircleRadius) / outerCircleRadius * MAX_SPEED;
+        }
+        if (movingJoystickGun) {
+            float deltaX = worldCoordinates.x - joystickGun.getOuterCircle().x;
+            float deltaY = worldCoordinates.y - joystickGun.getOuterCircle().y;
+            float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            float angle = MathUtils.atan2(deltaY, deltaX) * MathUtils.radiansToDegrees;
+
+            float maxRadius = joystickGun.getOuterCircle().radius;
+            if (deltaLength > maxRadius) {
+                deltaX = deltaX * maxRadius / deltaLength;
+                deltaY = deltaY * maxRadius / deltaLength;
+            }
+            joystickGun.getInnerCircle().setPosition(joystickGun.getOuterCircle().x + deltaX, joystickGun.getOuterCircle().y + deltaY);
+            inputDirectionGun = angle;
         }
         return false; // standard return value
     }
 
-    /*
-     * todo: add firing button
-     */
+    private boolean isCircleTouched(Circle circle, int screenX, int screenY) {
+        Vector2 worldCoordinates = new Vector2(screenX, screenY);
+        fitViewport.unproject(worldCoordinates);
+        return circle.contains(worldCoordinates);
+    }
 }
