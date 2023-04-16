@@ -16,7 +16,6 @@ import com.mygdx.shapewars.network.data.LobbyRequest;
 import com.mygdx.shapewars.network.data.LobbyResponse;
 import com.mygdx.shapewars.network.data.ShipData;
 import com.mygdx.shapewars.view.MainMenuView;
-
 import java.io.IOException;
 
 public class ClientConnector {
@@ -68,8 +67,8 @@ public class ClientConnector {
         client.addListener(new ClientListener(model));
     }
 
-    public void sendInputRequest(String clientId, float valueInput, float directionInput, boolean firingFlag) {
-        client.sendUDP(new InputRequest(clientId, valueInput, directionInput, firingFlag));
+    public void sendInputRequest(String clientId, float valueInput, float directionShipInput, float directionGunInput, boolean firingFlag) {
+        client.sendUDP(new InputRequest(clientId, valueInput, directionShipInput, directionGunInput, firingFlag));
     }
 
     public void sendLobbyRequest(String clientId) {

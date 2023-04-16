@@ -20,12 +20,10 @@ import com.mygdx.shapewars.network.data.ShipData;
 
 public class UpdateSystemClient extends EntitySystem {
     private static volatile UpdateSystemClient instance;
-    protected ImmutableArray<Entity> entities;
     protected ShapeWarsModel shapeWarsModel;
     public ShipData[] shipsServer;
     public BulletData[] bulletsServer;
-    public boolean updated; // records if the system has updated all entities and can receive new data
-    // works like a thread lock
+    public boolean updated; // works as a lock to avoid conflicts between threads
 
     public UpdateSystemClient(ShapeWarsModel shapeWarsModel) {
         this.shapeWarsModel = shapeWarsModel;
@@ -67,9 +65,10 @@ public class UpdateSystemClient extends EntitySystem {
                         ComponentMappers.position.get(shipClient).setPosition(x, y);
 
                         // update velocity
-                        float direction = shipDataServer.velocityComponent.getDirection();
+                        float directionShip = shipDataServer.velocityComponent.getDirection();
+                        float directionGun = shipDataServer.velocityComponent.getDirectionGun();
                         float magnitude = shipDataServer.velocityComponent.getValue();
-                        ComponentMappers.velocity.get(shipClient).setVelocity(magnitude, direction);
+                        ComponentMappers.velocity.get(shipClient).setVelocity(magnitude, directionShip, directionGun);
 
                         // update health
                         int health = shipDataServer.healthComponent.getHealth();

@@ -140,7 +140,7 @@ public class ShapeWarsModel {
                 Entity ship = new Entity();
                 Vector2 cell = spawnCells.get(i);
                 ship.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
-                ship.add(new VelocityComponent(0, 0));
+                ship.add(new VelocityComponent(0, 0, 0));
                 ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
                 ship.add(new HealthComponent(100));
                 ship.add(new IdentityComponent(i));
@@ -153,7 +153,7 @@ public class ShapeWarsModel {
             for (int i = 0; i < numPlayers; i++) {
                 Entity ship = new Entity();
                 ship.add(new PositionComponent(0, 0));
-                ship.add(new VelocityComponent(0, 0));
+                ship.add(new VelocityComponent(0, 0, 0));
                 ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
                 ship.add(new HealthComponent(100));
                 ship.add(new IdentityComponent(i));

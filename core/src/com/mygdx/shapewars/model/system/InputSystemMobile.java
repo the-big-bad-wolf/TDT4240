@@ -2,17 +2,12 @@ package com.mygdx.shapewars.model.system;
 
 import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.shapewars.controller.Joystick;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.config.GameConfig;
 import com.mygdx.shapewars.controller.Firebutton;
-import com.mygdx.shapewars.network.client.ClientConnector;
-import com.mygdx.shapewars.config.Role;
-
 
 public class InputSystemMobile extends InputSystem {
     private Joystick joystick;
@@ -77,7 +72,7 @@ public class InputSystemMobile extends InputSystem {
                 deltaY = deltaY * maxRadius / deltaLength;
             }
             joystick.getInnerCircle().setPosition(joystick.getOuterCircle().x + deltaX, joystick.getOuterCircle().y + deltaY);
-            inputDirection = angle;
+            inputDirectionShip = angle;
             inputValue = MathUtils.clamp(deltaLength, 0, outerCircleRadius) / outerCircleRadius * MAX_SPEED;
         }
         return false; // standard return value
