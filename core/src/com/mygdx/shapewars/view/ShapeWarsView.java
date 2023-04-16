@@ -110,6 +110,7 @@ public class ShapeWarsView implements Screen {
             SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
             spriteComponent.getSprite().draw(mapRenderer.getBatch());
         }
+        model.aimHelp.draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
 
         Gdx.gl.glEnable(GL20.GL_BLEND);

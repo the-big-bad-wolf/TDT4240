@@ -9,6 +9,8 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -60,6 +62,7 @@ public class ShapeWarsModel {
     public boolean createEntitiesFlag;
     public UpdateSystemClient updateSystemClient;
     public UpdateSystemServer updateSystemServer;
+    public Sprite aimHelp;
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
         this.role = role;
@@ -166,6 +169,10 @@ public class ShapeWarsModel {
         for (EntitySystem system : SystemFactory.generateSystems(this)) {
             engine.addSystem(system);
         }
+
+        this.aimHelp = new Sprite(new Texture("player_flag.png"));
+        aimHelp.setSize(50, 20);
+        aimHelp.setOrigin(-100, 0);
     }
 
     public void update() {

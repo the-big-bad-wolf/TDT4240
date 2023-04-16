@@ -32,7 +32,8 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
         entities = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
 
         Gdx.input.setInputProcessor(this);
-        // todo can this be coded simpler?
+        shapeWarsModel.aimHelp.setRotation(inputDirectionGun);
+
         if (shapeWarsModel.role == Role.Server) {
             try {
                 Entity entity = null;
