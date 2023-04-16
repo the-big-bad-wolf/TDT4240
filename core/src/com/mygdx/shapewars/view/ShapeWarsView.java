@@ -109,10 +109,13 @@ public class ShapeWarsView implements Screen {
             Entity entity = model.engine.getEntities().get(i);
             SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
             spriteComponent.getSprite().draw(mapRenderer.getBatch());
-        }
-        model.aimHelp.draw(mapRenderer.getBatch());
-        mapRenderer.getBatch().end();
 
+            // render the aim helper if the player is alive
+            if (ComponentMappers.identity.get(entity) != null && ComponentMappers.identity.get(entity).getId() == model.shipId)
+                model.aimHelp.draw(mapRenderer.getBatch());
+        }
+
+        mapRenderer.getBatch().end();
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
