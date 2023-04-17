@@ -1,7 +1,6 @@
 package com.mygdx.shapewars.model.system;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,12 +12,7 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import java.util.ArrayList;
 
-public class CollisionSystem extends EntitySystem {
-
-    private static volatile CollisionSystem instance;
-
-    private CollisionSystem() {
-    }
+public abstract class CollisionSystem {
 
     /**
      * Gets the bounds of an Entity.
@@ -142,16 +136,5 @@ public class CollisionSystem extends EntitySystem {
         // Check if entity A's bounding box overlaps with entity B's bounding box
         return (x1 < rightB && rightA > x2 &&
                 y1 < topB && topA > y2);
-    }
-
-    public static CollisionSystem getInstance() {
-        if (instance == null) {
-            synchronized (CollisionSystem.class) {
-                if (instance == null) {
-                    instance = new CollisionSystem();
-                }
-            }
-        }
-        return instance;
     }
 }

@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SystemFactory {
-    public static List<EntitySystem> generateSystems(ShapeWarsModel model) {
+    public static List<PirateWarsSystem> generateSystems(ShapeWarsModel model) {
         Role role = model.role;
         Launcher launcher = model.gameModel.launcher;
 
-        List<EntitySystem> systems = new ArrayList<>();
+        List<PirateWarsSystem> systems = new ArrayList<>();
 
         systems.add(SpriteSystem.getInstance(model));
         systems.add(launcher == Launcher.Desktop ?

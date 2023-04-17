@@ -16,7 +16,7 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.badlogic.gdx.math.Polygon;
 import java.util.ArrayList;
 
-public class RicochetSystem extends EntitySystem {
+public class RicochetSystem extends PirateWarsSystem {
   private ImmutableArray<Entity> bullets;
   private ArrayList<Polygon> bulletObstacles;
 
@@ -123,5 +123,9 @@ public class RicochetSystem extends EntitySystem {
       }
     }
     return instance;
+  }
+
+  public void dispose() {
+    instance = null;
   }
 }

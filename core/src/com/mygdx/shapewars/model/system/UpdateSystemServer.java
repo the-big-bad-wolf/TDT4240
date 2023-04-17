@@ -2,12 +2,11 @@ package com.mygdx.shapewars.model.system;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateSystemServer extends EntitySystem {
+public class UpdateSystemServer extends PirateWarsSystem {
     private static volatile UpdateSystemServer instance;
     protected ShapeWarsModel shapeWarsModel;
 
@@ -27,6 +26,10 @@ public class UpdateSystemServer extends EntitySystem {
             }
         }
         return instance;
+    }
+
+    public void dispose() {
+        instance = null;
     }
 
     public void addedToEngine(Engine engine) { }

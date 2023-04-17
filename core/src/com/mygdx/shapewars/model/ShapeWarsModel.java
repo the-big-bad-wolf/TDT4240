@@ -24,19 +24,18 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
+import com.mygdx.shapewars.model.system.PirateWarsSystem;
 import com.mygdx.shapewars.model.system.SystemFactory;
 import com.mygdx.shapewars.model.system.UpdateSystemClient;
 import com.mygdx.shapewars.model.system.UpdateSystemServer;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.Firebutton;
-import com.mygdx.shapewars.config.Launcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,6 +65,7 @@ public class ShapeWarsModel {
     public UpdateSystemServer updateSystemServer;
     public InputMultiplexer multiplexer;
     public Sprite aimHelp;
+    public List<PirateWarsSystem> systems;
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
         this.role = role;
@@ -171,7 +171,8 @@ public class ShapeWarsModel {
             this.updateSystemClient = UpdateSystemClient.getInstance(this);
             engine.addSystem(updateSystemClient);
         }
-        for (EntitySystem system : SystemFactory.generateSystems(this)) {
+        this.systems = SystemFactory.generateSystems(this);
+        for (EntitySystem system : systems) {
             engine.addSystem(system);
         }
 
@@ -194,6 +195,7 @@ public class ShapeWarsModel {
         engine.update(Gdx.graphics.getDeltaTime());
     }
 
+    // todo remove
     public static void addToEngine(Entity entity) {
       engine.addEntity(entity);
     }
@@ -223,6 +225,9 @@ public class ShapeWarsModel {
     }
 
     public void dispose() {
+        for (PirateWarsSystem system : systems) {
+            system.dispose();
+        }
         engine.removeAllSystems();
         engine.removeAllEntities();
         try {

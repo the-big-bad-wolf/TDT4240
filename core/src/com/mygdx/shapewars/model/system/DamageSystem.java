@@ -16,7 +16,7 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 
-public class DamageSystem extends EntitySystem {
+public class DamageSystem extends PirateWarsSystem {
 
     private ImmutableArray<Entity> bullets;
     private ImmutableArray<Entity> ships;
@@ -91,5 +91,9 @@ public class DamageSystem extends EntitySystem {
             }
         }
         return instance;
+    }
+
+    public void dispose() {
+        instance = null;
     }
 }

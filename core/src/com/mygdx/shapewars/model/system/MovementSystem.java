@@ -16,7 +16,7 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 import java.util.ArrayList;
 
 
-public class MovementSystem extends EntitySystem {
+public class MovementSystem extends PirateWarsSystem {
 	private ImmutableArray<Entity> entities;
 	private ArrayList<Polygon> shipObstacles;
 
@@ -63,5 +63,9 @@ public class MovementSystem extends EntitySystem {
 			}
 		}
 		return instance;
+	}
+
+	public void dispose() {
+		instance = null;
 	}
 }

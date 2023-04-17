@@ -5,7 +5,6 @@ import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.mygdx.shapewars.model.ShapeWarsModel;
@@ -18,7 +17,7 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.data.BulletData;
 import com.mygdx.shapewars.network.data.ShipData;
 
-public class UpdateSystemClient extends EntitySystem {
+public class UpdateSystemClient extends PirateWarsSystem {
     private static volatile UpdateSystemClient instance;
     protected ShapeWarsModel shapeWarsModel;
     public ShipData[] shipsServer;
@@ -38,6 +37,10 @@ public class UpdateSystemClient extends EntitySystem {
             }
         }
         return instance;
+    }
+
+    public void dispose() {
+        instance = null;
     }
 
     public void addedToEngine(Engine engine) { }

@@ -13,7 +13,7 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 
-public class FiringSystem extends EntitySystem {
+public class FiringSystem extends PirateWarsSystem {
   
   private static volatile FiringSystem instance;
 
@@ -34,6 +34,7 @@ public class FiringSystem extends EntitySystem {
     ShapeWarsModel.addToEngine(bullet);
   }
 
+  // todo make this abstract
   public static FiringSystem getInstance() {
 		if (instance == null) {
 			synchronized (FiringSystem.class) {
@@ -44,4 +45,8 @@ public class FiringSystem extends EntitySystem {
 		}
 		return instance;
 	}
+
+    public void dispose() {
+        instance = null;
+    }
 }

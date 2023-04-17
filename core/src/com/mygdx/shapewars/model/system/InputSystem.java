@@ -13,7 +13,7 @@ import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
 
-public abstract class InputSystem extends EntitySystem implements InputProcessor {
+public abstract class InputSystem extends PirateWarsSystem implements InputProcessor {
     protected float inputDirectionShip;
     protected float inputDirectionGun;
     protected float inputValue;

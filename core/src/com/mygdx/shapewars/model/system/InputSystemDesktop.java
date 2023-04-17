@@ -28,6 +28,10 @@ public class InputSystemDesktop extends InputSystem {
         return instance;
     }
 
+    public void dispose() {
+        instance = null;
+    }
+
     @Override
     public void update(float deltaTime) {
         inputValue = getInputValue();
