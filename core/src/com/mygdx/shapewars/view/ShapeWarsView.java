@@ -59,6 +59,7 @@ public class ShapeWarsView implements Screen {
     @Override
     public void show() {
         model.multiplexer.addProcessor(this.stage); // set stage as first input processor
+        Gdx.input.setInputProcessor(model.multiplexer);
         // create a render object to easily render all layers, objects, etc. of our TileMap
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         shapeRenderer = new ShapeRenderer();
@@ -149,8 +150,8 @@ public class ShapeWarsView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    controller.shapeWarsModel.dispose();
                     controller.setScreen(new MainMenuView(controller));
+                    controller.shapeWarsModel.dispose();
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
