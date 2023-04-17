@@ -23,14 +23,16 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
 
     public InputSystem(ShapeWarsModel shapeWarsModel) {
         this.shapeWarsModel = shapeWarsModel;
+        this.shapeWarsModel.multiplexer.addProcessor(this);  // set your game input precessor as second
+
     }
 
     public void addedToEngine(Engine engine) { }
 
     public void update(float deltaTime) {
         entities = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
+        Gdx.input.setInputProcessor(this.shapeWarsModel.multiplexer); // set multiplexer as input processor
 
-        Gdx.input.setInputProcessor(this);
         // todo can this be coded simpler?
         if (shapeWarsModel.role == Role.Server) {
             try {

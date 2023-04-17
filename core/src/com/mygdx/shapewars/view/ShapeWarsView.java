@@ -10,8 +10,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.config.Launcher;
@@ -31,18 +33,21 @@ public class ShapeWarsView implements Screen {
     private Sprite backgroundSprite;
     private ExtendViewport extendViewport;
     private ShapeWarsController controller;
+    private ImageButton startButton;
     private UIBuilder uiBuilder;
-    private TextButton menuButton;
 
     public ShapeWarsView(ShapeWarsController controller) {
         this.controller = controller;
         this.model = controller.shapeWarsModel;
         this.stage = new Stage(); // todo check if we need to change that
+        model.multiplexer.addProcessor(this.stage); // set stage as first input processor
         map = ShapeWarsModel.getMap();
         this.fitViewport = model.shapeWarsViewport;
         this.uiBuilder = new UIBuilder(this.stage);
-        menuButton = uiBuilder.buildButton("Menu", 150f, 60f, Gdx.graphics.getWidth() - 150f,
-                Gdx.graphics.getHeight() - 60f);
+
+        // todo sophie: set phone to a really wide one with large borders. the button position is correct but I have to click on the border to the right to press the button
+        startButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), 256, 100, fitViewport.getScreenX() + 2880, fitViewport.getScreenY() + 1250);
+        addActionsToUI();
     }
 
     public ShapeWarsController getController() {
@@ -51,31 +56,25 @@ public class ShapeWarsView implements Screen {
 
     @Override
     public void show() {
-        // create a render object to easily render all layers, objects, etc. of our
-        // TileMap
+        // create a render object to easily render all layers, objects, etc. of our TileMap
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         shapeRenderer = new ShapeRenderer();
 
-        // creation and setting of map to make sure dimensions are set right and whole
-        // map is shown
+        // creation and setting of map to make sure dimensions are set right and whole map is shown
         float mapWidth = map.getProperties().get("width", Integer.class)
                 * map.getProperties().get("tilewidth", Integer.class);
         float mapHeight = map.getProperties().get("height", Integer.class)
                 * map.getProperties().get("tileheight", Integer.class);
 
 
-        // fitViewport scales the game world to fit on screen with the correct
-        // dimensions
-        // no extra fitviewport anymore
-        // extendViewport allows for a scalable background that shows when fitViewport
-        // doesn't use the whole screen
+        /* fitViewport scales the game world to fit on screen with the correct dimensions no extra
+        * fitviewport anymore extendViewport allows for a scalable background that shows when
+        * fitViewport doesn't use the whole screen */
         extendViewport = new ExtendViewport(mapWidth, mapHeight);
 
         // Background that shows around the actual playing field
         Texture background = new Texture(Gdx.files.internal("maps/mapExpansionGrass.png"));
         backgroundSprite = new Sprite(background);
-
-        Gdx.input.setInputProcessor(stage);
         render(Gdx.graphics.getDeltaTime());
     }
 
@@ -129,18 +128,22 @@ public class ShapeWarsView implements Screen {
 
         shapeRenderer.end();
         stage.draw();
-        // TODO this for sure needs to be changed
-        if (Gdx.input.justTouched()) {
-            if (Gdx.input.getX() >= Gdx.graphics.getWidth() - 150f
-                    && Gdx.input.getY() <= 60f) {
-                dispose();
-                controller.setScreen(new MainMenuView(controller));
-            }
-        }
-
     }
 
-    @Override
+    private void addActionsToUI() {
+        startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    controller.setScreen(new MainMenuView(controller));
+                } catch (NullPointerException nullPointerException) {
+                    System.out.println("No Controller found");
+                }
+            }
+        });
+    }
+
+        @Override
     public void resize(int width, int height) {
         fitViewport.update(width, height);
         extendViewport.update(width, height);

@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -59,11 +60,14 @@ public class ShapeWarsModel {
     public boolean createEntitiesFlag;
     public UpdateSystemClient updateSystemClient;
     public UpdateSystemServer updateSystemServer;
+    public InputMultiplexer multiplexer;
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
         this.role = role;
         this.gameModel = gameModel;
         this.controller = controller;
+
+        this.multiplexer = new InputMultiplexer();
 
         TmxMapLoader loader = new TmxMapLoader();
         /*
