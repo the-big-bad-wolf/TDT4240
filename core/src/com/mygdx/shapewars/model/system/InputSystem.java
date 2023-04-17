@@ -39,16 +39,15 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
 
         if (shapeWarsModel.role == Role.Server) {
             try {
-                Entity entity = null;
                 for (int i = 0; i < entities.size(); i++) {
-                    Entity e = entities.get(i);
-                    if (ComponentMappers.identity.get(e).getId() == 0) {
-                        entity = e;
-                    }
-                    VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-                    velocityComponent.setVelocity(inputValue, inputDirectionShip, inputDirectionGun);
-                    if (firingFlag)
-                        FiringSystem.spawnBullet(entity);
+                    Entity entity = entities.get(i);
+                    if (ComponentMappers.identity.get(entity).getId() == 0) {
+                        VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
+                        velocityComponent.setVelocity(inputValue, inputDirectionShip, inputDirectionGun);
+                        if (firingFlag) {
+                            FiringSystem.spawnBullet(entity);
+                        }
+                    } 
                 }
             } catch (NullPointerException e) { }
         } else {

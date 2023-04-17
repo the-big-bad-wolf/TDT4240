@@ -38,23 +38,24 @@ public class DamageSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
-        for (Entity bullet : bullets) {
+        for (int i = 0; i < bullets.size(); i++) {
+            Entity bullet = bullets.get(i);
             PositionComponent bulletPositionComponent = ComponentMappers.position.get(bullet);
             HealthComponent bulletHealthComponent = ComponentMappers.health.get(bullet);
             SpriteComponent bulletSpriteComponent = ComponentMappers.sprite.get(bullet);
 
             // Check if bullet hits ship
             for (Entity ship : ships) {
+                IdentityComponent shipIdentityComponent = ComponentMappers.identity.get(ship);
                 PositionComponent shipPositionComponent = ComponentMappers.position.get(ship);
                 SpriteComponent shipSpriteComponent = ComponentMappers.sprite.get(ship);
                 HealthComponent shipHealthComponent = ComponentMappers.health.get(ship);
-
                 if (CollisionSystem.checkCollisionWithEntity(bulletPositionComponent, bulletSpriteComponent,
-                    shipPositionComponent, shipSpriteComponent)) {
+                        shipPositionComponent, shipSpriteComponent)) {
                     ParentComponent bulletParentComponent = ComponentMappers.parent.get(bullet);
-                    if (ship.equals(bulletParentComponent.getParent())) {
+                    if (shipIdentityComponent.getId() == (bulletParentComponent.getParent().getComponent(IdentityComponent.class).getId())) {
                         if (bulletHealthComponent.getHealth() == MAX_BULLET_HEALTH) {
-                             break;
+                            break;
                         }
                     }
                     shipHealthComponent.takeDamage(40);
@@ -64,11 +65,9 @@ public class DamageSystem extends EntitySystem {
             }
 
             // Check if bullet hits bullet
-            Array<Entity> bulletsCopy = new Array<Entity>(bullets.toArray(Entity.class));
-            for (Entity otherBullet : bulletsCopy) {
-                if (otherBullet.equals(bullet)) {
-                    continue;
-                }
+            //Array<Entity> bulletsCopy = new Array<Entity>(bullets.toArray(Entity.class));
+            for (int j = i + 1; j < bullets.size(); j++) {
+                Entity otherBullet = bullets.get(j);
                 PositionComponent otherBulletPositionComponent = ComponentMappers.position.get(otherBullet);
                 SpriteComponent otherBulletSpriteComponent = ComponentMappers.sprite.get(otherBullet);
                 if (CollisionSystem.checkCollisionWithEntity(bulletPositionComponent, bulletSpriteComponent,
