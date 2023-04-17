@@ -33,20 +33,22 @@ public class ShapeWarsView implements Screen {
     private Sprite backgroundSprite;
     private ExtendViewport extendViewport;
     private ShapeWarsController controller;
-    private ImageButton startButton;
+    private ImageButton menuButton;
     private UIBuilder uiBuilder;
 
     public ShapeWarsView(ShapeWarsController controller) {
         this.controller = controller;
         this.model = controller.shapeWarsModel;
         this.stage = new Stage(); // todo check if we need to change that
-        model.multiplexer.addProcessor(this.stage); // set stage as first input processor
         map = ShapeWarsModel.getMap();
         this.fitViewport = model.shapeWarsViewport;
         this.uiBuilder = new UIBuilder(this.stage);
+        stage.setViewport(fitViewport);
 
         // todo sophie: set phone to a really wide one with large borders. the button position is correct but I have to click on the border to the right to press the button
-        startButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), 256, 100, fitViewport.getScreenX() + 2880, fitViewport.getScreenY() + 1250);
+        int buttonHeight = 128;
+        int buttonWidth = 256;
+        menuButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), buttonWidth, buttonHeight, fitViewport.getWorldWidth()-buttonWidth, fitViewport.getWorldHeight()- buttonHeight);
         addActionsToUI();
     }
 
@@ -56,6 +58,7 @@ public class ShapeWarsView implements Screen {
 
     @Override
     public void show() {
+        model.multiplexer.addProcessor(this.stage); // set stage as first input processor
         // create a render object to easily render all layers, objects, etc. of our TileMap
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         shapeRenderer = new ShapeRenderer();
@@ -82,6 +85,10 @@ public class ShapeWarsView implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        fitViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true); // Add this line to update the stage's viewport
+
 
         int numLayers = map.getLayers().size();
         int[] layers = new int[numLayers];
@@ -127,11 +134,12 @@ public class ShapeWarsView implements Screen {
         }
 
         shapeRenderer.end();
+        stage.act(delta);
         stage.draw();
     }
 
     private void addActionsToUI() {
-        startButton.addListener(new ClickListener() {
+        menuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
@@ -147,6 +155,7 @@ public class ShapeWarsView implements Screen {
     public void resize(int width, int height) {
         fitViewport.update(width, height);
         extendViewport.update(width, height);
+            stage.getViewport().update(width, height, true); // Add this line to update the stage's viewport
     }
 
     @Override
