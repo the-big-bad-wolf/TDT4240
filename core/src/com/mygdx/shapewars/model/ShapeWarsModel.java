@@ -191,7 +191,9 @@ public class ShapeWarsModel {
                 generateEntities();
             }
         }
-        engine.update(Gdx.graphics.getDeltaTime());
+        if (!isGameActive) {
+            engine.update(Gdx.graphics.getDeltaTime());
+        }
     }
 
     public static void addToEngine(Entity entity) {
@@ -223,6 +225,7 @@ public class ShapeWarsModel {
     }
 
     public void dispose() {
+        isGameActive = false;
         try {
             if (role == Role.Server) {
                 serverConnector.getServer().dispose();
