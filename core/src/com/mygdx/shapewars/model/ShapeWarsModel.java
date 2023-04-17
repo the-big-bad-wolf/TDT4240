@@ -37,6 +37,8 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.Firebutton;
 import com.mygdx.shapewars.config.Launcher;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +57,6 @@ public class ShapeWarsModel {
     public Firebutton firebutton;
     public ArrayList<Polygon> shipObstacles;
     public ArrayList<Polygon> bulletObstacles;
-
     public FitViewport shapeWarsViewport;
     public GameModel gameModel;
     public boolean isGameActive;
@@ -219,5 +220,15 @@ public class ShapeWarsModel {
 
     public Firebutton getFirebutton() {
         return firebutton;
+    }
+
+    public void dispose() {
+        try {
+            if (role == Role.Server) {
+                serverConnector.getServer().dispose();
+            } else {
+                clientConnector.getClient().dispose();
+            }
+        } catch (IOException e) {}
     }
 }

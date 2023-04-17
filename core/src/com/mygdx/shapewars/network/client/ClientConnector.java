@@ -74,4 +74,8 @@ public class ClientConnector {
     public void sendLobbyRequest(String clientId) {
         client.sendUDP(new LobbyRequest(clientId));
     }
+
+    public Client getClient() {
+        return this.client;
+    }
 }

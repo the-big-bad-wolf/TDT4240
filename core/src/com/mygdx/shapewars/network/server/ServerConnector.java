@@ -67,4 +67,8 @@ public class ServerConnector {
 
         this.server.addListener(new ServerListener(model));
     }
+
+    public Server getServer() {
+        return this.server;
+    }
 }
