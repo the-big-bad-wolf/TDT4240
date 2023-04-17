@@ -35,7 +35,6 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
         Gdx.input.setInputProcessor(this.shapeWarsModel.multiplexer); // set multiplexer as input processor
 
         // todo can this be coded simpler?
-        Gdx.input.setInputProcessor(this);
         shapeWarsModel.aimHelp.setRotation(inputDirectionGun);
 
         if (shapeWarsModel.role == Role.Server) {
