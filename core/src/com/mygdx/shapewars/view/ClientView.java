@@ -2,30 +2,36 @@ package com.mygdx.shapewars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.controller.ShapeWarsController;
+
+import javax.swing.GroupLayout;
 
 public class ClientView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private final ShapeWarsController controller;
     private TextField inputField;
-    private ImageButton backButton;
-    private ImageButton okButton;
+    private TextButton backButton;
+    private TextButton okButton;
     private Sprite backgroundSprite;
 
     public ClientView(ShapeWarsController controller) {
@@ -97,23 +103,24 @@ public class ClientView implements Screen {
     }
 
     private void buildUI() {
-        float inputFieldWidth = 800;
-        float inputFieldHeight = 100;
-        float allButtonsWidth = 250f;
-        float allButtonsHeight = 100f;
+        float inputFieldWidth = 612;
+        float inputFieldHeight = 128;
+        float allButtonsWidth = 256f;
+        float allButtonsHeight = 128f;
         float inputFieldXPos = Gdx.graphics.getWidth() / 2f - inputFieldWidth / 2;
-        float inputFieldYPos = Gdx.graphics.getHeight() / 2f + inputFieldHeight / 2 + 100f;
+        float inputFieldYPos = Gdx.graphics.getHeight() / 2f + inputFieldHeight / 2;
         float backButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth - 50f;
         float backButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float okButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
 
-        inputField = uiBuilder.buildTextField("Enter host IP address", inputFieldWidth, inputFieldHeight,
-                inputFieldXPos, inputFieldYPos);
-        backButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), allButtonsWidth, allButtonsHeight,
+        Skin skin = new Skin(Gdx.files.internal("data/custom.json"));
+
+        inputField = uiBuilder.buildTextField("Enter host IP address", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
+
+        backButton = uiBuilder.buildButton("BACK", allButtonsWidth, allButtonsHeight,
                 backButtonXPos, backButtonYPos);
-        okButton = uiBuilder.buildImageButton(new Texture("mainMenu/okButton.png"), allButtonsWidth, allButtonsHeight,
-                okButtonXPos, okButtonYPos);
+        okButton = uiBuilder.buildButton("OK", allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos);
 
         addActionsToUI();
     }

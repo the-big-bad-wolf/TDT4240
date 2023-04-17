@@ -27,19 +27,16 @@ public class UIBuilder {
 
     public UIBuilder(Stage stage) {
         this.stage = stage;
-        this.skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        this.skin = new Skin(Gdx.files.internal("data/custom.json"));
     }
 
     public TextField buildTextField(String text, float width, float height, float xPos, float yPos) {
         textField = new TextField(text, skin);
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"));
 
         buildTextFieldStyle(skin);
         textField.setSize(width, height);
         textField.setPosition(xPos, yPos);
-        textField.setColor(Color.valueOf("7ba3b0"));
-        // textField.setStyle(textFieldStyle);
+        textField.setAlignment(Align.center);
 
         stage.addActor(textField);
 
@@ -54,32 +51,6 @@ public class UIBuilder {
         stage.addActor(label);
         return label;
     }
-
-    /*
-     * public TextField buildTextField(String text, float width, float height, float
-     * xPos, float yPos, Drawable backgroundDrawable) {
-     * TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-     * 
-     * // Set up the font for the text field
-     * BitmapFont font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"));
-     * textFieldStyle.font = font;
-     * 
-     * // Set up the background image for the text field
-     * textFieldStyle.background = backgroundDrawable;
-     * 
-     * // Create the text field with the text and style
-     * TextField textField = new TextField(text, textFieldStyle);
-     * 
-     * // Set the size and position of the text field
-     * textField.setSize(width, height);
-     * textField.setPosition(xPos, yPos);
-     * 
-     * // Add the text field to your stage or UI table
-     * stage.addActor(textField);
-     * 
-     * return textField;
-     * }
-     */
 
     public TextButton buildButton(String text, float width, float height, float xPos, float yPos) {
         textButton = new TextButton(text, skin);
@@ -123,18 +94,18 @@ public class UIBuilder {
 
     private void buildTextFieldStyle(Skin skin) {
         fieldStyle = new TextFieldStyle();
-        fieldStyle.font = skin.getFont("default-font");
+        fieldStyle.font = skin.getFont("sans");
         fieldStyle.font.getData().setScale(1f);
-        fieldStyle.background = skin.getDrawable("default-scroll");
-        fieldStyle.cursor = skin.getDrawable("default-round");
+        //fieldStyle.background = skin.getDrawable("default-scroll");
+        //fieldStyle.cursor = skin.getDrawable("default-round");
     }
 
     private void buildButtonStyle(Skin skin) {
         buttonStyle = new TextButtonStyle();
-        buttonStyle.font = skin.getFont("default-font");
+        buttonStyle.font = skin.getFont("sans");
         buttonStyle.font.getData().setScale(1f);
-        buttonStyle.up = skin.getDrawable("default-round");
-        buttonStyle.down = skin.getDrawable("default-round-down");
+        //buttonStyle.up = skin.getDrawable("default-round");
+        //buttonStyle.down = skin.getDrawable("default-round-down");
     }
 
     public ImageButton buildImageButtonWithText(Texture texture, String text, float width, float height, float xPos,
