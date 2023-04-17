@@ -23,6 +23,7 @@ public class ServerConnector {
 
     private Server server;
     private Kryo kryo;
+    private ServerListener listener;
 
     public ServerConnector(ShapeWarsModel model) {
         this.server = new Server();
@@ -65,10 +66,12 @@ public class ServerConnector {
         this.kryo.register(Vector2.class);
         this.kryo.register(float[].class);
 
-        this.server.addListener(new ServerListener(model));
+        this.listener = new ServerListener(model);
+        this.server.addListener(listener);
     }
 
-    public Server getServer() {
-        return this.server;
+    public void dispose() throws IOException {
+        server.removeListener(listener);
+        server.close();
     }
 }

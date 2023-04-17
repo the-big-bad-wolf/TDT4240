@@ -22,6 +22,7 @@ public class ClientConnector {
 
     private Client client;
     private Kryo kryo;
+    private ClientListener listener;
 
     public ClientConnector(ShapeWarsModel model, String ipAddress) {
         this.client = new com.esotericsoftware.kryonet.Client();
@@ -64,7 +65,8 @@ public class ClientConnector {
         this.kryo.register(Vector2.class);
         this.kryo.register(float[].class);
 
-        client.addListener(new ClientListener(model));
+        this.listener = new ClientListener(model);
+        client.addListener(listener);
     }
 
     public void sendInputRequest(String clientId, float valueInput, float directionShipInput, float directionGunInput, boolean firingFlag) {
@@ -75,7 +77,8 @@ public class ClientConnector {
         client.sendUDP(new LobbyRequest(clientId));
     }
 
-    public Client getClient() {
-        return this.client;
+    public void dispose() {
+        client.removeListener(listener);
+        client.close();
     }
 }
