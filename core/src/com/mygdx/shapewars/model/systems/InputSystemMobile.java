@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.model.system;
+package com.mygdx.shapewars.model.systems;
 
 import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
 
@@ -10,6 +10,7 @@ import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.Firebutton;
+import com.mygdx.shapewars.model.helperSystems.InputSystem;
 
 public class InputSystemMobile extends InputSystem {
     private Joystick joystickShip;

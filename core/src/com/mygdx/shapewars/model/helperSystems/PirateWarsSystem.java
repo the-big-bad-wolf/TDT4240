@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.model.system;
+package com.mygdx.shapewars.model.helperSystems;
 
 import com.badlogic.ashley.core.EntitySystem;
 

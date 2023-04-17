@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.model.system;
+package com.mygdx.shapewars.model.systems;
 
 import static com.mygdx.shapewars.config.GameConfig.CANNON_BALL;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
@@ -14,6 +14,7 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
 import com.mygdx.shapewars.network.data.BulletData;
 import com.mygdx.shapewars.network.data.ShipData;
 

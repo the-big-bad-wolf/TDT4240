@@ -1,13 +1,11 @@
-package com.mygdx.shapewars.model.system;
+package com.mygdx.shapewars.model.systems;
 
 import static com.mygdx.shapewars.config.GameConfig.MAX_BULLET_HEALTH;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
@@ -15,12 +13,13 @@ import com.mygdx.shapewars.model.components.ParentComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.model.helperSystems.CollisionSystem;
+import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
 
 public class DamageSystem extends PirateWarsSystem {
 
     private ImmutableArray<Entity> bullets;
     private ImmutableArray<Entity> ships;
-
     private static volatile DamageSystem instance;
 
     private DamageSystem() {

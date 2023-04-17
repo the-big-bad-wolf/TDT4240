@@ -1,8 +1,7 @@
-package com.mygdx.shapewars.model.system;
+package com.mygdx.shapewars.model.systems;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
@@ -13,6 +12,9 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.model.helperSystems.CollisionSystem;
+import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
+
 import java.util.ArrayList;
 
 

@@ -1,10 +1,9 @@
-package com.mygdx.shapewars.model.system;
+package com.mygdx.shapewars.model.helperSystems;
 
 import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;

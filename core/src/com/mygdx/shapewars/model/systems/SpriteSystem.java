@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.model.system;
+package com.mygdx.shapewars.model.systems;
 
 import static com.mygdx.shapewars.config.GameConfig.ENEMY_DAMAGE_ONE;
 import static com.mygdx.shapewars.config.GameConfig.ENEMY_DAMAGE_TWO;
@@ -13,7 +13,6 @@ import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
@@ -24,6 +23,7 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
 
 public class SpriteSystem extends PirateWarsSystem {
 

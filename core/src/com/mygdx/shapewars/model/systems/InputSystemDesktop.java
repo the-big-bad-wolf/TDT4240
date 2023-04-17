@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.model.system;
+package com.mygdx.shapewars.model.systems;
 
 import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
 import static com.mygdx.shapewars.config.GameConfig.MAX_TURN_RATE;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
+import com.mygdx.shapewars.model.helperSystems.InputSystem;
 
 public class InputSystemDesktop extends InputSystem {
     private static volatile InputSystemDesktop instance;

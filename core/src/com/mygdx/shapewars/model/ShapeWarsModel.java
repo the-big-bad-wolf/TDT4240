@@ -24,10 +24,9 @@ import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.model.system.PirateWarsSystem;
-import com.mygdx.shapewars.model.system.SystemFactory;
-import com.mygdx.shapewars.model.system.UpdateSystemClient;
-import com.mygdx.shapewars.model.system.UpdateSystemServer;
+import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
+import com.mygdx.shapewars.model.systems.UpdateSystemClient;
+import com.mygdx.shapewars.model.systems.UpdateSystemServer;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,7 +35,6 @@ import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.Firebutton;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -195,14 +193,9 @@ public class ShapeWarsModel {
         engine.update(Gdx.graphics.getDeltaTime());
     }
 
-    // todo remove
     public static void addToEngine(Entity entity) {
       engine.addEntity(entity);
     }
-
-    public static void removeFromEngine(Entity entity) {
-        engine.removeEntity(entity);
-      }
 
     public static TiledMap getMap() {
         return map;
@@ -216,9 +209,6 @@ public class ShapeWarsModel {
         return joystickGun;
     }
 
-    public static TiledMapTileLayer getLayer(int layerId) {
-      return (TiledMapTileLayer) getMap().getLayers().get(layerId);
-    }
 
     public Firebutton getFirebutton() {
         return firebutton;

@@ -1,9 +1,16 @@
-package com.mygdx.shapewars.model.system;
+package com.mygdx.shapewars.model;
 
-import com.badlogic.ashley.core.EntitySystem;
 import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
+import com.mygdx.shapewars.model.systems.DamageSystem;
+import com.mygdx.shapewars.model.systems.DeathSystem;
+import com.mygdx.shapewars.model.systems.InputSystemDesktop;
+import com.mygdx.shapewars.model.systems.InputSystemMobile;
+import com.mygdx.shapewars.model.systems.MovementSystem;
+import com.mygdx.shapewars.model.systems.RicochetSystem;
+import com.mygdx.shapewars.model.systems.SpriteSystem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +28,7 @@ public class SystemFactory {
         if (role == Role.Server) {
             systems.add(MovementSystem.getInstance(model.shipObstacles));
             systems.add(RicochetSystem.getInstance(model.bulletObstacles));
-            systems.add(DeathSystem.getInstance());
+            systems.add(DeathSystem.getInstance(model));
             systems.add(DamageSystem.getInstance());
         }
         return systems;
