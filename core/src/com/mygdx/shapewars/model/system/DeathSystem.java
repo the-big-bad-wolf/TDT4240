@@ -11,7 +11,7 @@ import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
 
-public class DeathSystem extends EntitySystem {
+public class DeathSystem extends PirateWarsSystem {
     private ImmutableArray<Entity> entities;
 
     private static volatile DeathSystem instance;
@@ -45,5 +45,9 @@ public class DeathSystem extends EntitySystem {
             }
         }
         return instance;
+    }
+
+    public void dispose() {
+        instance = null;
     }
 }
