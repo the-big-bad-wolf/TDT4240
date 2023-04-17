@@ -10,6 +10,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -48,7 +50,8 @@ public class ShapeWarsModel {
     public ClientConnector clientConnector;
     public HashMap<String, Integer> deviceShipMapping = new HashMap<>();
     public int shipId; // todo put this in a model just for clients
-    public Joystick joystick;
+    public Joystick joystickShip;
+    public Joystick joystickGun;
     public Firebutton firebutton;
     public ArrayList<Polygon> shipObstacles;
     public ArrayList<Polygon> bulletObstacles;
@@ -61,6 +64,7 @@ public class ShapeWarsModel {
     public UpdateSystemClient updateSystemClient;
     public UpdateSystemServer updateSystemServer;
     public InputMultiplexer multiplexer;
+    public Sprite aimHelp;
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
         this.role = role;
@@ -81,7 +85,17 @@ public class ShapeWarsModel {
          */
         map = loader.load("maps/pirateMap.tmx"); // make server send this AFTER sophie is done
         engine = new Engine();
-        joystick = new Joystick(180, 180, 120, 50);
+
+        OrthographicCamera camera = new OrthographicCamera();
+        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
+        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
+        camera.setToOrtho(false, mapWidth, mapHeight);
+        camera.update();
+        // fitViewport scales the game world to fit on screen with the correct dimensions
+        shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
+        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-180, 480, 120);
+        joystickShip = new Joystick(180, 180, 120, 50);
+        joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth()-180, 180, 120, 50);
 
         // TODO right layer
         shipObstacles = new ArrayList<Polygon>();
@@ -103,16 +117,6 @@ public class ShapeWarsModel {
                 bulletObstacles.add(rect);
             }
         }
-
-
-        OrthographicCamera camera = new OrthographicCamera();
-        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
-        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
-        camera.setToOrtho(false, mapWidth, mapHeight);
-        camera.update();
-        // fitViewport scales the game world to fit on screen with the correct dimensions
-        shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
-        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-180, 180, 120);
 
         if (this.role == Role.Server) {
             this.shipId = 0;
@@ -144,7 +148,7 @@ public class ShapeWarsModel {
                 Entity ship = new Entity();
                 Vector2 cell = spawnCells.get(i);
                 ship.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
-                ship.add(new VelocityComponent(0, 0));
+                ship.add(new VelocityComponent(0, 0, 0));
                 ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
                 ship.add(new HealthComponent(100));
                 ship.add(new IdentityComponent(i));
@@ -157,7 +161,7 @@ public class ShapeWarsModel {
             for (int i = 0; i < numPlayers; i++) {
                 Entity ship = new Entity();
                 ship.add(new PositionComponent(0, 0));
-                ship.add(new VelocityComponent(0, 0));
+                ship.add(new VelocityComponent(0, 0, 0));
                 ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
                 ship.add(new HealthComponent(100));
                 ship.add(new IdentityComponent(i));
@@ -169,6 +173,10 @@ public class ShapeWarsModel {
         for (EntitySystem system : SystemFactory.generateSystems(this)) {
             engine.addSystem(system);
         }
+
+        this.aimHelp = new Sprite(new Texture("player_flag.png"));
+        aimHelp.setSize(50, 20);
+        aimHelp.setOrigin(-100, 0);
     }
 
     public void update() {
@@ -197,8 +205,12 @@ public class ShapeWarsModel {
         return map;
     }
 
-    public Joystick getJoystick() {
-        return joystick;
+    public Joystick getJoystickShip() {
+        return joystickShip;
+    }
+
+    public Joystick getJoystickGun() {
+        return joystickGun;
     }
 
     public static TiledMapTileLayer getLayer(int layerId) {

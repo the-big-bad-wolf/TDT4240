@@ -31,7 +31,7 @@ public class InputSystemDesktop extends InputSystem {
     @Override
     public void update(float deltaTime) {
         inputValue = getInputValue();
-        inputDirection = getInputDirection();
+        inputDirectionShip = getInputDirection();
         super.update(deltaTime);
     }
 

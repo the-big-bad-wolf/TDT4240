@@ -14,7 +14,8 @@ import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
 
 public abstract class InputSystem extends EntitySystem implements InputProcessor {
-    protected float inputDirection;
+    protected float inputDirectionShip;
+    protected float inputDirectionGun;
     protected float inputValue;
     protected ImmutableArray<Entity> entities;
     protected ShapeWarsModel shapeWarsModel;
@@ -34,6 +35,9 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
         Gdx.input.setInputProcessor(this.shapeWarsModel.multiplexer); // set multiplexer as input processor
 
         // todo can this be coded simpler?
+        Gdx.input.setInputProcessor(this);
+        shapeWarsModel.aimHelp.setRotation(inputDirectionGun);
+
         if (shapeWarsModel.role == Role.Server) {
             try {
                 Entity entity = null;
@@ -43,13 +47,13 @@ public abstract class InputSystem extends EntitySystem implements InputProcessor
                         entity = e;
                     }
                     VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-                    velocityComponent.setVelocity(inputValue, inputDirection);
+                    velocityComponent.setVelocity(inputValue, inputDirectionShip, inputDirectionGun);
                     if (firingFlag)
                         FiringSystem.spawnBullet(entity);
                 }
             } catch (NullPointerException e) { }
         } else {
-            shapeWarsModel.clientConnector.sendInputRequest(shapeWarsModel.gameModel.deviceId, inputValue, inputDirection, firingFlag);
+            shapeWarsModel.clientConnector.sendInputRequest(shapeWarsModel.gameModel.deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
         }
         firingFlag = false;
     }

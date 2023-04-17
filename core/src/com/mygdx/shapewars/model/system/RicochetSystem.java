@@ -105,7 +105,6 @@ public class RicochetSystem extends EntitySystem {
         } else {
           bulletVelocityComponent.setDirection(bulletVelocityComponent.getDirection() * -1);
         }
-        // System.out.println(velocity.getDirection());
       }
 
       bulletSpriteComponent.getSprite().setRotation(bulletVelocityComponent.getDirection() + 90);

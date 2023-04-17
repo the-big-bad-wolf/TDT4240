@@ -46,7 +46,6 @@ public class SpriteSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-
         for (int i = 0; i < ships.size(); i++) {
             Entity ship = ships.get(i);
             HealthComponent shipHealthComponent = ComponentMappers.health.get(ship);
@@ -68,6 +67,9 @@ public class SpriteSystem extends EntitySystem {
                     ship.remove(SpriteComponent.class);
                     ship.add(new SpriteComponent(expectedSkin, SHIP_WIDTH, SHIP_HEIGHT));
                 }
+
+                Vector2 position = ComponentMappers.position.get(ship).getPosition();
+                shapeWarsModel.aimHelp.setPosition(position.x + SHIP_WIDTH / 2 + 100, position.y + SHIP_HEIGHT / 2);
             } else {
                 String expectedSkin;
                 if (shipHealthComponent.getHealth() >= 100) {
