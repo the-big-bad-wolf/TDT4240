@@ -43,9 +43,9 @@ public class RicochetSystem extends EntitySystem {
       float radians = MathUtils.degreesToRadians * bulletVelocityComponent.getDirection();
 
       float newX = bulletPositionComponent.getPosition().x
-          + MathUtils.cos(radians) * bulletVelocityComponent.getValue();
+          + MathUtils.cos(radians) * bulletVelocityComponent.getValue() * deltaTime * 50;
       float newY = bulletPositionComponent.getPosition().y
-          + MathUtils.sin(radians) * bulletVelocityComponent.getValue();
+          + MathUtils.sin(radians) * bulletVelocityComponent.getValue() * deltaTime * 50;
 
       boolean hasHitX = false;
       boolean hasHitY = false;

@@ -42,8 +42,8 @@ public class MovementSystem extends EntitySystem {
 			// calculate old and new position values
 			float radians = MathUtils.degreesToRadians * velocity.getDirection();
 
-			float newX = position.getPosition().x + MathUtils.cos(radians) * velocity.getValue();
-			float newY = position.getPosition().y + MathUtils.sin(radians) * velocity.getValue();
+			float newX = position.getPosition().x + (MathUtils.cos(radians) * velocity.getValue()) * deltaTime * 50;
+			float newY = position.getPosition().y + (MathUtils.sin(radians) * velocity.getValue()) * deltaTime * 50;
 
 			// update position and rotation
 			Vector2 overlapVector = CollisionSystem.getCollisionWithWall(entity, shipObstacles, newX, newY);
