@@ -5,6 +5,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
@@ -25,7 +27,10 @@ public class DeathSystem extends EntitySystem {
     public void update(float deltaTime) {
         for (Entity entity : entities) {
             HealthComponent healthComponent = ComponentMappers.health.get(entity);
-            if (healthComponent.getHealth() <= 0) {
+            Vector2 position = ComponentMappers.position.get(entity).getPosition();
+            if (healthComponent.getHealth() <= 0 
+                || position.x < -100 || position.x > Gdx.graphics.getWidth() + 100
+                || position.y < -100 || position.y > Gdx.graphics.getHeight() + 100) {
                 ShapeWarsModel.removeFromEngine(entity);
             }
         }
