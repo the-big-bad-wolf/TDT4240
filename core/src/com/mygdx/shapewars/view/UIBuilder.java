@@ -1,9 +1,7 @@
 package com.mygdx.shapewars.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -22,8 +20,10 @@ public class UIBuilder {
     private final Skin skin;
     private TextFieldStyle fieldStyle;
     private TextButtonStyle buttonStyle;
+    private ImageButton.ImageButtonStyle imageButtonStyle;
     private TextField textField;
     private TextButton textButton;
+    private ImageButton imageButton;
 
     public UIBuilder(Stage stage) {
         this.stage = stage;
@@ -62,31 +62,15 @@ public class UIBuilder {
         return textButton;
     }
 
-    public TextButton buildInputButton(String text, float width, float height, float xPos, float yPos,
-            TextureRegionDrawable background) {
-        TextButton textButton = new TextButton(text, skin);
 
-        TextButton.TextButtonStyle textButtonStyle = textButton.getStyle();
-
-        // Set the background image for the text button
-        textButtonStyle.up = background;
-
-        // Set the background image for the text button when pressed
-        textButtonStyle.down = background; // You can use a different image for pressed state if desired
-
-        textButton.setSize(width, height);
-        textButton.setPosition(xPos, yPos);
-        stage.addActor(textButton);
-
-        return textButton;
-    }
-
-    public ImageButton buildImageButton(Texture texture, float width, float height, float xPos, float yPos) {
+    public ImageButton buildImageButton(Texture texture, Texture upTexture, float width, float height, float xPos, float yPos) {
         Drawable drawableImage = new TextureRegionDrawable(new TextureRegion(texture));
-        ImageButton imageButton = new ImageButton(drawableImage);
-
+        Drawable buttonUp = new TextureRegionDrawable(new TextureRegion(upTexture));
+        imageButton = new ImageButton(drawableImage);
         imageButton.setSize(width, height);
         imageButton.setPosition(xPos, yPos);
+
+        buildImageButtonStyle(skin, buttonUp);
         stage.addActor(imageButton);
 
         return imageButton;
@@ -96,50 +80,16 @@ public class UIBuilder {
         fieldStyle = new TextFieldStyle();
         fieldStyle.font = skin.getFont("sans");
         fieldStyle.font.getData().setScale(1f);
-        //fieldStyle.background = skin.getDrawable("default-scroll");
-        //fieldStyle.cursor = skin.getDrawable("default-round");
     }
 
     private void buildButtonStyle(Skin skin) {
         buttonStyle = new TextButtonStyle();
         buttonStyle.font = skin.getFont("sans");
         buttonStyle.font.getData().setScale(1f);
-        //buttonStyle.up = skin.getDrawable("default-round");
-        //buttonStyle.down = skin.getDrawable("default-round-down");
     }
 
-    public ImageButton buildImageButtonWithText(Texture texture, String text, float width, float height, float xPos,
-            float yPos) {
-        Drawable drawableImage = new TextureRegionDrawable(new TextureRegion(texture));
-        ImageButton imageButton = new ImageButton(drawableImage);
-
-        // Create a Label for the text
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("data/verdana39.fnt"),
-                Gdx.files.internal("data/verdana39.png"), false);
-        // labelStyle.font.getData().setScale(1.8f);
-        labelStyle.fontColor = Color.valueOf("7ba3b0");
-
-        Label ipAddressLabel = new Label(text, labelStyle);
-        ipAddressLabel.setAlignment(Align.center);
-        ipAddressLabel.setSize(width, height); // Set the size of the Label to match the ImageButton
-        ipAddressLabel.setPosition((width - ipAddressLabel.getWidth()) / 2, (height - ipAddressLabel.getHeight()) / 2); // Set
-                                                                                                                        // the
-                                                                                                                        // position
-                                                                                                                        // of
-                                                                                                                        // the
-                                                                                                                        // text
-                                                                                                                        // within
-                                                                                                                        // the
-                                                                                                                        // ImageButton
-
-        // Add the Label as a child actor to the ImageButton
-        imageButton.addActor(ipAddressLabel);
-
-        imageButton.setSize(width, height);
-        imageButton.setPosition(xPos, yPos);
-        stage.addActor(imageButton);
-
-        return imageButton;
+    private void buildImageButtonStyle(Skin skin, Drawable buttonUp) {
+        imageButtonStyle = new ImageButton.ImageButtonStyle();
+        imageButtonStyle.up = skin.newDrawable(buttonUp);
     }
 }

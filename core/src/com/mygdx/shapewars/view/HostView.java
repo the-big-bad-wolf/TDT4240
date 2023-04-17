@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Align;
@@ -25,9 +26,9 @@ public class HostView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
-    private ImageButton backButton;
-    private ImageButton startButton;
-    private ImageButton ipAddressField;
+    private TextButton backButton;
+    private TextButton startButton;
+    private TextButton ipAddressField;
     private Label ipLabel;
     private String ipAddress;
     private Sprite backgroundSprite;
@@ -118,14 +119,9 @@ public class HostView implements Screen {
         ipAddress = getIpAddress();
         ipLabel = uiBuilder.buildTextLabel("Your IP address:", allButtonsWidth, allButtonsHeight, ipAddressXPos,
                 ipAddressYPos + 100);
-        ipAddressField = uiBuilder.buildImageButtonWithText(new Texture("mainMenu/button3.png"), ipAddress,
-                ipAddressWidth, ipAddressHeight, ipAddressXPos,
-                ipAddressYPos);
-        startButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostStart.png"), allButtonsWidth,
-                allButtonsHeight, startButtonXPos, startButtonYPos);
-        backButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), allButtonsWidth, allButtonsHeight,
-                backButtonXPos,
-                backButtonYPos);
+        ipAddressField = uiBuilder.buildButton(ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
+        startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
+        backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
 
         addActionsToUI();
     }

@@ -7,7 +7,7 @@
 		"flip": false
 	},
 	"sans": {
-		"file": "OpenSans-Bold(2).fnt",
+		"file": "sans.fnt",
 		"scaledSize": -1,
 		"markupEnabled": false,
 		"flip": false
@@ -33,9 +33,9 @@
 		"a": 1
 	},
 	"blue": {
-		"r": 0.6627451,
-		"g": 0.88235295,
-		"b": 0.9372549,
+		"r": 0.48235294,
+		"g": 0.6392157,
+		"b": 0.6901961,
 		"a": 1
 	},
 	"gray": {
@@ -132,8 +132,7 @@
 "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
 	"default": {
 		"up": "round-gray",
-		"down": "round-dark-gray",
-		"over": "round-light-gray"
+		"down": "greyButton"
 	},
 	"toggle": {
 		"up": "round-gray",
@@ -162,8 +161,8 @@
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
 	"default": {
-		"font": "font",
-		"fontColor": "black"
+		"font": "sans",
+		"fontColor": "white"
 	},
 	"title": {
 		"font": "title",
@@ -245,6 +244,11 @@
 		"up": "round-gray",
 		"down": "round-dark-gray",
 		"over": "round-light-gray"
+	},
+	"default-nopress": {
+		"font": "sans",
+		"fontColor": "blue",
+		"up": "button3"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {

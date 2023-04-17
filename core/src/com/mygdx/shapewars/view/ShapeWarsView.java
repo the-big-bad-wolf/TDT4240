@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -33,7 +34,7 @@ public class ShapeWarsView implements Screen {
     private Sprite backgroundSprite;
     private ExtendViewport extendViewport;
     private ShapeWarsController controller;
-    private ImageButton menuButton;
+    private TextButton menuButton;
     private UIBuilder uiBuilder;
 
     public ShapeWarsView(ShapeWarsController controller) {
@@ -45,10 +46,9 @@ public class ShapeWarsView implements Screen {
         this.uiBuilder = new UIBuilder(this.stage);
         stage.setViewport(fitViewport);
 
-        // todo sophie: set phone to a really wide one with large borders. the button position is correct but I have to click on the border to the right to press the button
-        int buttonHeight = 128;
-        int buttonWidth = 256;
-        menuButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostBack.png"), buttonWidth, buttonHeight, fitViewport.getWorldWidth()-buttonWidth, fitViewport.getWorldHeight()- buttonHeight);
+        int buttonHeight = 80;
+        int buttonWidth = 150;
+        menuButton = uiBuilder.buildButton("Menu", buttonWidth, buttonHeight, fitViewport.getWorldWidth()-buttonWidth, fitViewport.getWorldHeight()- buttonHeight);
         addActionsToUI();
     }
 
