@@ -82,10 +82,15 @@ public class InputSystemDesktop extends InputSystem {
 
     @Override
     public boolean keyDown(int keycode) {
-        // keyDown is only used for firing as spamming bullets should not be allowed
-        if (keycode == Input.Keys.SPACE)
+        if (keycode == Input.Keys.SPACE || keycode == Input.Buttons.LEFT)
             firingFlag = true;
+        return false; // standard return value
+    }
 
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.LEFT)
+            firingFlag = true;
         return false; // standard return value
     }
 
