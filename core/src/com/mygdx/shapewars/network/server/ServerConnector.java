@@ -29,6 +29,9 @@ public class ServerConnector {
         this.server = new Server();
         this.server.start();
 
+        this.listener = new ServerListener(model);
+        this.server.addListener(listener);
+
         try {
             server.bind(25444, 25666);
         } catch (IOException e) {
@@ -65,13 +68,14 @@ public class ServerConnector {
         this.kryo.register(Array.class);
         this.kryo.register(Vector2.class);
         this.kryo.register(float[].class);
-
-        this.listener = new ServerListener(model);
-        this.server.addListener(listener);
     }
 
     public void dispose() throws IOException {
-        server.removeListener(listener);
+        try {
+            server.removeListener(listener);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         server.close();
     }
 }

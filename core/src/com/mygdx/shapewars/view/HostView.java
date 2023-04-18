@@ -131,8 +131,8 @@ public class HostView implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    controller.shapeWarsModel.dispose();
                     controller.setScreen(new MainMenuView(controller));
+                    controller.shapeWarsModel.dispose();
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No controller found");
                 }
