@@ -39,7 +39,7 @@ public class ClientView implements Screen {
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
 
-        Texture background = new Texture(Gdx.files.internal("mainMenu/hostButtonBackground.png"));
+        Texture background = new Texture(Gdx.files.internal("mainMenu/background.png"));
         backgroundSprite = new Sprite(background);
 
         // make menu resizable
@@ -114,9 +114,7 @@ public class ClientView implements Screen {
         float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float okButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
 
-        Skin skin = new Skin(Gdx.files.internal("data/custom.json"));
-
-        inputField = uiBuilder.buildTextField("Enter host IP address", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
+        inputField = uiBuilder.buildTextField("Enter host IP address", "default", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
 
         backButton = uiBuilder.buildButton("BACK", allButtonsWidth, allButtonsHeight,
                 backButtonXPos, backButtonYPos, "default");

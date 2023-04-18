@@ -30,10 +30,9 @@ public class UIBuilder {
         this.skin = new Skin(Gdx.files.internal("data/custom.json"));
     }
 
-    public TextField buildTextField(String text, float width, float height, float xPos, float yPos) {
-        textField = new TextField(text, skin);
-
-        buildTextFieldStyle(skin);
+    public TextField buildTextField(String text, String styleName, float width, float height, float xPos, float yPos) {
+        buildTextFieldStyle(skin, styleName);
+        textField = new TextField(text, fieldStyle);
         textField.setSize(width, height);
         textField.setPosition(xPos, yPos);
         textField.setAlignment(Align.center);
@@ -53,7 +52,6 @@ public class UIBuilder {
     }
 
     public TextButton buildButton(String text, float width, float height, float xPos, float yPos, String styleName) {
-        //textButton = new TextButton(text, skin);
         buildButtonStyle(skin, styleName);
         textButton = new TextButton(text, buttonStyle);
         textButton.setSize(width, height);
@@ -63,9 +61,8 @@ public class UIBuilder {
         return textButton;
     }
 
-    private void buildTextFieldStyle(Skin skin) {
-        fieldStyle = new TextFieldStyle();
-        fieldStyle.font = skin.getFont("sans");
+    private void buildTextFieldStyle(Skin skin, String styleName) {
+        fieldStyle = skin.get(styleName, TextFieldStyle.class);
         fieldStyle.font.getData().setScale(1f);
     }
 

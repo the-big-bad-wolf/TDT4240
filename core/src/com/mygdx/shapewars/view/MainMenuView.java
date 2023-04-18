@@ -31,7 +31,7 @@ public class MainMenuView implements Screen {
         this.controller = controller;
         this.uiBuilder = new UIBuilder(this.stage);
         buildUI();
-        Texture background = new Texture(Gdx.files.internal("mainMenu/background.png"));
+        Texture background = new Texture(Gdx.files.internal("mainMenu/mainBackground.png"));
         backgroundSprite = new Sprite(background);
         Gdx.input.setInputProcessor(stage);
     }

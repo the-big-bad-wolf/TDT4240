@@ -273,7 +273,7 @@
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
 	"default": {
-		"font": "sans",
+		"font": "font",
 		"fontColor": "blue",
 		"background": "button3",
 		"cursor": "horizontal-split-pane-blue"

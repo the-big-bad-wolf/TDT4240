@@ -21,6 +21,7 @@ public class TutorialView implements Screen {
 	private TextButton nextButton;
 	private int sourceInt;
 	private Sprite imageSprite;
+	private Sprite backgroundSprite;
 	private SpriteBatch batch;
 
 	public TutorialView(ShapeWarsController controller, int sourceInt) {
@@ -35,7 +36,7 @@ public class TutorialView implements Screen {
 
 	private void buildUI() {
 		float nextButtonsWidth = 250f;
-		float nextButtonsHeight = 100f;
+		float nextButtonsHeight = 80f;
 		float nextButtonXPos = Gdx.graphics.getWidth() / 2f - 250 / 2;
 		float nextButtonYPos = 0;
 
@@ -70,10 +71,15 @@ public class TutorialView implements Screen {
 
 	@Override
 	public void show() {
+		Texture background = new Texture(Gdx.files.internal("maps/mapExpansionGrass.png"));
+		backgroundSprite = new Sprite(background);
+
 		Texture image = new Texture(Gdx.files.internal("mainMenu/tutorial.png"));
 		imageSprite = new Sprite(image);
-		imageSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		imageSprite.setY(0);
+		imageSprite.setScale(1.1f);
+		imageSprite.setCenter(Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f);
+		//imageSprite.setPosition(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f);
+
 		Gdx.input.setInputProcessor(stage);
 		render(0);
 	}
@@ -89,6 +95,7 @@ public class TutorialView implements Screen {
 		controller.gameModel.batch.end();
 
 		batch.begin();
+		backgroundSprite.draw(batch);
 		imageSprite.draw(batch);
 		batch.end();
 
