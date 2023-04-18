@@ -37,8 +37,8 @@ public class DeathSystem extends PirateWarsSystem {
             HealthComponent healthComponent = ComponentMappers.health.get(entity);
             Vector2 position = ComponentMappers.position.get(entity).getPosition();
             if (healthComponent.getHealth() <= 0 
-                || position.x < -100 || position.x > Gdx.graphics.getWidth() + 100
-                || position.y < -100 || position.y > Gdx.graphics.getHeight() + 100) {
+                || position.x < -1000 || position.x > Gdx.graphics.getWidth() + 1000
+                || position.y < -1000 || position.y > Gdx.graphics.getHeight() + 1000) {
                 if (entity.getComponent(IdentityComponent.class) != null) {
                     SpriteComponent deadShipSprite = new SpriteComponent(SHIP_DEAD, SHIP_WIDTH, SHIP_HEIGHT);
                     deadShipSprite.getSprite().setPosition(position.x, position.y);
