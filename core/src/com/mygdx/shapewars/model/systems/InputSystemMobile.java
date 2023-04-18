@@ -20,6 +20,8 @@ public class InputSystemMobile extends InputSystem {
     private final int outerCircleRadius;
     private boolean movingJoystickShip;
     private boolean movingJoystickGun;
+    private int joystickShipPointer = -1;
+    private int joystickGunPointer = -1;
     private static volatile InputSystemMobile instance;
 
     private InputSystemMobile(ShapeWarsModel shapeWarsModel) {
@@ -51,25 +53,44 @@ public class InputSystemMobile extends InputSystem {
         Vector2 worldCoordinates = new Vector2(screenX, screenY);
         fitViewport.unproject(worldCoordinates);
 
-        movingJoystickShip = isCircleTouched(joystickShip.getOuterCircle(), screenX, screenY);
-        movingJoystickGun = isCircleTouched(joystickGun.getOuterCircle(), screenX, screenY);
-        if (isCircleTouched(firebutton.getOuterCircle(), screenX, screenY))
+        boolean joystickShipTouched = isCircleTouched(joystickShip.getOuterCircle(), screenX, screenY);
+        boolean joystickGunTouched = isCircleTouched(joystickGun.getOuterCircle(), screenX, screenY);
+
+        // Check which joystick was touched first and only move that one
+        if (joystickShipTouched && (joystickGunPointer == -1 || joystickShipPointer < joystickGunPointer)) {
+            joystickShipPointer = pointer;
+            movingJoystickShip = true;
+        }
+
+        if (joystickGunTouched && (joystickShipPointer == -1 || joystickGunPointer < joystickShipPointer)) {
+            joystickGunPointer = pointer;
+            movingJoystickGun = true;
+        }
+
+        if (isCircleTouched(firebutton.getOuterCircle(), screenX, screenY)) {
             firingFlag = true;
+        }
         return false;
     }
 
+
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // check which joystick the finger was lifted off of
-        if (screenX < Gdx.graphics.getWidth() / 2) {
+        if (pointer == joystickShipPointer) {
             joystickShip.getInnerCircle().setPosition(joystickShip.getOuterCircle().x, joystickShip.getOuterCircle().y);
             inputValue = 0;
             movingJoystickShip = false;
-        } else {
+            joystickShipPointer = -1;
+            System.out.println("Ship pointer finger lifted up");
+        }
+
+        if (pointer == joystickGunPointer) {
             joystickGun.getInnerCircle().setPosition(joystickGun.getOuterCircle().x, joystickGun.getOuterCircle().y);
             movingJoystickGun = false;
+            joystickGunPointer = -1;
+            System.out.println("Gun pointer finger lifted up");
         }
-        return false; // standard return value
+        return false;
     }
 
     @Override
@@ -78,7 +99,7 @@ public class InputSystemMobile extends InputSystem {
         fitViewport.unproject(worldCoordinates);
 
         // todo unite code?
-        if (movingJoystickShip) {
+        if (movingJoystickShip && pointer == joystickShipPointer) {
             float deltaX = worldCoordinates.x - joystickShip.getOuterCircle().x;
             float deltaY = worldCoordinates.y - joystickShip.getOuterCircle().y;
             float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -94,7 +115,7 @@ public class InputSystemMobile extends InputSystem {
             inputDirectionShip = angle;
             inputValue = MathUtils.clamp(deltaLength, 0, outerCircleRadius) / outerCircleRadius * MAX_SPEED;
         }
-        if (movingJoystickGun) {
+        if (movingJoystickGun && pointer == joystickGunPointer) {
             float deltaX = worldCoordinates.x - joystickGun.getOuterCircle().x;
             float deltaY = worldCoordinates.y - joystickGun.getOuterCircle().y;
             float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
