@@ -49,10 +49,8 @@ public class TutorialView implements Screen {
 
 		Texture image = new Texture(Gdx.files.internal("mainMenu/tutorial.png"));
 		imageSprite = new Sprite(image);
-		imageSprite.setScale(1f);
 		imageSprite.setSize(Gdx.graphics.getWidth()-200, Gdx.graphics.getHeight()-100);
 		imageSprite.setPosition(7, (Gdx.graphics.getHeight()- imageSprite.getHeight())/2f);
-		//imageSprite.setPosition(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f);
 
 		Gdx.input.setInputProcessor(stage);
 		render(0);
