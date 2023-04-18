@@ -1,8 +1,10 @@
 package com.mygdx.shapewars.config;
 
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
+import com.mygdx.shapewars.model.components.ParentComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
@@ -21,6 +23,8 @@ public abstract class GameConfig {
     public static final String ENEMY_DAMAGE_TWO = "enemy_damage_two.png";
     public static final String PLAYER_DEAD = "player_dead.png";
     public static final String ENEMY_DEAD = "enemy_dead.png";
+    public static final String SHIP_DEAD = "ship_dead.png";
     public static final String CANNON_BALL = "cannon_ball.png";
     public static final Family SHIP_FAMILY = Family.all(PositionComponent .class, VelocityComponent .class, SpriteComponent .class, HealthComponent .class, IdentityComponent.class).get();
+    public static final Family BULLET_FAMILY = Family.all(PositionComponent .class, VelocityComponent .class, SpriteComponent .class, HealthComponent .class, ParentComponent.class).exclude(IdentityComponent.class).get();
 }

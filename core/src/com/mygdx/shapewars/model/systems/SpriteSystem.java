@@ -10,6 +10,7 @@ import static com.mygdx.shapewars.config.GameConfig.PLAYER_DEAD;
 import static com.mygdx.shapewars.config.GameConfig.PLAYER_FULL_HEALTH;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -34,10 +35,9 @@ public class SpriteSystem extends PirateWarsSystem {
     private static volatile SpriteSystem instance;
 
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntities();
-        ships = engine.getEntitiesFor(
-                Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class,
-                        IdentityComponent.class).get());
+        entities = engine.getEntitiesFor(
+                Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class).get());
+        ships = engine.getEntitiesFor(SHIP_FAMILY);
     }
 
     private SpriteSystem(ShapeWarsModel shapeWarsModel) {

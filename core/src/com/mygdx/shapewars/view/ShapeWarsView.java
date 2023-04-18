@@ -118,8 +118,11 @@ public class ShapeWarsView implements Screen {
             spriteComponent.getSprite().draw(mapRenderer.getBatch());
 
             // render the aim helper if the player is alive
-            if (ComponentMappers.identity.get(entity) != null && ComponentMappers.identity.get(entity).getId() == model.shipId)
+            if (ComponentMappers.identity.get(entity) != null 
+                    && ComponentMappers.identity.get(entity).getId() == model.shipId 
+                    && ComponentMappers.health.get(entity) != null) {
                 model.aimHelp.draw(mapRenderer.getBatch());
+            }
         }
 
         mapRenderer.getBatch().end();

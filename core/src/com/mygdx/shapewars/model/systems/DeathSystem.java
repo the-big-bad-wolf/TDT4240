@@ -1,5 +1,9 @@
 package com.mygdx.shapewars.model.systems;
 
+import static com.mygdx.shapewars.config.GameConfig.SHIP_DEAD;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -9,6 +13,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
+import com.mygdx.shapewars.model.components.IdentityComponent;
+import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
 
 public class DeathSystem extends PirateWarsSystem {
@@ -33,7 +39,16 @@ public class DeathSystem extends PirateWarsSystem {
             if (healthComponent.getHealth() <= 0 
                 || position.x < -100 || position.x > Gdx.graphics.getWidth() + 100
                 || position.y < -100 || position.y > Gdx.graphics.getHeight() + 100) {
-                model.engine.removeEntity(entity);
+                if (entity.getComponent(IdentityComponent.class) != null) {
+                    SpriteComponent deadShipSprite = new SpriteComponent(SHIP_DEAD, SHIP_WIDTH, SHIP_HEIGHT);
+                    deadShipSprite.getSprite().setPosition(position.x, position.y);
+                    deadShipSprite.setRotation(ComponentMappers.velocity.get(entity).getDirection());
+                    entity.remove(SpriteComponent.class);
+                    entity.add(deadShipSprite);
+                    entity.remove(HealthComponent.class);
+                } else {
+                    model.engine.removeEntity(entity);
+                }
             }
         }
     }

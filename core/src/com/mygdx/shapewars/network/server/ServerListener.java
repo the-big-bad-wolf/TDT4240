@@ -1,6 +1,7 @@
 package com.mygdx.shapewars.network.server;
 
 import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
+import static com.mygdx.shapewars.config.GameConfig.BULLET_FAMILY;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -71,9 +72,7 @@ public class ServerListener extends Listener {
             ArrayList<ShipData> shipDataArrayList = new ArrayList<>();
             ArrayList<BulletData> bulletDataArrayList = new ArrayList<>();
 
-
-            Family bulletFamily = Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class).exclude(IdentityComponent.class).get();
-            ImmutableArray<Entity> bullets = model.engine.getEntitiesFor(bulletFamily);
+            ImmutableArray<Entity> bullets = model.engine.getEntitiesFor(BULLET_FAMILY);
 
             for (int i = 0; i < ships.size(); i++) {
                 Entity ship = ships.get(i);

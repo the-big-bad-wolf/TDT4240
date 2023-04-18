@@ -1,14 +1,14 @@
 package com.mygdx.shapewars.model.systems;
 
+import static com.mygdx.shapewars.config.GameConfig.BULLET_FAMILY;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
@@ -30,9 +30,7 @@ public class RicochetSystem extends PirateWarsSystem {
   };
 
   public void addedToEngine(Engine engine) {
-    bullets = engine.getEntitiesFor(
-        Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class)
-            .exclude(IdentityComponent.class).get());
+    bullets = engine.getEntitiesFor(BULLET_FAMILY);
   }
 
   public void update(float deltaTime) {
