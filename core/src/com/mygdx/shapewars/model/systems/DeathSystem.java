@@ -30,9 +30,9 @@ public class DeathSystem extends PirateWarsSystem {
         for (Entity entity : entities) {
             HealthComponent healthComponent = ComponentMappers.health.get(entity);
             Vector2 position = ComponentMappers.position.get(entity).getPosition();
-            if (healthComponent.getHealth() <= 0 
-                || position.x < -100 || position.x > Gdx.graphics.getWidth() + 100
-                || position.y < -100 || position.y > Gdx.graphics.getHeight() + 100) {
+            if (healthComponent.getHealth() <= 0
+                || position.x < -1000 || position.x > Gdx.graphics.getWidth() + 1000
+                || position.y < -1000 || position.y > Gdx.graphics.getHeight() + 1000) {
                 model.engine.removeEntity(entity);
             }
         }
