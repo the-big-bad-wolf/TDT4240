@@ -42,15 +42,6 @@ public class UIBuilder {
         return textField;
     }
 
-    public Label buildTextLabel(String text, float width, float height, float xPos, float yPos) {
-        Label label = new Label(text, skin);
-        label.setWidth(width);
-        label.setHeight(height);
-        label.setPosition(xPos, yPos);
-        stage.addActor(label);
-        return label;
-    }
-
     public TextButton buildButton(String text, float width, float height, float xPos, float yPos, String styleName) {
         buildButtonStyle(skin, styleName);
         textButton = new TextButton(text, buttonStyle);

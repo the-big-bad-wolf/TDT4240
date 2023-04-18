@@ -117,9 +117,7 @@ public class HostView implements Screen {
         float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         ipAddress = getIpAddress();
-        ipLabel = uiBuilder.buildTextLabel("Your IP address:", allButtonsWidth, allButtonsHeight, ipAddressXPos,
-                ipAddressYPos + 100);
-        ipAddressField = uiBuilder.buildButton("Your IP address: " + ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos, "ipaddress");
+        ipAddressField = uiBuilder.buildButton("Your IP address:  " + ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos, "ipaddress");
         startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos, "default");
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos, "default");
 

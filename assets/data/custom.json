@@ -18,6 +18,12 @@
 		"markupEnabled": false,
 		"flip": false
 	},
+	"sanslight": {
+		"file": "sanslight.fnt",
+		"scaledSize": -1,
+		"markupEnabled": false,
+		"flip": false
+	},
 	"title": {
 		"file": "font-title-export.fnt",
 		"scaledSize": -1,
@@ -264,7 +270,7 @@
 		"over": "mainMenuOver"
 	},
 	"ipaddress": {
-		"font": "font",
+		"font": "sanslight",
 		"fontColor": "blue",
 		"up": "button3",
 		"down": "button3",
@@ -273,7 +279,7 @@
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
 	"default": {
-		"font": "font",
+		"font": "sanslight",
 		"fontColor": "blue",
 		"background": "button3",
 		"cursor": "horizontal-split-pane-blue"
