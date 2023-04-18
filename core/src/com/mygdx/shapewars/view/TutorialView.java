@@ -37,7 +37,7 @@ public class TutorialView implements Screen {
 		float nextButtonsWidth = 250f;
 		float nextButtonsHeight = 100f;
 		float nextButtonXPos = Gdx.graphics.getWidth() / 2f - 250 / 2;
-		float nextButtonYPos = 10;
+		float nextButtonYPos = 0;
 
 		nextButton = uiBuilder.buildButton("Next", nextButtonsWidth, nextButtonsHeight,
 				nextButtonXPos,
@@ -71,8 +71,8 @@ public class TutorialView implements Screen {
 	public void show() {
 		Texture image = new Texture(Gdx.files.internal("mainMenu/tutorial.png"));
 		imageSprite = new Sprite(image);
-		imageSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 100);
-		imageSprite.setY(100);
+		imageSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		imageSprite.setY(0);
 		Gdx.input.setInputProcessor(stage);
 		render(0);
 	}
