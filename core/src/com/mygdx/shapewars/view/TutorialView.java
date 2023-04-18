@@ -41,7 +41,8 @@ public class TutorialView implements Screen {
 
 		nextButton = uiBuilder.buildButton("Next", nextButtonsWidth, nextButtonsHeight,
 				nextButtonXPos,
-				nextButtonYPos);
+				nextButtonYPos,
+				"redVersion");
 
 		addActionsToUI();
 	}

@@ -48,7 +48,7 @@ public class ShapeWarsView implements Screen {
 
         int buttonHeight = 80;
         int buttonWidth = 150;
-        menuButton = uiBuilder.buildButton("Menu", buttonWidth, buttonHeight, fitViewport.getWorldWidth()-buttonWidth, fitViewport.getWorldHeight()- buttonHeight);
+        menuButton = uiBuilder.buildButton("Menu", buttonWidth, buttonHeight, fitViewport.getWorldWidth()-buttonWidth, fitViewport.getWorldHeight()- buttonHeight, "redVersion");
         addActionsToUI();
     }
 

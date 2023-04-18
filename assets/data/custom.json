@@ -12,6 +12,12 @@
 		"markupEnabled": false,
 		"flip": false
 	},
+	"sansbold": {
+		"file": "sansbold.fnt",
+		"scaledSize": -1,
+		"markupEnabled": false,
+		"flip": false
+	},
 	"title": {
 		"file": "font-title-export.fnt",
 		"scaledSize": -1,
@@ -39,9 +45,15 @@
 		"a": 1
 	},
 	"gray": {
-		"r": 0.68333334,
-		"g": 0.68333334,
-		"b": 0.68333334,
+		"r": 0.4,
+		"g": 0.4,
+		"b": 0.4,
+		"a": 1
+	},
+	"green": {
+		"r": 0.15686275,
+		"g": 0.38431373,
+		"b": 0.20392157,
 		"a": 1
 	},
 	"white": {
@@ -131,8 +143,9 @@
 },
 "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
 	"default": {
-		"up": "round-gray",
-		"down": "greyButton"
+		"up": "button3",
+		"down": "greyButton",
+		"over": "buttonhover"
 	},
 	"toggle": {
 		"up": "round-gray",
@@ -140,14 +153,18 @@
 		"over": "round-light-gray",
 		"checked": "round-dark-gray",
 		"checkedOver": "round-light-gray"
+	},
+	"tutorial": {
+		"up": "button3",
+		"down": "greyButton"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle": {
 	"default": {
-		"font": "font",
-		"up": "round-gray",
-		"down": "round-dark-gray",
-		"over": "round-light-gray"
+		"font": "sans",
+		"up": "button3",
+		"down": "greyButton",
+		"over": "buttonhover"
 	},
 	"toggle": {
 		"font": "font",
@@ -227,28 +244,31 @@
 		"font": "sans",
 		"fontColor": "blue",
 		"up": "button3",
-		"down": "greyButton"
+		"down": "greyButton",
+		"over": "buttonhover"
 	},
-	"toggle": {
-		"font": "font",
-		"fontColor": "black",
-		"up": "round-gray",
-		"down": "round-dark-gray",
-		"over": "round-light-gray",
-		"checked": "round-dark-gray",
-		"checkedOver": "round-light-gray"
-	},
-	"special": {
-		"font": "title",
-		"fontColor": "black",
-		"up": "round-gray",
-		"down": "round-dark-gray",
-		"over": "round-light-gray"
-	},
-	"default-nopress": {
+	"redVersion": {
 		"font": "sans",
+		"fontColor": "gray",
+		"overFontColor": "gray",
+		"up": "buttonred",
+		"down": "greyButton",
+		"over": "buttonhover"
+	},
+	"mainMenu": {
+		"font": "sansbold",
+		"fontColor": "green",
+		"overFontColor": "gray",
+		"up": "mainMenu",
+		"down": "greyButton",
+		"over": "mainMenuOver"
+	},
+	"ipaddress": {
+		"font": "font",
 		"fontColor": "blue",
-		"up": "button3"
+		"up": "button3",
+		"down": "button3",
+		"over": "button3"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {

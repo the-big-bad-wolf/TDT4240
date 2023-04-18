@@ -52,28 +52,15 @@ public class UIBuilder {
         return label;
     }
 
-    public TextButton buildButton(String text, float width, float height, float xPos, float yPos) {
-        textButton = new TextButton(text, skin);
-        buildButtonStyle(skin);
+    public TextButton buildButton(String text, float width, float height, float xPos, float yPos, String styleName) {
+        //textButton = new TextButton(text, skin);
+        buildButtonStyle(skin, styleName);
+        textButton = new TextButton(text, buttonStyle);
         textButton.setSize(width, height);
         textButton.setPosition(xPos, yPos);
         stage.addActor(textButton);
 
         return textButton;
-    }
-
-
-    public ImageButton buildImageButton(Texture texture, Texture upTexture, float width, float height, float xPos, float yPos) {
-        Drawable drawableImage = new TextureRegionDrawable(new TextureRegion(texture));
-        Drawable buttonUp = new TextureRegionDrawable(new TextureRegion(upTexture));
-        imageButton = new ImageButton(drawableImage);
-        imageButton.setSize(width, height);
-        imageButton.setPosition(xPos, yPos);
-
-        buildImageButtonStyle(skin, buttonUp);
-        stage.addActor(imageButton);
-
-        return imageButton;
     }
 
     private void buildTextFieldStyle(Skin skin) {
@@ -82,9 +69,8 @@ public class UIBuilder {
         fieldStyle.font.getData().setScale(1f);
     }
 
-    private void buildButtonStyle(Skin skin) {
-        buttonStyle = new TextButtonStyle();
-        buttonStyle.font = skin.getFont("sans");
+    private void buildButtonStyle(Skin skin, String styleName) {
+        buttonStyle = skin.get(styleName, TextButtonStyle.class);
         buttonStyle.font.getData().setScale(1f);
     }
 

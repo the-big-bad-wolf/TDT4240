@@ -119,9 +119,9 @@ public class HostView implements Screen {
         ipAddress = getIpAddress();
         ipLabel = uiBuilder.buildTextLabel("Your IP address:", allButtonsWidth, allButtonsHeight, ipAddressXPos,
                 ipAddressYPos + 100);
-        ipAddressField = uiBuilder.buildButton(ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos);
-        startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
-        backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos);
+        ipAddressField = uiBuilder.buildButton("Your IP address: " + ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos, "ipaddress");
+        startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos, "default");
+        backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos, "default");
 
         addActionsToUI();
     }

@@ -119,8 +119,8 @@ public class ClientView implements Screen {
         inputField = uiBuilder.buildTextField("Enter host IP address", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
 
         backButton = uiBuilder.buildButton("BACK", allButtonsWidth, allButtonsHeight,
-                backButtonXPos, backButtonYPos);
-        okButton = uiBuilder.buildButton("OK", allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos);
+                backButtonXPos, backButtonYPos, "default");
+        okButton = uiBuilder.buildButton("OK", allButtonsWidth, allButtonsHeight, okButtonXPos, okButtonYPos, "default");
 
         addActionsToUI();
     }

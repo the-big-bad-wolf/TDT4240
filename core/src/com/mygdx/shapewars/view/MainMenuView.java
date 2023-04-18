@@ -21,9 +21,9 @@ public class MainMenuView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
-    private ImageButton startButton;
-    private ImageButton hostButton;
-    private ImageButton joinButton;
+    private TextButton startButton;
+    private TextButton hostButton;
+    private TextButton joinButton;
     private Sprite backgroundSprite;
 
     public MainMenuView(ShapeWarsController controller) {
@@ -99,9 +99,9 @@ public class MainMenuView implements Screen {
         float joinButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
         float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
 
-        startButton = uiBuilder.buildImageButton(new Texture("mainMenu/startButton.png"), new Texture("mainMenu/startButtonUp.png"), allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos);
-        joinButton = uiBuilder.buildImageButton(new Texture("mainMenu/JoinButton.png"), new Texture("mainMenu/startButtonUp.png"), allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos);
-        hostButton = uiBuilder.buildImageButton(new Texture("mainMenu/hostButton.png"), new Texture("mainMenu/startButtonUp.png"), allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos);
+        startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos, "mainMenu");
+        joinButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos, "mainMenu");
+        hostButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos, "mainMenu");
 
         addActionsToUI();
     }
