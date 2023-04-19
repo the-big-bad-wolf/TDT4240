@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
 public class TutorialView implements Screen {
@@ -49,8 +50,8 @@ public class TutorialView implements Screen {
 
 		Texture image = new Texture(Gdx.files.internal("mainMenu/tutorial.png"));
 		imageSprite = new Sprite(image);
-		imageSprite.setSize(Gdx.graphics.getWidth()-200, Gdx.graphics.getHeight()-100);
-		imageSprite.setPosition(7, (Gdx.graphics.getHeight()- imageSprite.getHeight())/2f);
+		imageSprite.setSize(Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 100);
+		imageSprite.setPosition(7, (Gdx.graphics.getHeight() - imageSprite.getHeight()) / 2f);
 
 		Gdx.input.setInputProcessor(stage);
 		render(0);
@@ -68,7 +69,8 @@ public class TutorialView implements Screen {
 
 		batch.begin();
 		backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
-		backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth())/2, (stage.getViewport().getWorldHeight()- backgroundSprite.getHeight()) / 2);
+		backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
+				(stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
 		backgroundSprite.draw(batch);
 		imageSprite.draw(batch);
 		batch.end();
@@ -109,7 +111,7 @@ public class TutorialView implements Screen {
 		float nextButtonsWidth = 180f;
 		float nextButtonsHeight = 100f;
 		float nextButtonXPos = Gdx.graphics.getWidth() - nextButtonsWidth;
-		float nextButtonYPos = (Gdx.graphics.getHeight() - nextButtonsHeight)/2f;
+		float nextButtonYPos = (Gdx.graphics.getHeight() - nextButtonsHeight) / 2f;
 
 		nextButton = uiBuilder.buildButton("Next", nextButtonsWidth, nextButtonsHeight,
 				nextButtonXPos,
@@ -131,7 +133,12 @@ public class TutorialView implements Screen {
 					if (sourceInt == 1) {
 						controller.setScreen(new ClientView(controller));
 					}
+					if (sourceInt == 2) {
 
+						controller.generateShapeWarsModel(Role.Server, "");
+						controller.shapeWarsModel.generateEntities();
+						controller.setScreen(new ShapeWarsView(controller));
+					}
 				} catch (NullPointerException | UnknownHostException nullPointerException) {
 					System.out.println("No controller found");
 				}

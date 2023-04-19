@@ -56,7 +56,8 @@ public class MainMenuView implements Screen {
 
         controller.gameModel.batch.begin();
         backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
-        backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth())/2, (stage.getViewport().getWorldHeight()- backgroundSprite.getHeight()) / 2);
+        backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
+                (stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
         backgroundSprite.draw(controller.gameModel.batch);
         controller.gameModel.batch.end();
 
@@ -99,9 +100,12 @@ public class MainMenuView implements Screen {
         float joinButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth / 2;
         float joinButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 300;
 
-        startButton = uiBuilder.buildButton("Start Game", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos, "mainMenu");
-        joinButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos, "mainMenu");
-        hostButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos, "mainMenu");
+        startButton = uiBuilder.buildButton("Training Mode", allButtonsWidth, allButtonsHeight, startButtonXPos,
+                startButtonYPos, "mainMenu");
+        joinButton = uiBuilder.buildButton("Join", allButtonsWidth, allButtonsHeight, joinButtonXPos, joinButtonYPos,
+                "mainMenu");
+        hostButton = uiBuilder.buildButton("Host", allButtonsWidth, allButtonsHeight, hostButtonXPos, hostButtonYPos,
+                "mainMenu");
 
         addActionsToUI();
     }
@@ -112,9 +116,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.generateShapeWarsModel(Role.Server, "");
-                    controller.shapeWarsModel.generateEntities();
-                    controller.setScreen(new ShapeWarsView(controller));
+                    controller.setScreen(new TutorialView(controller, 2));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }
