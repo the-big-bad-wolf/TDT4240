@@ -24,11 +24,11 @@ public class SystemFactory {
         systems.add(SpriteSystem.getInstance(model));
         systems.add(launcher == Launcher.Desktop ?
                 InputSystemDesktop.getInstance(model) : InputSystemMobile.getInstance(model));
+        systems.add(DeathSystem.getInstance(model));
 
         if (role == Role.Server) {
             systems.add(MovementSystem.getInstance(model.shipObstacles));
             systems.add(RicochetSystem.getInstance(model.bulletObstacles));
-            systems.add(DeathSystem.getInstance(model));
             systems.add(DamageSystem.getInstance());
         }
         return systems;
