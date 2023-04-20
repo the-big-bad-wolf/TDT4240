@@ -5,6 +5,7 @@ import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.GameModel;
 import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.shapewars.view.ClientWaitingView;
 import com.mygdx.shapewars.view.MainMenuView;
 import com.mygdx.shapewars.view.ShapeWarsView;
 
@@ -24,7 +25,7 @@ public class ShapeWarsController extends Game {
     }
 
     public void render() {
-        if (this.screen instanceof ShapeWarsView) {
+        if (this.screen instanceof ShapeWarsView || this.screen instanceof ClientWaitingView) {
             shapeWarsModel.update();
         }
         super.render();

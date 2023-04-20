@@ -2,28 +2,20 @@ package com.mygdx.shapewars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.controller.ShapeWarsController;
-
-import javax.swing.GroupLayout;
 
 public class ClientView implements Screen {
     private final Stage stage;
@@ -141,11 +133,8 @@ public class ClientView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 System.out.println(inputField.getText());
-                // todo sanitise ip address input
-                // todo can this code be improved?
                 controller.generateShapeWarsModel(Role.Client, inputField.getText(), "");
-                if (!(controller.getScreen() instanceof MainMenuView))
-                    controller.setScreen(new ShapeWarsView(controller));
+                controller.setScreen(new ClientWaitingView(controller));
             }
         });
 
