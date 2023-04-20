@@ -31,7 +31,7 @@ public class ClientView implements Screen {
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
 
-        Texture background = new Texture(Gdx.files.internal("mainMenu/background.png"));
+        Texture background = new Texture(Gdx.files.internal("images/background.png"));
         backgroundSprite = new Sprite(background);
 
         // make menu resizable
