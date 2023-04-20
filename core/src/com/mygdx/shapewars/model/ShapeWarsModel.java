@@ -35,6 +35,8 @@ import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.Firebutton;
+import com.mygdx.shapewars.view.ShapeWarsView;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,23 +73,24 @@ public class ShapeWarsModel {
         this.gameModel = gameModel;
         this.controller = controller;
         this.selectedMap = selectedMap;
+        this.engine = new Engine();
 
         if (this.role == Role.Server) {
             this.shipId = 0;
             this.deviceShipMapping = new HashMap<>();
             deviceShipMapping.put(this.gameModel.deviceId, shipId);
             this.serverConnector = new ServerConnector(this);
+            this.generateWorld(); // this happens in update() for the client as it needs to wait for the map
         } else {
             this.clientConnector = new ClientConnector(this, serverIpAddress);
         }
     }
 
-    public void generateEntities() {
+    public void generateWorld() {
         this.multiplexer = new InputMultiplexer();
 
         TmxMapLoader loader = new TmxMapLoader();
         map = loader.load(selectedMap.isEmpty() ? "maps/pirateMap.tmx" : this.selectedMap);
-        engine = new Engine();
 
         OrthographicCamera camera = new OrthographicCamera();
         float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
@@ -118,9 +121,9 @@ public class ShapeWarsModel {
                 bulletObstacles.add(rect);
             }
         }
+    }
 
-
-
+    public void generateEntities() {
 
         if (this.role == Role.Server) {
             numPlayers = deviceShipMapping.size();
@@ -175,11 +178,16 @@ public class ShapeWarsModel {
     public void update() {
         if (role == Role.Client) {
             if (!isGameActive) {
-                // here send the keep alive requests
                 clientConnector.sendLobbyRequest(gameModel.deviceId);
+                if (!this.selectedMap.isEmpty()) {
+                    generateWorld(); // todo this is called multiple times
+                }
             }
+
             if (createEntitiesFlag) {
                 createEntitiesFlag = false;
+                controller.getScreen().dispose();
+                controller.setScreen(new ShapeWarsView(controller));
                 generateEntities();
             }
         }
