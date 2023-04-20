@@ -5,9 +5,10 @@ import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.shapewars.controller.Joystick;
 import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.Firebutton;
 import com.mygdx.shapewars.model.helperSystems.InputSystem;
@@ -88,42 +89,39 @@ public class InputSystemMobile extends InputSystem {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+        if (movingJoystickShip && pointer == joystickShipPointer) {
+            Vector3 delta = getJoystickDelta(screenX, screenY, joystickShip);
+            joystickShip.getInnerCircle().setPosition(joystickShip.getOuterCircle().x + delta.x, joystickShip.getOuterCircle().y + delta.y);
+            inputDirectionShip = getAngle(delta.x, delta.y);
+            inputValue = MathUtils.clamp(delta.z, 0, JOYSTICK_OUTER_CIRCLE_RADIUS) / JOYSTICK_OUTER_CIRCLE_RADIUS * MAX_SPEED;
+        }
+        if (movingJoystickGun && pointer == joystickGunPointer) {
+            Vector3 delta = getJoystickDelta(screenX, screenY, joystickGun);
+            joystickGun.getInnerCircle().setPosition(joystickGun.getOuterCircle().x + delta.x, joystickGun.getOuterCircle().y + delta.y);
+            inputDirectionGun = getAngle(delta.x, delta.y);
+        }
+        return false; // standard return value
+    }
+
+    // return the movement deltas of the joystick
+    public Vector3 getJoystickDelta(int screenX, int screenY, Joystick joystick) {
         Vector2 worldCoordinates = new Vector2(screenX, screenY);
         fitViewport.unproject(worldCoordinates);
 
-        // todo unite code?
-        if (movingJoystickShip && pointer == joystickShipPointer) {
-            float deltaX = worldCoordinates.x - joystickShip.getOuterCircle().x;
-            float deltaY = worldCoordinates.y - joystickShip.getOuterCircle().y;
-            float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        float deltaX = worldCoordinates.x - joystick.getOuterCircle().x;
+        float deltaY = worldCoordinates.y - joystick.getOuterCircle().y;
+        float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            float angle = MathUtils.atan2(deltaY, deltaX) * MathUtils.radiansToDegrees;
-
-            float maxRadius = joystickShip.getOuterCircle().radius;
-            if (deltaLength > maxRadius) {
-                deltaX = deltaX * maxRadius / deltaLength;
-                deltaY = deltaY * maxRadius / deltaLength;
-            }
-            joystickShip.getInnerCircle().setPosition(joystickShip.getOuterCircle().x + deltaX, joystickShip.getOuterCircle().y + deltaY);
-            inputDirectionShip = angle;
-            inputValue = MathUtils.clamp(deltaLength, 0, JOYSTICK_OUTER_CIRCLE_RADIUS) / JOYSTICK_OUTER_CIRCLE_RADIUS * MAX_SPEED;
+        if (deltaLength > JOYSTICK_OUTER_CIRCLE_RADIUS) {
+            deltaX = deltaX * JOYSTICK_OUTER_CIRCLE_RADIUS / deltaLength;
+            deltaY = deltaY * JOYSTICK_OUTER_CIRCLE_RADIUS / deltaLength;
         }
-        if (movingJoystickGun && pointer == joystickGunPointer) {
-            float deltaX = worldCoordinates.x - joystickGun.getOuterCircle().x;
-            float deltaY = worldCoordinates.y - joystickGun.getOuterCircle().y;
-            float deltaLength = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        return new Vector3(deltaX, deltaY, deltaLength);
+    }
 
-            float angle = MathUtils.atan2(deltaY, deltaX) * MathUtils.radiansToDegrees;
-
-            float maxRadius = joystickGun.getOuterCircle().radius;
-            if (deltaLength > maxRadius) {
-                deltaX = deltaX * maxRadius / deltaLength;
-                deltaY = deltaY * maxRadius / deltaLength;
-            }
-            joystickGun.getInnerCircle().setPosition(joystickGun.getOuterCircle().x + deltaX, joystickGun.getOuterCircle().y + deltaY);
-            inputDirectionGun = angle;
-        }
-        return false; // standard return value
+    public float getAngle(float x, float y) {
+        return MathUtils.atan2(y,x) * MathUtils.radiansToDegrees;
     }
 
     private boolean isCircleTouched(Circle circle, int screenX, int screenY) {
