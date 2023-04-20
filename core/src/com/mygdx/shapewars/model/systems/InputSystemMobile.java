@@ -2,7 +2,6 @@ package com.mygdx.shapewars.model.systems;
 
 import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.shapewars.controller.Joystick;
@@ -81,14 +80,12 @@ public class InputSystemMobile extends InputSystem {
             inputValue = 0;
             movingJoystickShip = false;
             joystickShipPointer = -1;
-            System.out.println("Ship pointer finger lifted up");
         }
 
         if (pointer == joystickGunPointer) {
             joystickGun.getInnerCircle().setPosition(joystickGun.getOuterCircle().x, joystickGun.getOuterCircle().y);
             movingJoystickGun = false;
             joystickGunPointer = -1;
-            System.out.println("Gun pointer finger lifted up");
         }
         return false;
     }

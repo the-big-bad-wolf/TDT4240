@@ -1,7 +1,6 @@
 package com.mygdx.shapewars.config;
 
 import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.ParentComponent;
@@ -15,6 +14,8 @@ public abstract class GameConfig {
     public static final int SHIP_WIDTH = 160;
     public static final int SHIP_HEIGHT = 120;
     public static final int MAX_BULLET_HEALTH = 3;
+    public static final int SHIP_OBSTACLE_LAYER = 5;
+    public static final int BULLET_OBSTACLE_LAYER = 6;
     public static final String PLAYER_FULL_HEALTH = "player_full_health.png";
     public static final String PLAYER_DAMAGE_ONE = "player_damage_one.png";
     public static final String PLAYER_DAMAGE_TWO = "player_damage_two.png";
