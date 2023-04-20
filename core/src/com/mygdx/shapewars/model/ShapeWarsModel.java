@@ -61,6 +61,7 @@ public class ShapeWarsModel {
     public boolean createEntitiesFlag;
     public UpdateSystemClient updateSystemClient;
     public UpdateSystemServer updateSystemServer;
+    public String selectedMap;
     public InputMultiplexer multiplexer;
     public Sprite aimHelp;
     public List<PirateWarsSystem> systems;
@@ -69,25 +70,23 @@ public class ShapeWarsModel {
         this.role = role;
         this.gameModel = gameModel;
         this.controller = controller;
+        this.selectedMap = selectedMap;
 
+        if (this.role == Role.Server) {
+            this.shipId = 0;
+            this.deviceShipMapping = new HashMap<>();
+            deviceShipMapping.put(this.gameModel.deviceId, shipId);
+            this.serverConnector = new ServerConnector(this);
+        } else {
+            this.clientConnector = new ClientConnector(this, serverIpAddress);
+        }
+    }
+
+    public void generateEntities() {
         this.multiplexer = new InputMultiplexer();
 
         TmxMapLoader loader = new TmxMapLoader();
-        /*
-            current map structure:
-            0 = groundLayer
-            1 = collisionLayer
-            2 = bulletLayer
-            3 = spawnLayer
-            4 = collisionObjectLayer (defines the Polygons for collision detection)
-            5, 6 ... = non-existent yet
-         */
-        if (selectedMap.isEmpty()) {
-            map = loader.load("maps/pirateMap.tmx"); // make server send this AFTER sophie is done
-        }
-        else {
-            map = loader.load(selectedMap);
-        }
+        map = loader.load(selectedMap.isEmpty() ? "maps/pirateMap.tmx" : this.selectedMap);
         engine = new Engine();
 
         OrthographicCamera camera = new OrthographicCamera();
@@ -101,8 +100,7 @@ public class ShapeWarsModel {
         joystickShip = new Joystick(180, 180, 120, 50);
         joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth()-180, 180, 120, 50);
 
-        // TODO right layer
-        shipObstacles = new ArrayList<Polygon>();
+        shipObstacles = new ArrayList<>();
         // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
         for (MapObject object : map.getLayers().get(5).getObjects()) {
             if (object instanceof PolygonMapObject) {
@@ -111,8 +109,7 @@ public class ShapeWarsModel {
             }
         }
 
-        // TODO right layer
-        bulletObstacles = new ArrayList<Polygon>();
+        bulletObstacles = new ArrayList<>();
 
         // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
         for (MapObject object : map.getLayers().get(6).getObjects()) {
@@ -122,18 +119,9 @@ public class ShapeWarsModel {
             }
         }
 
-        if (this.role == Role.Server) {
-            this.shipId = 0;
-            this.deviceShipMapping = new HashMap<>();
-            deviceShipMapping.put(this.gameModel.deviceId, shipId);
-            this.serverConnector = new ServerConnector(this);
-        } else {
-            this.clientConnector = new ClientConnector(this, serverIpAddress);
-        }
 
-    }
 
-    public void generateEntities() {
+
         if (this.role == Role.Server) {
             numPlayers = deviceShipMapping.size();
             TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);

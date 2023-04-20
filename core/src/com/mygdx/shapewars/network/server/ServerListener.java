@@ -4,7 +4,6 @@ import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
 import static com.mygdx.shapewars.config.GameConfig.BULLET_FAMILY;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -13,7 +12,6 @@ import com.mygdx.shapewars.model.components.ComponentMappers;
 import com.mygdx.shapewars.model.components.HealthComponent;
 import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.network.data.BulletData;
 import com.mygdx.shapewars.network.data.GameResponse;
@@ -48,7 +46,7 @@ public class ServerListener extends Listener {
             if (!model.deviceShipMapping.containsKey(request.deviceId))
                 model.deviceShipMapping.put(request.deviceId, model.deviceShipMapping.size());
             connection.sendUDP(new LobbyResponse(model.deviceShipMapping.size(),
-                    model.deviceShipMapping.get(request.deviceId), model.isGameActive));
+                    model.deviceShipMapping.get(request.deviceId), model.selectedMap, model.isGameActive));
         }
 
         if (object instanceof InputRequest) {

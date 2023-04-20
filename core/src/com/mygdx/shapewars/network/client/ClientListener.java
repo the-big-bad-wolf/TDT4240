@@ -31,6 +31,7 @@ public class ClientListener extends Listener {
             LobbyResponse response = (LobbyResponse) object;
             model.numPlayers = response.numPlayers;
             model.shipId = response.clientShipId;
+            model.selectedMap = response.selectedMap;
             // the ordering here is important!
             model.createEntitiesFlag = !model.isGameActive && response.isGameActive;
             model.isGameActive = response.isGameActive;
