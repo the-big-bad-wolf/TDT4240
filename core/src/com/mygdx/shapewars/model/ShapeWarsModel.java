@@ -65,7 +65,7 @@ public class ShapeWarsModel {
     public Sprite aimHelp;
     public List<PirateWarsSystem> systems;
 
-    public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress) {
+    public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress, String selectedMap) {
         this.role = role;
         this.gameModel = gameModel;
         this.controller = controller;
@@ -82,7 +82,12 @@ public class ShapeWarsModel {
             4 = collisionObjectLayer (defines the Polygons for collision detection)
             5, 6 ... = non-existent yet
          */
-        map = loader.load("maps/pirateMap.tmx"); // make server send this AFTER sophie is done
+        if (selectedMap.isEmpty()) {
+            map = loader.load("maps/pirateMap.tmx"); // make server send this AFTER sophie is done
+        }
+        else {
+            map = loader.load(selectedMap);
+        }
         engine = new Engine();
 
         OrthographicCamera camera = new OrthographicCamera();

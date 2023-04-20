@@ -134,10 +134,7 @@ public class TutorialView implements Screen {
 						controller.setScreen(new ClientView(controller));
 					}
 					if (sourceInt == 2) {
-
-						controller.generateShapeWarsModel(Role.Server, "");
-						controller.shapeWarsModel.generateEntities();
-						controller.setScreen(new ShapeWarsView(controller));
+						controller.setScreen(new SelectionView(controller, 2));
 					}
 				} catch (NullPointerException | UnknownHostException nullPointerException) {
 					System.out.println("No controller found");

@@ -143,7 +143,7 @@ public class ClientView implements Screen {
                 System.out.println(inputField.getText());
                 // todo sanitise ip address input
                 // todo can this code be improved?
-                controller.generateShapeWarsModel(Role.Client, inputField.getText());
+                controller.generateShapeWarsModel(Role.Client, inputField.getText(), "");
                 if (!(controller.getScreen() instanceof MainMenuView))
                     controller.setScreen(new ShapeWarsView(controller));
             }

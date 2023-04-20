@@ -30,8 +30,8 @@ public class ShapeWarsController extends Game {
         super.render();
     }
 
-    public void generateShapeWarsModel(Role role, String serverIpAddress) {
-        this.shapeWarsModel = new ShapeWarsModel(this, this.gameModel, role, serverIpAddress);
+    public void generateShapeWarsModel(Role role, String serverIpAddress, String selectedMap) {
+        this.shapeWarsModel = new ShapeWarsModel(this, this.gameModel, role, serverIpAddress, selectedMap);
     }
 
     public void dispose() {
