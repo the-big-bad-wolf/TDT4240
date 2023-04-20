@@ -12,6 +12,8 @@ public abstract class GameConfig {
     public static final int MAX_SPEED = 5;
     public static final int MAX_TURN_RATE = 3;
     public static final int SHIP_WIDTH = 160;
+    public static final int JOYSTICK_OUTER_CIRCLE_RADIUS = 120;
+    public static final int JOYSTICK_INNER_CIRCLE_RADIUS = 50;
     public static final int SHIP_HEIGHT = 120;
     public static final int MAX_BULLET_HEALTH = 3;
     public static final int SHIP_OBSTACLE_LAYER = 5;

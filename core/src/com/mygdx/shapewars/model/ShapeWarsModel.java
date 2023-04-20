@@ -2,6 +2,8 @@ package com.mygdx.shapewars.model;
 
 import static com.mygdx.shapewars.config.GameConfig.BULLET_OBSTACLE_LAYER;
 import static com.mygdx.shapewars.config.GameConfig.ENEMY_FULL_HEALTH;
+import static com.mygdx.shapewars.config.GameConfig.JOYSTICK_INNER_CIRCLE_RADIUS;
+import static com.mygdx.shapewars.config.GameConfig.JOYSTICK_OUTER_CIRCLE_RADIUS;
 import static com.mygdx.shapewars.config.GameConfig.PLAYER_FULL_HEALTH;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_OBSTACLE_LAYER;
@@ -98,9 +100,9 @@ public class ShapeWarsModel {
         shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
 
         if (gameModel.launcher == Launcher.Mobile) {
-            firebutton = new Firebutton(shapeWarsViewport.getWorldWidth() - 180, 480, 120);
-            joystickShip = new Joystick(180, 180, 120, 50);
-            joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth() - 180, 180, 120, 50);
+            firebutton = new Firebutton(shapeWarsViewport.getWorldWidth() - 180, 480, JOYSTICK_OUTER_CIRCLE_RADIUS);
+            joystickShip = new Joystick(180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS, JOYSTICK_INNER_CIRCLE_RADIUS);
+            joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth() - 180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS, JOYSTICK_INNER_CIRCLE_RADIUS);
         }
 
         shipObstacles = getLayerObstacles(SHIP_OBSTACLE_LAYER);

@@ -1,5 +1,6 @@
 package com.mygdx.shapewars.model.systems;
 
+import static com.mygdx.shapewars.config.GameConfig.JOYSTICK_OUTER_CIRCLE_RADIUS;
 import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
 
 import com.badlogic.gdx.math.Circle;
@@ -12,13 +13,10 @@ import com.mygdx.shapewars.controller.Firebutton;
 import com.mygdx.shapewars.model.helperSystems.InputSystem;
 
 public class InputSystemMobile extends InputSystem {
-    private Joystick joystickShip;
-    private Joystick joystickGun;
+    private Joystick joystickShip, joystickGun;
     private Firebutton firebutton;
     private FitViewport fitViewport;
-    private final int outerCircleRadius;
-    private boolean movingJoystickShip;
-    private boolean movingJoystickGun;
+    private boolean movingJoystickShip, movingJoystickGun;
     private int joystickShipPointer = -1;
     private int joystickGunPointer = -1;
     private static volatile InputSystemMobile instance;
@@ -29,7 +27,6 @@ public class InputSystemMobile extends InputSystem {
         this.joystickGun = shapeWarsModel.joystickGun;
         this.firebutton = shapeWarsModel.firebutton;
         this.fitViewport = shapeWarsModel.shapeWarsViewport;
-        this.outerCircleRadius = Math.round(joystickShip.getOuterCircle().radius);
     }
 
     public static InputSystemMobile getInstance(ShapeWarsModel shapeWarsModel) {
@@ -55,7 +52,6 @@ public class InputSystemMobile extends InputSystem {
         boolean joystickShipTouched = isCircleTouched(joystickShip.getOuterCircle(), screenX, screenY);
         boolean joystickGunTouched = isCircleTouched(joystickGun.getOuterCircle(), screenX, screenY);
 
-        // Check which joystick was touched first and only move that one
         if (joystickShipTouched && (joystickGunPointer == -1 || joystickShipPointer < joystickGunPointer)) {
             joystickShipPointer = pointer;
             movingJoystickShip = true;
@@ -110,7 +106,7 @@ public class InputSystemMobile extends InputSystem {
             }
             joystickShip.getInnerCircle().setPosition(joystickShip.getOuterCircle().x + deltaX, joystickShip.getOuterCircle().y + deltaY);
             inputDirectionShip = angle;
-            inputValue = MathUtils.clamp(deltaLength, 0, outerCircleRadius) / outerCircleRadius * MAX_SPEED;
+            inputValue = MathUtils.clamp(deltaLength, 0, JOYSTICK_OUTER_CIRCLE_RADIUS) / JOYSTICK_OUTER_CIRCLE_RADIUS * MAX_SPEED;
         }
         if (movingJoystickGun && pointer == joystickGunPointer) {
             float deltaX = worldCoordinates.x - joystickGun.getOuterCircle().x;
