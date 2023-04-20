@@ -27,6 +27,7 @@ import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
 import com.mygdx.shapewars.model.systems.UpdateSystemClient;
 import com.mygdx.shapewars.model.systems.UpdateSystemServer;
+import com.mygdx.shapewars.network.ConnectorStrategy;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -47,8 +48,7 @@ public class ShapeWarsModel {
     public static Engine engine;
     private static TiledMap map;
     public Role role;
-    public ServerConnector serverConnector; // todo implement strategy pattern
-    public ClientConnector clientConnector;
+    public ConnectorStrategy connectorStrategy;
     public HashMap<String, Integer> deviceShipMapping = new HashMap<>();
     public int shipId; // todo put this in a model just for clients
     public Joystick joystickShip;
@@ -67,6 +67,7 @@ public class ShapeWarsModel {
     public InputMultiplexer multiplexer;
     public Sprite aimHelp;
     public List<PirateWarsSystem> systems;
+    public boolean worldGenerated;
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress, String selectedMap) {
         this.role = role;
@@ -79,10 +80,10 @@ public class ShapeWarsModel {
             this.shipId = 0;
             this.deviceShipMapping = new HashMap<>();
             deviceShipMapping.put(this.gameModel.deviceId, shipId);
-            this.serverConnector = new ServerConnector(this);
+            this.connectorStrategy = new ServerConnector(this);
             this.generateWorld(); // this happens in update() for the client as it needs to wait for the map
         } else {
-            this.clientConnector = new ClientConnector(this, serverIpAddress);
+            this.connectorStrategy = new ClientConnector(this, serverIpAddress);
         }
     }
 
@@ -178,10 +179,13 @@ public class ShapeWarsModel {
     public void update() {
         if (role == Role.Client) {
             if (!isGameActive) {
-                clientConnector.sendLobbyRequest(gameModel.deviceId);
-                if (!this.selectedMap.isEmpty()) {
-                    generateWorld(); // todo this is called multiple times
-                }
+                connectorStrategy.sendLobbyRequest(gameModel.deviceId);
+            }
+
+            if (!this.selectedMap.isEmpty() && !this.worldGenerated) {
+                System.out.println(this.selectedMap);
+                generateWorld();
+                worldGenerated = true;
             }
 
             if (createEntitiesFlag) {
@@ -222,11 +226,7 @@ public class ShapeWarsModel {
         engine.removeAllSystems();
         engine.removeAllEntities();
         try {
-            if (role == Role.Server) {
-                serverConnector.dispose();
-            } else {
-                clientConnector.dispose();
-            }
+            connectorStrategy.dispose();
         } catch (IOException e) {}
     }
 }
