@@ -26,8 +26,10 @@ public class SelectionView implements Screen {
     private TextButton map2Button;
     private String map1;
     private String map2;
+    private Sprite map1Image;
+    private Sprite map2Image;
+
     private int sourceInt;
-    private Sprite imageSprite;
     private Sprite backgroundSprite;
     private SpriteBatch batch;
     private ExtendViewport extendViewport;
@@ -37,12 +39,8 @@ public class SelectionView implements Screen {
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
         this.sourceInt = sourceInt;
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.update();
         batch = new SpriteBatch();
         extendViewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage.setViewport(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
         buildUI();
         setMaps();
     }
@@ -52,10 +50,11 @@ public class SelectionView implements Screen {
         Texture background = new Texture(Gdx.files.internal("maps/mapExpansionGrass.png"));
         backgroundSprite = new Sprite(background);
 
-        Texture image = new Texture(Gdx.files.internal("mainMenu/tutorial.png"));
-        imageSprite = new Sprite(image);
-        imageSprite.setSize(Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 100);
-        imageSprite.setPosition(7, (Gdx.graphics.getHeight() - imageSprite.getHeight()) / 2f);
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.update();
+        stage.setViewport(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
+
 
         Gdx.input.setInputProcessor(stage);
         render(0);
@@ -76,7 +75,6 @@ public class SelectionView implements Screen {
         backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
                 (stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
         backgroundSprite.draw(batch);
-        imageSprite.draw(batch);
         batch.end();
 
         stage.act(delta);

@@ -140,7 +140,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.generateShapeWarsModel(Role.Server, "", "");
+                    controller.generateShapeWarsModel(Role.Server, "", "maps/pirateMap2.tmx");
                     controller.setScreen(new TutorialView(controller, 0));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");

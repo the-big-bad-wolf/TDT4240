@@ -168,7 +168,7 @@
 "com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle": {
 	"default": {
 		"font": "sans",
-		"up": "button3",
+		"up": "map1",
 		"down": "greyButton",
 		"over": "buttonhover"
 	},
@@ -180,6 +180,12 @@
 		"over": "round-light-gray",
 		"checked": "round-dark-gray",
 		"checkedOver": "round-light-gray"
+	},
+	"map1": {
+		"font": "sans",
+		"up": "map1",
+		"down": "greyButton",
+		"over": "buttonhover"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
