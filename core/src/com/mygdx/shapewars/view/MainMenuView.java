@@ -31,7 +31,7 @@ public class MainMenuView implements Screen {
         this.controller = controller;
         this.uiBuilder = new UIBuilder(this.stage);
         buildUI();
-        Texture background = new Texture(Gdx.files.internal("mainMenu/mainBackground.png"));
+        Texture background = new Texture(Gdx.files.internal("images/mainBackground.png"));
         backgroundSprite = new Sprite(background);
         Gdx.input.setInputProcessor(stage);
     }
@@ -140,7 +140,7 @@ public class MainMenuView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.generateShapeWarsModel(Role.Server, "", "maps/pirateMap.tmx");
+                    controller.generateShapeWarsModel(Role.Server, "", "maps/pirateMap2.tmx");
                     controller.setScreen(new TutorialView(controller, 0));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");

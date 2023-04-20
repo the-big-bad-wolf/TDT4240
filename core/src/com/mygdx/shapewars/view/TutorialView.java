@@ -23,6 +23,7 @@ public class TutorialView implements Screen {
 	private final Stage stage;
 	private final UIBuilder uiBuilder;
 	private TextButton nextButton;
+	private TextButton backButton;
 	private int sourceInt;
 	private Sprite imageSprite;
 	private Sprite backgroundSprite;
@@ -45,10 +46,10 @@ public class TutorialView implements Screen {
 
 	@Override
 	public void show() {
-		Texture background = new Texture(Gdx.files.internal("maps/mapExpansionGrass.png"));
+		Texture background = new Texture(Gdx.files.internal("images/mapBackground.png"));
 		backgroundSprite = new Sprite(background);
 
-		Texture image = new Texture(Gdx.files.internal("mainMenu/tutorial.png"));
+		Texture image = new Texture(Gdx.files.internal("images/tutorial.png"));
 		imageSprite = new Sprite(image);
 		imageSprite.setSize(Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 100);
 		imageSprite.setPosition(7, (Gdx.graphics.getHeight() - imageSprite.getHeight()) / 2f);
@@ -108,14 +109,21 @@ public class TutorialView implements Screen {
 	}
 
 	private void buildUI() {
-		float nextButtonsWidth = 180f;
-		float nextButtonsHeight = 100f;
-		float nextButtonXPos = Gdx.graphics.getWidth() - nextButtonsWidth;
-		float nextButtonYPos = (Gdx.graphics.getHeight() - nextButtonsHeight) / 2f;
+		float allButtonsWidth = 180f;
+		float allButtonsHeight = 100f;
+		float xPos = Gdx.graphics.getWidth() - allButtonsWidth;
+		float nextButtonYPos = Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() - allButtonsHeight) / 2.5f;
+		float backButtonYPos = (Gdx.graphics.getHeight() - allButtonsHeight) / 3f;
 
-		nextButton = uiBuilder.buildButton("Next", nextButtonsWidth, nextButtonsHeight,
-				nextButtonXPos,
+
+		nextButton = uiBuilder.buildButton("Next", allButtonsWidth, allButtonsHeight,
+				xPos,
 				nextButtonYPos,
+				"redVersion");
+
+		backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight,
+				xPos,
+				backButtonYPos,
 				"redVersion");
 
 		addActionsToUI();
@@ -128,7 +136,7 @@ public class TutorialView implements Screen {
 
 				try {
 					if (sourceInt == 0) {
-						controller.setScreen(new HostView(controller));
+						controller.setScreen(new SelectionView(controller, 0));
 					}
 					if (sourceInt == 1) {
 						controller.setScreen(new ClientView(controller));
@@ -136,7 +144,28 @@ public class TutorialView implements Screen {
 					if (sourceInt == 2) {
 						controller.setScreen(new SelectionView(controller, 2));
 					}
-				} catch (NullPointerException | UnknownHostException nullPointerException) {
+				} catch (NullPointerException nullPointerException) {
+					System.out.println("No controller found");
+				}
+
+			}
+		});
+
+		backButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+
+				try {
+					if (sourceInt == 0) {
+						controller.setScreen(new MainMenuView(controller));
+					}
+					if (sourceInt == 1) {
+						controller.setScreen(new MainMenuView(controller));
+					}
+					if (sourceInt == 2) {
+						controller.setScreen(new MainMenuView(controller));
+					}
+				} catch (NullPointerException nullPointerException) {
 					System.out.println("No controller found");
 				}
 

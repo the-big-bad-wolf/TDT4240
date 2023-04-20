@@ -77,7 +77,7 @@ public class ShapeWarsView implements Screen {
         extendViewport = new ExtendViewport(mapWidth, mapHeight);
 
         // Background that shows around the actual playing field
-        Texture background = new Texture(Gdx.files.internal("maps/mapExpansionGrass.png"));
+        Texture background = new Texture(Gdx.files.internal("images/mapBackground.png"));
         backgroundSprite = new Sprite(background);
         render(Gdx.graphics.getDeltaTime());
     }
