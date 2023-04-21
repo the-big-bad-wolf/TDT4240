@@ -210,8 +210,10 @@ public class ShapeWarsModel {
     }
 
     public void dispose() {
-        for (PirateWarsSystem system : systems) {
-            system.dispose();
+        if (systems!=null) {
+            for (PirateWarsSystem system : systems) {
+                system.dispose();
+            }  
         }
         engine.removeAllSystems();
         engine.removeAllEntities();
