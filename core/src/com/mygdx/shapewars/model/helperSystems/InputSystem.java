@@ -50,7 +50,7 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
                 }
             } catch (NullPointerException e) { }
         } else {
-            shapeWarsModel.clientConnector.sendInputRequest(shapeWarsModel.gameModel.deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
+            shapeWarsModel.connectorStrategy.sendInputRequest(shapeWarsModel.gameModel.deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
         }
         firingFlag = false;
     }

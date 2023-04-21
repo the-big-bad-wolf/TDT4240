@@ -59,7 +59,7 @@ public class ServerListener extends Listener {
                         VelocityComponent velocityComponent = ComponentMappers.velocity.get(ships.get(i));
                         velocityComponent.setVelocity(request.valueInput, request.directionShipInput, request.directionGunInput);
                         if (request.firingFlag) {
-                            model.updateSystemServer.unshotBullets.add(ships.get(i)); // cannot call firing system directly from this thread
+                            model.updateSystemStrategy.addUnshotBullets(ships.get(i)); // cannot call firing system directly from this thread
                         }
                     }
                 }

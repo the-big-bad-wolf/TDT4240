@@ -14,22 +14,19 @@ import com.mygdx.shapewars.model.components.IdentityComponent;
 import com.mygdx.shapewars.model.components.PositionComponent;
 import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
+import com.mygdx.shapewars.model.helperSystems.UpdateSystem;
 import com.mygdx.shapewars.network.data.BulletData;
 import com.mygdx.shapewars.network.data.ShipData;
 
-public class UpdateSystemClient extends PirateWarsSystem {
-    private static volatile UpdateSystemClient instance;
-    protected ShapeWarsModel shapeWarsModel;
+public class UpdateSystemClient extends UpdateSystem {
     public ShipData[] shipsServer;
     public BulletData[] bulletsServer;
-    public boolean updated; // works as a lock to avoid conflicts between threads
 
     public UpdateSystemClient(ShapeWarsModel shapeWarsModel) {
-        this.shapeWarsModel = shapeWarsModel;
+        super(shapeWarsModel);
     }
 
-    public static UpdateSystemClient getInstance(ShapeWarsModel shapeWarsModel) {
+    public static UpdateSystem getInstance(ShapeWarsModel shapeWarsModel) {
         if (instance == null) {
             synchronized (InputSystemDesktop.class) {
                 if (instance == null) {
@@ -40,11 +37,12 @@ public class UpdateSystemClient extends PirateWarsSystem {
         return instance;
     }
 
-    public void dispose() {
-        instance = null;
-    }
-
     public void addedToEngine(Engine engine) { }
+
+    public void replaceData(ShipData[] shipsServer, BulletData[] bulletsServer) {
+        this.shipsServer = shipsServer;
+        this.bulletsServer = bulletsServer;
+    }
 
     public void update(float deltaTime) {
         if (shipsServer == null || bulletsServer == null || !updated)

@@ -156,7 +156,7 @@ public class SelectionView implements Screen {
                 selectHeight,
                 selectXPos,
                 selectYPos,
-                "default");
+                "ipaddress");
 
 
         addActionsToUI();

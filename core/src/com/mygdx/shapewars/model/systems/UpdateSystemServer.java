@@ -1,26 +1,22 @@
 package com.mygdx.shapewars.model.systems;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.model.helperSystems.FiringSystem;
-import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
-
+import com.mygdx.shapewars.model.helperSystems.UpdateSystem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateSystemServer extends PirateWarsSystem {
-    private static volatile UpdateSystemServer instance;
-    protected ShapeWarsModel shapeWarsModel;
+public class UpdateSystemServer extends UpdateSystem {
 
     public List<Entity> unshotBullets;
 
     public UpdateSystemServer(ShapeWarsModel shapeWarsModel) {
+        super(shapeWarsModel);
         this.unshotBullets = new ArrayList<>();
-        this.shapeWarsModel = shapeWarsModel;
     }
 
-    public static UpdateSystemServer getInstance(ShapeWarsModel shapeWarsModel) {
+    public static UpdateSystem getInstance(ShapeWarsModel shapeWarsModel) {
         if (instance == null) {
             synchronized (InputSystemDesktop.class) {
                 if (instance == null) {
@@ -31,12 +27,12 @@ public class UpdateSystemServer extends PirateWarsSystem {
         return instance;
     }
 
-    public void dispose() {
-        instance = null;
+    @Override
+    public void addUnshotBullets(Entity entity) {
+        unshotBullets.add(entity);
     }
 
-    public void addedToEngine(Engine engine) { }
-
+    @Override
     public void update(float deltaTime) {
         // no iterator can be used here as the list gets accessed by the server thread
         for (int i = 0; i < unshotBullets.size(); i++) {

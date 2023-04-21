@@ -1,8 +1,12 @@
 package com.mygdx.shapewars.model;
 
+import static com.mygdx.shapewars.config.GameConfig.BULLET_OBSTACLE_LAYER;
 import static com.mygdx.shapewars.config.GameConfig.ENEMY_FULL_HEALTH;
+import static com.mygdx.shapewars.config.GameConfig.JOYSTICK_INNER_CIRCLE_RADIUS;
+import static com.mygdx.shapewars.config.GameConfig.JOYSTICK_OUTER_CIRCLE_RADIUS;
 import static com.mygdx.shapewars.config.GameConfig.PLAYER_FULL_HEALTH;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
+import static com.mygdx.shapewars.config.GameConfig.SHIP_OBSTACLE_LAYER;
 import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
 
 import com.badlogic.ashley.core.Engine;
@@ -16,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.shapewars.config.Launcher;
 import com.mygdx.shapewars.controller.Joystick;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 import com.mygdx.shapewars.model.components.HealthComponent;
@@ -25,8 +30,10 @@ import com.mygdx.shapewars.model.components.SpriteComponent;
 import com.mygdx.shapewars.model.components.VelocityComponent;
 import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
+import com.mygdx.shapewars.model.helperSystems.UpdateSystem;
 import com.mygdx.shapewars.model.systems.UpdateSystemClient;
 import com.mygdx.shapewars.model.systems.UpdateSystemServer;
+import com.mygdx.shapewars.network.ConnectorStrategy;
 import com.mygdx.shapewars.network.client.ClientConnector;
 import com.mygdx.shapewars.network.server.ServerConnector;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,42 +43,35 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.Firebutton;
 import com.mygdx.shapewars.view.ShapeWarsView;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class ShapeWarsModel {
-    public int numPlayers;
+    public int shipId, numPlayers;
+    public boolean isGameActive, createEntitiesFlag, isWorldGenerated;
     public static Engine engine;
     private static TiledMap map;
     public Role role;
-    public ServerConnector serverConnector; // todo implement strategy pattern
-    public ClientConnector clientConnector;
+    public ConnectorStrategy connectorStrategy;
     public HashMap<String, Integer> deviceShipMapping = new HashMap<>();
-    public int shipId; // todo put this in a model just for clients
-    public Joystick joystickShip;
-    public Joystick joystickGun;
+    public Joystick joystickShip, joystickGun;
     public Firebutton firebutton;
-    public ArrayList<Polygon> shipObstacles;
-    public ArrayList<Polygon> bulletObstacles;
+    public ArrayList<Polygon> shipObstacles, bulletObstacles;
     public FitViewport shapeWarsViewport;
     public GameModel gameModel;
-    public boolean isGameActive;
     public ShapeWarsController controller;
-    public boolean createEntitiesFlag;
-    public UpdateSystemClient updateSystemClient;
-    public UpdateSystemServer updateSystemServer;
+    public UpdateSystem updateSystemStrategy;
     public String selectedMap;
     public InputMultiplexer multiplexer;
     public Sprite aimHelp;
     public List<PirateWarsSystem> systems;
 
     public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress, String selectedMap) {
+        this.controller = controller;
         this.role = role;
         this.gameModel = gameModel;
-        this.controller = controller;
         this.selectedMap = selectedMap;
         this.engine = new Engine();
 
@@ -79,10 +79,10 @@ public class ShapeWarsModel {
             this.shipId = 0;
             this.deviceShipMapping = new HashMap<>();
             deviceShipMapping.put(this.gameModel.deviceId, shipId);
-            this.serverConnector = new ServerConnector(this);
+            this.connectorStrategy = new ServerConnector(this);
             this.generateWorld(); // this happens in update() for the client as it needs to wait for the map
         } else {
-            this.clientConnector = new ClientConnector(this, serverIpAddress);
+            this.connectorStrategy = new ClientConnector(this, serverIpAddress);
         }
     }
 
@@ -97,74 +97,50 @@ public class ShapeWarsModel {
         float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
         camera.setToOrtho(false, mapWidth, mapHeight);
         camera.update();
-        // fitViewport scales the game world to fit on screen with the correct dimensions
         shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
-        firebutton = new Firebutton(shapeWarsViewport.getWorldWidth()-180, 480, 120);
-        joystickShip = new Joystick(180, 180, 120, 50);
-        joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth()-180, 180, 120, 50);
 
-        shipObstacles = new ArrayList<>();
-        // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
-        for (MapObject object : map.getLayers().get(5).getObjects()) {
-            if (object instanceof PolygonMapObject) {
-                Polygon rect = ((PolygonMapObject) object).getPolygon();
-                shipObstacles.add(rect);
-            }
+        if (gameModel.launcher == Launcher.Mobile) {
+            firebutton = new Firebutton(shapeWarsViewport.getWorldWidth() - 180, 480, JOYSTICK_OUTER_CIRCLE_RADIUS);
+            joystickShip = new Joystick(180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS, JOYSTICK_INNER_CIRCLE_RADIUS);
+            joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth() - 180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS, JOYSTICK_INNER_CIRCLE_RADIUS);
         }
 
-        bulletObstacles = new ArrayList<>();
-
-        // iterating over all map objects and adding them to ArrayList<Polygon> obstacles
-        for (MapObject object : map.getLayers().get(6).getObjects()) {
-            if (object instanceof PolygonMapObject) {
-                Polygon rect = ((PolygonMapObject) object).getPolygon();
-                bulletObstacles.add(rect);
-            }
-        }
+        shipObstacles = getLayerObstacles(SHIP_OBSTACLE_LAYER);
+        bulletObstacles = getLayerObstacles(BULLET_OBSTACLE_LAYER);
     }
 
     public void generateEntities() {
-
         if (this.role == Role.Server) {
             numPlayers = deviceShipMapping.size();
-            TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
-
-            List<Vector2> spawnCells = new ArrayList<>();
-            for (int y = 0; y < spawnLayer.getHeight(); y++) {
-                for (int x = 0; x < spawnLayer.getWidth(); x++) {
-                    TiledMapTileLayer.Cell cell = spawnLayer.getCell(x, y);
-                    if (cell != null) {
-                        spawnCells.add(new Vector2(x, y));
-                    }
-                }
-            }
-
-            for (int i = 0; i < numPlayers; i++) {
-                Entity ship = new Entity();
-                Vector2 cell = spawnCells.get(i);
-                ship.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
-                ship.add(new VelocityComponent(0, 0, 0));
-                ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
-                ship.add(new HealthComponent(100));
-                ship.add(new IdentityComponent(i));
-                engine.addEntity(ship);
-            }
-            this.updateSystemServer = UpdateSystemServer.getInstance(this);
-            engine.addSystem(updateSystemServer);
+            // todo maybe move this further up?
+            this.updateSystemStrategy = UpdateSystemServer.getInstance(this);
             isGameActive = true;
         } else {
-            for (int i = 0; i < numPlayers; i++) {
-                Entity ship = new Entity();
-                ship.add(new PositionComponent(0, 0));
-                ship.add(new VelocityComponent(0, 0, 0));
-                ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
-                ship.add(new HealthComponent(100));
-                ship.add(new IdentityComponent(i));
-                engine.addEntity(ship);
-            }
-            this.updateSystemClient = UpdateSystemClient.getInstance(this);
-            engine.addSystem(updateSystemClient);
+            this.updateSystemStrategy = UpdateSystemClient.getInstance(this);
         }
+        engine.addSystem(updateSystemStrategy);
+
+        TiledMapTileLayer spawnLayer = (TiledMapTileLayer) map.getLayers().get(3);
+        List<Vector2> spawnCells = new ArrayList<>();
+        for (int y = 0; y < spawnLayer.getHeight(); y++) {
+            for (int x = 0; x < spawnLayer.getWidth(); x++) {
+                TiledMapTileLayer.Cell cell = spawnLayer.getCell(x, y);
+                if (cell != null) {
+                    spawnCells.add(new Vector2(x, y));
+                }
+            }
+        }
+        for (int i = 0; i < numPlayers; i++) {
+            Entity ship = new Entity();
+            Vector2 cell = spawnCells.get(i);
+            ship.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
+            ship.add(new VelocityComponent(0, 0, 0));
+            ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
+            ship.add(new HealthComponent(100));
+            ship.add(new IdentityComponent(i));
+            engine.addEntity(ship);
+        }
+
         this.systems = SystemFactory.generateSystems(this);
         for (EntitySystem system : systems) {
             engine.addSystem(system);
@@ -178,10 +154,13 @@ public class ShapeWarsModel {
     public void update() {
         if (role == Role.Client) {
             if (!isGameActive) {
-                clientConnector.sendLobbyRequest(gameModel.deviceId);
-                if (!this.selectedMap.isEmpty()) {
-                    generateWorld(); // todo this is called multiple times
-                }
+                connectorStrategy.sendLobbyRequest(gameModel.deviceId);
+            }
+
+            if (!this.selectedMap.isEmpty() && !this.isWorldGenerated) {
+                System.out.println(this.selectedMap);
+                generateWorld();
+                isWorldGenerated = true;
             }
 
             if (createEntitiesFlag) {
@@ -210,9 +189,19 @@ public class ShapeWarsModel {
         return joystickGun;
     }
 
-
     public Firebutton getFirebutton() {
         return firebutton;
+    }
+
+    public ArrayList<Polygon> getLayerObstacles(int layer) {
+        ArrayList<Polygon> layerObstacles = new ArrayList<>();
+        for (MapObject object : map.getLayers().get(layer).getObjects()) {
+            if (object instanceof PolygonMapObject) {
+                Polygon rect = ((PolygonMapObject) object).getPolygon();
+                layerObstacles.add(rect);
+            }
+        }
+        return layerObstacles;
     }
 
     public void dispose() {
@@ -222,11 +211,7 @@ public class ShapeWarsModel {
         engine.removeAllSystems();
         engine.removeAllEntities();
         try {
-            if (role == Role.Server) {
-                serverConnector.dispose();
-            } else {
-                clientConnector.dispose();
-            }
+            connectorStrategy.dispose();
         } catch (IOException e) {}
     }
 }
