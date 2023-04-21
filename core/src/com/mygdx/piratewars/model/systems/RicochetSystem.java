@@ -117,7 +117,7 @@ public class RicochetSystem extends PirateWarsSystem {
 
   public static RicochetSystem getInstance(ArrayList<Polygon> obstacles) {
     if (instance == null) {
-      synchronized (FiringSystem.class) {
+      synchronized (RicochetSystem.class) {
         if (instance == null) {
           instance = new RicochetSystem(obstacles);
         }

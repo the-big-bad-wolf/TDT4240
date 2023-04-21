@@ -28,7 +28,7 @@ public class UpdateSystemClient extends UpdateSystem {
 
     public static UpdateSystem getInstance(PirateWarsModel pirateWarsModel) {
         if (instance == null) {
-            synchronized (InputSystemDesktop.class) {
+            synchronized (UpdateSystemClient.class) {
                 if (instance == null) {
                     instance = new UpdateSystemClient(pirateWarsModel);
                 }
