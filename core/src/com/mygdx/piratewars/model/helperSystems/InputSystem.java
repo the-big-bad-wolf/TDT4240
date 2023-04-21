@@ -1,42 +1,42 @@
-package com.mygdx.shapewars.model.helperSystems;
+package com.mygdx.piratewars.model.helperSystems;
 
-import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.config.Role;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.model.components.ComponentMappers;
+import com.mygdx.piratewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.config.Role;
 
 public abstract class InputSystem extends PirateWarsSystem implements InputProcessor {
     protected float inputDirectionShip;
     protected float inputDirectionGun;
     protected float inputValue;
     protected ImmutableArray<Entity> entities;
-    protected ShapeWarsModel shapeWarsModel;
+    protected PirateWarsModel pirateWarsModel;
 
     protected boolean firingFlag;
 
-    public InputSystem(ShapeWarsModel shapeWarsModel) {
-        this.shapeWarsModel = shapeWarsModel;
-        this.shapeWarsModel.multiplexer.addProcessor(this);  // set your game input precessor as second
+    public InputSystem(PirateWarsModel pirateWarsModel) {
+        this.pirateWarsModel = pirateWarsModel;
+        this.pirateWarsModel.multiplexer.addProcessor(this);  // set your game input precessor as second
 
     }
 
     public void addedToEngine(Engine engine) { }
 
     public void update(float deltaTime) {
-        entities = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
-        Gdx.input.setInputProcessor(this.shapeWarsModel.multiplexer); // set multiplexer as input processor
+        entities = pirateWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
+        Gdx.input.setInputProcessor(this.pirateWarsModel.multiplexer); // set multiplexer as input processor
 
         // todo can this be coded simpler?
-        shapeWarsModel.aimHelp.setRotation(inputDirectionGun);
+        pirateWarsModel.aimHelp.setRotation(inputDirectionGun);
 
-        if (shapeWarsModel.role == Role.Server) {
+        if (pirateWarsModel.role == Role.Server) {
             try {
                 for (int i = 0; i < entities.size(); i++) {
                     Entity entity = entities.get(i);
@@ -50,7 +50,7 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
                 }
             } catch (NullPointerException e) { }
         } else {
-            shapeWarsModel.connectorStrategy.sendInputRequest(shapeWarsModel.gameModel.deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
+            pirateWarsModel.connectorStrategy.sendInputRequest(pirateWarsModel.gameModel.deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
         }
         firingFlag = false;
     }

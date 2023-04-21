@@ -1,36 +1,36 @@
-package com.mygdx.shapewars.model.systems;
+package com.mygdx.piratewars.model.systems;
 
-import static com.mygdx.shapewars.config.GameConfig.CANNON_BALL;
-import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
+import static com.mygdx.piratewars.config.GameConfig.CANNON_BALL;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.model.helperSystems.UpdateSystem;
-import com.mygdx.shapewars.network.data.BulletData;
-import com.mygdx.shapewars.network.data.ShipData;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.model.components.ComponentMappers;
+import com.mygdx.piratewars.model.components.HealthComponent;
+import com.mygdx.piratewars.model.components.IdentityComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.SpriteComponent;
+import com.mygdx.piratewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.model.helperSystems.UpdateSystem;
+import com.mygdx.piratewars.network.data.BulletData;
+import com.mygdx.piratewars.network.data.ShipData;
 
 public class UpdateSystemClient extends UpdateSystem {
     public ShipData[] shipsServer;
     public BulletData[] bulletsServer;
 
-    public UpdateSystemClient(ShapeWarsModel shapeWarsModel) {
-        super(shapeWarsModel);
+    public UpdateSystemClient(PirateWarsModel pirateWarsModel) {
+        super(pirateWarsModel);
     }
 
-    public static UpdateSystem getInstance(ShapeWarsModel shapeWarsModel) {
+    public static UpdateSystem getInstance(PirateWarsModel pirateWarsModel) {
         if (instance == null) {
             synchronized (InputSystemDesktop.class) {
                 if (instance == null) {
-                    instance = new UpdateSystemClient(shapeWarsModel);
+                    instance = new UpdateSystemClient(pirateWarsModel);
                 }
             }
         }
@@ -50,7 +50,7 @@ public class UpdateSystemClient extends UpdateSystem {
 
         // synchronize ship entities
         try {
-            ImmutableArray<Entity> shipsClient = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
+            ImmutableArray<Entity> shipsClient = pirateWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
             for (int i = 0; i < shipsClient.size(); i++) {
                 Entity shipClient = shipsClient.get(i);
                 for (int j = 0; j < shipsServer.length; j++) {
@@ -83,7 +83,7 @@ public class UpdateSystemClient extends UpdateSystem {
         // synchronize bullet entities
         try {
             Family bulletFamily = Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class).exclude(IdentityComponent.class).get();
-            ImmutableArray<Entity> bulletsClient = shapeWarsModel.engine.getEntitiesFor(bulletFamily);
+            ImmutableArray<Entity> bulletsClient = pirateWarsModel.engine.getEntitiesFor(bulletFamily);
 
             int numberOfBulletsServer = bulletsServer.length;
             int numberOfBulletsClient = bulletsClient.size();
@@ -96,18 +96,18 @@ public class UpdateSystemClient extends UpdateSystem {
                     bullet.add(new VelocityComponent(0, 0));
                     bullet.add(new SpriteComponent(CANNON_BALL, 10, 10)); // todo why does a bullet have an image file??
                     bullet.add(new HealthComponent(3));
-                    shapeWarsModel.engine.addEntity(bullet);
+                    pirateWarsModel.engine.addEntity(bullet);
                 }
             } else if (diff < 0) {
                 // client has more entities -> client needs to delete #diff bullets
                 diff = Math.abs(diff);
                 for (int i = 0; i < diff; i++) {
                     Entity e = bulletsClient.get(numberOfBulletsClient - i - 1);
-                    shapeWarsModel.engine.removeEntity(e); // not at once?
+                    pirateWarsModel.engine.removeEntity(e); // not at once?
                 }
             }
 
-            bulletsClient = shapeWarsModel.engine.getEntitiesFor(bulletFamily);
+            bulletsClient = pirateWarsModel.engine.getEntitiesFor(bulletFamily);
 
             for (int i = 0; i < bulletsClient.size() && i < bulletsServer.length; i++) {
                 Entity bulletClient = bulletsClient.get(i);

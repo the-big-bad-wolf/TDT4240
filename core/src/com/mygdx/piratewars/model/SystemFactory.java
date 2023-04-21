@@ -1,21 +1,21 @@
-package com.mygdx.shapewars.model;
+package com.mygdx.piratewars.model;
 
-import com.mygdx.shapewars.config.Launcher;
-import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
-import com.mygdx.shapewars.model.systems.DamageSystem;
-import com.mygdx.shapewars.model.systems.DeathSystem;
-import com.mygdx.shapewars.model.systems.InputSystemDesktop;
-import com.mygdx.shapewars.model.systems.InputSystemMobile;
-import com.mygdx.shapewars.model.systems.MovementSystem;
-import com.mygdx.shapewars.model.systems.RicochetSystem;
-import com.mygdx.shapewars.model.systems.SpriteSystem;
+import com.mygdx.piratewars.config.Launcher;
+import com.mygdx.piratewars.config.Role;
+import com.mygdx.piratewars.model.helperSystems.PirateWarsSystem;
+import com.mygdx.piratewars.model.systems.DamageSystem;
+import com.mygdx.piratewars.model.systems.DeathSystem;
+import com.mygdx.piratewars.model.systems.InputSystemDesktop;
+import com.mygdx.piratewars.model.systems.InputSystemMobile;
+import com.mygdx.piratewars.model.systems.MovementSystem;
+import com.mygdx.piratewars.model.systems.RicochetSystem;
+import com.mygdx.piratewars.model.systems.SpriteSystem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SystemFactory {
-    public static List<PirateWarsSystem> generateSystems(ShapeWarsModel model) {
+    public static List<PirateWarsSystem> generateSystems(PirateWarsModel model) {
         Role role = model.role;
         Launcher launcher = model.gameModel.launcher;
 

@@ -1,13 +1,13 @@
-package com.mygdx.shapewars.model;
+package com.mygdx.piratewars.model;
 
-import static com.mygdx.shapewars.config.GameConfig.BULLET_OBSTACLE_LAYER;
-import static com.mygdx.shapewars.config.GameConfig.ENEMY_FULL_HEALTH;
-import static com.mygdx.shapewars.config.GameConfig.JOYSTICK_INNER_CIRCLE_RADIUS;
-import static com.mygdx.shapewars.config.GameConfig.JOYSTICK_OUTER_CIRCLE_RADIUS;
-import static com.mygdx.shapewars.config.GameConfig.PLAYER_FULL_HEALTH;
-import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
-import static com.mygdx.shapewars.config.GameConfig.SHIP_OBSTACLE_LAYER;
-import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
+import static com.mygdx.piratewars.config.GameConfig.BULLET_OBSTACLE_LAYER;
+import static com.mygdx.piratewars.config.GameConfig.ENEMY_FULL_HEALTH;
+import static com.mygdx.piratewars.config.GameConfig.JOYSTICK_INNER_CIRCLE_RADIUS;
+import static com.mygdx.piratewars.config.GameConfig.JOYSTICK_OUTER_CIRCLE_RADIUS;
+import static com.mygdx.piratewars.config.GameConfig.PLAYER_FULL_HEALTH;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_HEIGHT;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_OBSTACLE_LAYER;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_WIDTH;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -20,35 +20,35 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.shapewars.config.Launcher;
-import com.mygdx.shapewars.controller.Joystick;
-import com.mygdx.shapewars.controller.ShapeWarsController;
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
-import com.mygdx.shapewars.model.helperSystems.UpdateSystem;
-import com.mygdx.shapewars.model.systems.UpdateSystemClient;
-import com.mygdx.shapewars.model.systems.UpdateSystemServer;
-import com.mygdx.shapewars.network.ConnectorStrategy;
-import com.mygdx.shapewars.network.client.ClientConnector;
-import com.mygdx.shapewars.network.server.ServerConnector;
+import com.mygdx.piratewars.config.Launcher;
+import com.mygdx.piratewars.controller.Joystick;
+import com.mygdx.piratewars.controller.PirateWarsController;
+import com.mygdx.piratewars.model.components.HealthComponent;
+import com.mygdx.piratewars.model.components.IdentityComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.SpriteComponent;
+import com.mygdx.piratewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.config.Role;
+import com.mygdx.piratewars.model.helperSystems.PirateWarsSystem;
+import com.mygdx.piratewars.model.helperSystems.UpdateSystem;
+import com.mygdx.piratewars.model.systems.UpdateSystemClient;
+import com.mygdx.piratewars.model.systems.UpdateSystemServer;
+import com.mygdx.piratewars.network.ConnectorStrategy;
+import com.mygdx.piratewars.network.client.ClientConnector;
+import com.mygdx.piratewars.network.server.ServerConnector;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.controller.Firebutton;
-import com.mygdx.shapewars.view.ShapeWarsView;
+import com.mygdx.piratewars.controller.Firebutton;
+import com.mygdx.piratewars.view.PirateWarsView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ShapeWarsModel {
+public class PirateWarsModel {
     public int shipId, numPlayers;
     public boolean isGameActive, createEntitiesFlag, isWorldGenerated;
     public static Engine engine;
@@ -59,16 +59,16 @@ public class ShapeWarsModel {
     public Joystick joystickShip, joystickGun;
     public Firebutton firebutton;
     public ArrayList<Polygon> shipObstacles, bulletObstacles;
-    public FitViewport shapeWarsViewport;
+    public FitViewport pirateWarsViewport;
     public GameModel gameModel;
-    public ShapeWarsController controller;
+    public PirateWarsController controller;
     public UpdateSystem updateSystemStrategy;
     public String selectedMap;
     public InputMultiplexer multiplexer;
     public Sprite aimHelp;
     public List<PirateWarsSystem> systems;
 
-    public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress,
+    public PirateWarsModel(PirateWarsController controller, GameModel gameModel, Role role, String serverIpAddress,
             String selectedMap) {
         this.controller = controller;
         this.role = role;
@@ -100,12 +100,12 @@ public class ShapeWarsModel {
                 * map.getProperties().get("tileheight", Integer.class);
         camera.setToOrtho(false, mapWidth, mapHeight);
         camera.update();
-        shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
+        pirateWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
 
         if (gameModel.launcher == Launcher.Mobile) {
-            firebutton = new Firebutton(shapeWarsViewport.getWorldWidth() - 180, 480, JOYSTICK_OUTER_CIRCLE_RADIUS);
+            firebutton = new Firebutton(pirateWarsViewport.getWorldWidth() - 180, 480, JOYSTICK_OUTER_CIRCLE_RADIUS);
             joystickShip = new Joystick(180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS, JOYSTICK_INNER_CIRCLE_RADIUS);
-            joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth() - 180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS,
+            joystickGun = new Joystick((int) pirateWarsViewport.getWorldWidth() - 180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS,
                     JOYSTICK_INNER_CIRCLE_RADIUS);
         }
 
@@ -171,7 +171,7 @@ public class ShapeWarsModel {
             if (createEntitiesFlag) {
                 createEntitiesFlag = false;
                 controller.getScreen().dispose();
-                controller.setScreen(new ShapeWarsView(controller));
+                controller.setScreen(new PirateWarsView(controller));
                 generateEntities();
             }
         }

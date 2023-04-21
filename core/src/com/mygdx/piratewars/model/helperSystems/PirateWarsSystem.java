@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.model.helperSystems;
+package com.mygdx.piratewars.model.helperSystems;
 
 import com.badlogic.ashley.core.EntitySystem;
 

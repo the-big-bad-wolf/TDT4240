@@ -1,15 +1,15 @@
-package com.mygdx.shapewars.model.helperSystems;
+package com.mygdx.piratewars.model.helperSystems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.model.components.ComponentMappers;
+import com.mygdx.piratewars.model.components.IdentityComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.SpriteComponent;
+import com.mygdx.piratewars.model.components.VelocityComponent;
 import java.util.ArrayList;
 
 public abstract class CollisionSystem {

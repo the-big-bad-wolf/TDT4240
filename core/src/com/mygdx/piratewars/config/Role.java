@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.config;
+package com.mygdx.piratewars.config;
 
 public enum Role {
     Server, Client

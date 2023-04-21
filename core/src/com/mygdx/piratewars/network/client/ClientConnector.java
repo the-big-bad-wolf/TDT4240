@@ -1,11 +1,11 @@
-package com.mygdx.shapewars.network.client;
+package com.mygdx.piratewars.network.client;
 
 import com.esotericsoftware.kryonet.Client;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.network.ConnectorStrategy;
-import com.mygdx.shapewars.network.data.InputRequest;
-import com.mygdx.shapewars.network.data.LobbyRequest;
-import com.mygdx.shapewars.view.MainMenuView;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.network.ConnectorStrategy;
+import com.mygdx.piratewars.network.data.InputRequest;
+import com.mygdx.piratewars.network.data.LobbyRequest;
+import com.mygdx.piratewars.view.MainMenuView;
 import java.io.IOException;
 
 public class ClientConnector extends ConnectorStrategy {
@@ -13,7 +13,7 @@ public class ClientConnector extends ConnectorStrategy {
     private Client client;
     private ClientListener listener;
 
-    public ClientConnector(ShapeWarsModel model, String ipAddress) {
+    public ClientConnector(PirateWarsModel model, String ipAddress) {
         this.client = new com.esotericsoftware.kryonet.Client();
         this.client.start();
 

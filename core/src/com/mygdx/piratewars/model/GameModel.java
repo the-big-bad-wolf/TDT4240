@@ -1,7 +1,7 @@
-package com.mygdx.shapewars.model;
+package com.mygdx.piratewars.model;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.shapewars.config.Launcher;
+import com.mygdx.piratewars.config.Launcher;
 import java.util.UUID;
 
 public class GameModel {

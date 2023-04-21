@@ -1,12 +1,12 @@
-package com.mygdx.shapewars.config;
+package com.mygdx.piratewars.config;
 
 import com.badlogic.ashley.core.Family;
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.ParentComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.model.components.HealthComponent;
+import com.mygdx.piratewars.model.components.IdentityComponent;
+import com.mygdx.piratewars.model.components.ParentComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.SpriteComponent;
+import com.mygdx.piratewars.model.components.VelocityComponent;
 
 public abstract class GameConfig {
     public static final int MAX_SPEED = 5;

@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.controller;
+package com.mygdx.piratewars.controller;
 
 import com.badlogic.gdx.math.Circle;
 

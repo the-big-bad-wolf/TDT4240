@@ -1,16 +1,16 @@
-package com.mygdx.shapewars.model.helperSystems;
+package com.mygdx.piratewars.model.helperSystems;
 
-import static com.mygdx.shapewars.config.GameConfig.CANNON_BALL;
-import static com.mygdx.shapewars.config.GameConfig.MAX_BULLET_HEALTH;
+import static com.mygdx.piratewars.config.GameConfig.CANNON_BALL;
+import static com.mygdx.piratewars.config.GameConfig.MAX_BULLET_HEALTH;
 
 import com.badlogic.ashley.core.Entity;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.ParentComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.model.components.ComponentMappers;
+import com.mygdx.piratewars.model.components.HealthComponent;
+import com.mygdx.piratewars.model.components.ParentComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.SpriteComponent;
+import com.mygdx.piratewars.model.components.VelocityComponent;
 
 public abstract class FiringSystem {
 
@@ -26,6 +26,6 @@ public abstract class FiringSystem {
         bullet.add(new SpriteComponent(CANNON_BALL, 10, 10));
         bullet.add(new HealthComponent(MAX_BULLET_HEALTH));
         bullet.add(new ParentComponent(entity));
-        ShapeWarsModel.addToEngine(bullet);
+        PirateWarsModel.addToEngine(bullet);
     }
 }

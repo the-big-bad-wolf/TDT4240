@@ -1,9 +1,9 @@
-package com.mygdx.shapewars.network.server;
+package com.mygdx.piratewars.network.server;
 
 import com.esotericsoftware.kryonet.Server;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.network.ConnectorStrategy;
-import com.mygdx.shapewars.view.MainMenuView;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.network.ConnectorStrategy;
+import com.mygdx.piratewars.view.MainMenuView;
 import java.io.IOException;
 
 public class ServerConnector extends ConnectorStrategy {
@@ -11,7 +11,7 @@ public class ServerConnector extends ConnectorStrategy {
     private Server server;
     private ServerListener listener;
 
-    public ServerConnector(ShapeWarsModel model) {
+    public ServerConnector(PirateWarsModel model) {
         this.server = new Server();
         this.server.start();
         this.listener = new ServerListener(model);

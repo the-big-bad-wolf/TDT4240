@@ -1,9 +1,9 @@
-package com.mygdx.shapewars.network.data;
+package com.mygdx.piratewars.network.data;
 
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.model.components.HealthComponent;
+import com.mygdx.piratewars.model.components.IdentityComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.VelocityComponent;
 
 public class ShipData {
     public VelocityComponent velocityComponent;

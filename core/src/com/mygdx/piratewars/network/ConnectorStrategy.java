@@ -1,18 +1,18 @@
-package com.mygdx.shapewars.network;
+package com.mygdx.piratewars.network;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.network.data.BulletData;
-import com.mygdx.shapewars.network.data.GameResponse;
-import com.mygdx.shapewars.network.data.InputRequest;
-import com.mygdx.shapewars.network.data.LobbyRequest;
-import com.mygdx.shapewars.network.data.LobbyResponse;
-import com.mygdx.shapewars.network.data.ShipData;
+import com.mygdx.piratewars.model.components.HealthComponent;
+import com.mygdx.piratewars.model.components.IdentityComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.network.data.BulletData;
+import com.mygdx.piratewars.network.data.GameResponse;
+import com.mygdx.piratewars.network.data.InputRequest;
+import com.mygdx.piratewars.network.data.LobbyRequest;
+import com.mygdx.piratewars.network.data.LobbyResponse;
+import com.mygdx.piratewars.network.data.ShipData;
 
 import java.io.IOException;
 

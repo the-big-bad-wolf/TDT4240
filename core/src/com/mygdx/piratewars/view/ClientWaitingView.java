@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.view;
+package com.mygdx.piratewars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,15 +8,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.piratewars.controller.PirateWarsController;
 
 public class ClientWaitingView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
-    private ShapeWarsController controller;
+    private PirateWarsController controller;
     private Sprite backgroundSprite;
 
-    public ClientWaitingView(ShapeWarsController controller) {
+    public ClientWaitingView(PirateWarsController controller) {
         this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
@@ -35,7 +35,7 @@ public class ClientWaitingView implements Screen {
         buildUI();
     }
 
-    public void setController(ShapeWarsController controller) {
+    public void setController(PirateWarsController controller) {
         this.controller = controller;
     }
 

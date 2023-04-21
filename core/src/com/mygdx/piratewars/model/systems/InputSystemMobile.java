@@ -1,17 +1,17 @@
-package com.mygdx.shapewars.model.systems;
+package com.mygdx.piratewars.model.systems;
 
-import static com.mygdx.shapewars.config.GameConfig.JOYSTICK_OUTER_CIRCLE_RADIUS;
-import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
+import static com.mygdx.piratewars.config.GameConfig.JOYSTICK_OUTER_CIRCLE_RADIUS;
+import static com.mygdx.piratewars.config.GameConfig.MAX_SPEED;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.shapewars.controller.Joystick;
-import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.piratewars.controller.Joystick;
+import com.mygdx.piratewars.model.PirateWarsModel;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.controller.Firebutton;
-import com.mygdx.shapewars.model.helperSystems.InputSystem;
+import com.mygdx.piratewars.controller.Firebutton;
+import com.mygdx.piratewars.model.helperSystems.InputSystem;
 
 public class InputSystemMobile extends InputSystem {
     private Joystick joystickShip, joystickGun;
@@ -22,19 +22,19 @@ public class InputSystemMobile extends InputSystem {
     private int joystickGunPointer = -1;
     private static volatile InputSystemMobile instance;
 
-    private InputSystemMobile(ShapeWarsModel shapeWarsModel) {
-        super(shapeWarsModel);
-        this.joystickShip = shapeWarsModel.joystickShip;
-        this.joystickGun = shapeWarsModel.joystickGun;
-        this.firebutton = shapeWarsModel.firebutton;
-        this.fitViewport = shapeWarsModel.shapeWarsViewport;
+    private InputSystemMobile(PirateWarsModel pirateWarsModel) {
+        super(pirateWarsModel);
+        this.joystickShip = pirateWarsModel.joystickShip;
+        this.joystickGun = pirateWarsModel.joystickGun;
+        this.firebutton = pirateWarsModel.firebutton;
+        this.fitViewport = pirateWarsModel.pirateWarsViewport;
     }
 
-    public static InputSystemMobile getInstance(ShapeWarsModel shapeWarsModel) {
+    public static InputSystemMobile getInstance(PirateWarsModel pirateWarsModel) {
         if (instance == null) {
             synchronized (InputSystemMobile.class) {
                 if (instance == null) {
-                    instance = new InputSystemMobile(shapeWarsModel);
+                    instance = new InputSystemMobile(pirateWarsModel);
                 }
             }
         }

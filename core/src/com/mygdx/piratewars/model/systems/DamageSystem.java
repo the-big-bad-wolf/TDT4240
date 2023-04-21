@@ -1,20 +1,20 @@
-package com.mygdx.shapewars.model.systems;
+package com.mygdx.piratewars.model.systems;
 
-import static com.mygdx.shapewars.config.GameConfig.MAX_BULLET_HEALTH;
-import static com.mygdx.shapewars.config.GameConfig.BULLET_FAMILY;
-import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
+import static com.mygdx.piratewars.config.GameConfig.MAX_BULLET_HEALTH;
+import static com.mygdx.piratewars.config.GameConfig.BULLET_FAMILY;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.ParentComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
-import com.mygdx.shapewars.model.helperSystems.CollisionSystem;
-import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
+import com.mygdx.piratewars.model.components.ComponentMappers;
+import com.mygdx.piratewars.model.components.HealthComponent;
+import com.mygdx.piratewars.model.components.IdentityComponent;
+import com.mygdx.piratewars.model.components.ParentComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.SpriteComponent;
+import com.mygdx.piratewars.model.helperSystems.CollisionSystem;
+import com.mygdx.piratewars.model.helperSystems.PirateWarsSystem;
 
 public class DamageSystem extends PirateWarsSystem {
 

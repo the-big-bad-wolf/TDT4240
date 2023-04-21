@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.view;
+package com.mygdx.piratewars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,19 +14,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.piratewars.config.Role;
+import com.mygdx.piratewars.controller.PirateWarsController;
 
 public class ClientView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
-    private final ShapeWarsController controller;
+    private final PirateWarsController controller;
     private TextField inputField;
     private TextButton backButton;
     private TextButton okButton;
     private Sprite backgroundSprite;
 
-    public ClientView(ShapeWarsController controller) {
+    public ClientView(PirateWarsController controller) {
         this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
@@ -133,7 +133,7 @@ public class ClientView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 System.out.println(inputField.getText());
-                controller.generateShapeWarsModel(Role.Client, inputField.getText(), "");
+                controller.generatePirateWarsModel(Role.Client, inputField.getText(), "");
                 controller.setScreen(new ClientWaitingView(controller));
             }
         });

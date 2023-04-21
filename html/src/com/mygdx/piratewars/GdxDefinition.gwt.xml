@@ -5,8 +5,8 @@
 	<inherits name='com.badlogic.gdx.physics.box2d.box2d-gwt' />
 	<inherits name='com.badlogic.ashley_gwt' />
 
-	<inherits name='ShapeWars' />
-	<entry-point class='com.mygdx.shapewars.client.HtmlLauncher' />
+	<inherits name='PirateWars' />
+	<entry-point class='com.mygdx.piratewars.client.HtmlLauncher' />
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
 	<set-configuration-property name="gdx.assetpath" value="../assets" />
 	<set-property name="user.agent" value="gecko1_8, safari"/>

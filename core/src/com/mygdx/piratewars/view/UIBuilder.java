@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.view;
+package com.mygdx.piratewars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;

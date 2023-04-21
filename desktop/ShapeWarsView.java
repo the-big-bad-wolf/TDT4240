@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.view;
+package com.mygdx.piratewars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,20 +8,20 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.shapewars.model.ShapeWarsModel;
+import com.mygdx.piratewars.model.PirateWarsModel;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 
-public class ShapeWarsView implements Screen {
+public class PirateWarsView implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
     private final Stage stage;
-    private final ShapeWarsModel model;
+    private final PirateWarsModel model;
 
-    public ShapeWarsView(ShapeWarsModel model) {
+    public PirateWarsView(PirateWarsModel model) {
         this.model = model;
         this.stage = new Stage(); // todo check if we need to change that
     }

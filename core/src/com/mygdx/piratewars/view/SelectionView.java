@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.view;
+package com.mygdx.piratewars.view;
 
 import java.net.UnknownHostException;
 
@@ -14,11 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.mygdx.shapewars.config.Role;
-import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.piratewars.config.Role;
+import com.mygdx.piratewars.controller.PirateWarsController;
 
 public class SelectionView implements Screen {
-    private final ShapeWarsController controller;
+    private final PirateWarsController controller;
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private TextButton map1Button;
@@ -32,7 +32,7 @@ public class SelectionView implements Screen {
     private Sprite backgroundSprite;
     private SpriteBatch batch;
 
-    public SelectionView(ShapeWarsController controller, int sourceInt) {
+    public SelectionView(PirateWarsController controller, int sourceInt) {
         this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
@@ -162,13 +162,13 @@ public class SelectionView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     if (sourceInt == 0) {
-                        controller.generateShapeWarsModel(Role.Server, "", map1);
+                        controller.generatePirateWarsModel(Role.Server, "", map1);
                         controller.setScreen(new HostView(controller));
                     }
                     if (sourceInt == 2) {
-                        controller.generateShapeWarsModel(Role.Server, "", map1);
-                        controller.shapeWarsModel.generateEntities();
-                        controller.setScreen(new ShapeWarsView(controller));
+                        controller.generatePirateWarsModel(Role.Server, "", map1);
+                        controller.pirateWarsModel.generateEntities();
+                        controller.setScreen(new PirateWarsView(controller));
                     }
                 } catch (NullPointerException | UnknownHostException nullPointerException) {
                     System.out.println("No controller found");
@@ -181,13 +181,13 @@ public class SelectionView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     if (sourceInt == 0) {
-                        controller.generateShapeWarsModel(Role.Server, "", map2);
+                        controller.generatePirateWarsModel(Role.Server, "", map2);
                         controller.setScreen(new HostView(controller));
                     }
                     if (sourceInt == 2) {
-                        controller.generateShapeWarsModel(Role.Server, "", map2);
-                        controller.shapeWarsModel.generateEntities();
-                        controller.setScreen(new ShapeWarsView(controller));
+                        controller.generatePirateWarsModel(Role.Server, "", map2);
+                        controller.pirateWarsModel.generateEntities();
+                        controller.setScreen(new PirateWarsView(controller));
                     }
                 } catch (NullPointerException | UnknownHostException nullPointerException) {
                     System.out.println("No controller found");

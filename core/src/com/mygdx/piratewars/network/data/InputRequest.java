@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.network.data;
+package com.mygdx.piratewars.network.data;
 
 public class InputRequest {
 

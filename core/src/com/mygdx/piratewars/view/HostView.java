@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.view;
+package com.mygdx.piratewars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.piratewars.controller.PirateWarsController;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -22,13 +22,13 @@ import java.util.Enumeration;
 public class HostView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
-    private ShapeWarsController controller;
+    private PirateWarsController controller;
     private TextButton backButton;
     private TextButton startButton;
     private String ipAddress;
     private Sprite backgroundSprite;
 
-    public HostView(ShapeWarsController controller) throws UnknownHostException {
+    public HostView(PirateWarsController controller) throws UnknownHostException {
         this.controller = controller;
         this.stage = new Stage();
         this.uiBuilder = new UIBuilder(this.stage);
@@ -47,7 +47,7 @@ public class HostView implements Screen {
         buildUI();
     }
 
-    public void setController(ShapeWarsController controller) {
+    public void setController(PirateWarsController controller) {
         this.controller = controller;
     }
 
@@ -125,7 +125,7 @@ public class HostView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     controller.setScreen(new MainMenuView(controller));
-                    controller.shapeWarsModel.dispose();
+                    controller.pirateWarsModel.dispose();
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No controller found");
                 }
@@ -135,8 +135,8 @@ public class HostView implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.shapeWarsModel.generateEntities();
-                controller.setScreen(new ShapeWarsView(controller));
+                controller.pirateWarsModel.generateEntities();
+                controller.setScreen(new PirateWarsView(controller));
             }
         });
     }

@@ -1,36 +1,36 @@
-package com.mygdx.shapewars.model.systems;
+package com.mygdx.piratewars.model.systems;
 
-import static com.mygdx.shapewars.config.GameConfig.ENEMY_DAMAGE_ONE;
-import static com.mygdx.shapewars.config.GameConfig.ENEMY_DAMAGE_TWO;
-import static com.mygdx.shapewars.config.GameConfig.ENEMY_DEAD;
-import static com.mygdx.shapewars.config.GameConfig.ENEMY_FULL_HEALTH;
-import static com.mygdx.shapewars.config.GameConfig.PLAYER_DAMAGE_ONE;
-import static com.mygdx.shapewars.config.GameConfig.PLAYER_DAMAGE_TWO;
-import static com.mygdx.shapewars.config.GameConfig.PLAYER_DEAD;
-import static com.mygdx.shapewars.config.GameConfig.PLAYER_FULL_HEALTH;
-import static com.mygdx.shapewars.config.GameConfig.SHIP_HEIGHT;
-import static com.mygdx.shapewars.config.GameConfig.SHIP_WIDTH;
-import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
+import static com.mygdx.piratewars.config.GameConfig.ENEMY_DAMAGE_ONE;
+import static com.mygdx.piratewars.config.GameConfig.ENEMY_DAMAGE_TWO;
+import static com.mygdx.piratewars.config.GameConfig.ENEMY_DEAD;
+import static com.mygdx.piratewars.config.GameConfig.ENEMY_FULL_HEALTH;
+import static com.mygdx.piratewars.config.GameConfig.PLAYER_DAMAGE_ONE;
+import static com.mygdx.piratewars.config.GameConfig.PLAYER_DAMAGE_TWO;
+import static com.mygdx.piratewars.config.GameConfig.PLAYER_DEAD;
+import static com.mygdx.piratewars.config.GameConfig.PLAYER_FULL_HEALTH;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_HEIGHT;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_WIDTH;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.model.helperSystems.PirateWarsSystem;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.model.components.ComponentMappers;
+import com.mygdx.piratewars.model.components.HealthComponent;
+import com.mygdx.piratewars.model.components.IdentityComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.SpriteComponent;
+import com.mygdx.piratewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.model.helperSystems.PirateWarsSystem;
 
 public class SpriteSystem extends PirateWarsSystem {
 
     private ImmutableArray<Entity> entities;
     private ImmutableArray<Entity> ships;
-    private ShapeWarsModel shapeWarsModel;
+    private PirateWarsModel pirateWarsModel;
 
     private static volatile SpriteSystem instance;
 
@@ -40,8 +40,8 @@ public class SpriteSystem extends PirateWarsSystem {
         ships = engine.getEntitiesFor(SHIP_FAMILY);
     }
 
-    private SpriteSystem(ShapeWarsModel shapeWarsModel) {
-        this.shapeWarsModel = shapeWarsModel;
+    private SpriteSystem(PirateWarsModel pirateWarsModel) {
+        this.pirateWarsModel = pirateWarsModel;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class SpriteSystem extends PirateWarsSystem {
             IdentityComponent shipIdentityComponent = ComponentMappers.identity.get(ship);
             SpriteComponent shipSpriteComponent = ComponentMappers.sprite.get(ship);
 
-            if (shipIdentityComponent.getId() == shapeWarsModel.shipId) {
+            if (shipIdentityComponent.getId() == pirateWarsModel.shipId) {
                 String expectedSkin;
                 if (shipHealthComponent.getHealth() >= 100) {
                     expectedSkin = PLAYER_FULL_HEALTH;
@@ -69,7 +69,7 @@ public class SpriteSystem extends PirateWarsSystem {
                 }
 
                 Vector2 position = ComponentMappers.position.get(ship).getPosition();
-                shapeWarsModel.aimHelp.setPosition(position.x + SHIP_WIDTH / 2 + 100, position.y + SHIP_HEIGHT / 2);
+                pirateWarsModel.aimHelp.setPosition(position.x + SHIP_WIDTH / 2 + 100, position.y + SHIP_HEIGHT / 2);
             } else {
                 String expectedSkin;
                 if (shipHealthComponent.getHealth() >= 100) {
@@ -99,11 +99,11 @@ public class SpriteSystem extends PirateWarsSystem {
         }
     }
 
-    public static SpriteSystem getInstance(ShapeWarsModel shapeWarsModel) {
+    public static SpriteSystem getInstance(PirateWarsModel pirateWarsModel) {
         if (instance == null) {
             synchronized (SpriteSystem.class) {
                 if (instance == null) {
-                    instance = new SpriteSystem(shapeWarsModel);
+                    instance = new SpriteSystem(pirateWarsModel);
                 }
             }
         }

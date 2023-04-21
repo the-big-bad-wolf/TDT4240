@@ -17,7 +17,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "com.mygdx.shapewars"
+        applicationId "com.mygdx.piratewars"
         minSdkVersion 14
         targetSdkVersion 33
         versionCode 1
@@ -82,7 +82,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.shapewars/com.mygdx.shapewars.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.piratewars/com.mygdx.piratewars.AndroidLauncher'
 }
 
 eclipse.project.name = appName + "-android"

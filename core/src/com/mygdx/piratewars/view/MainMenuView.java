@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.view;
+package com.mygdx.piratewars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,18 +11,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.piratewars.controller.PirateWarsController;
 
 public class MainMenuView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
-    private ShapeWarsController controller;
+    private PirateWarsController controller;
     private TextButton startButton;
     private TextButton hostButton;
     private TextButton joinButton;
     private Sprite backgroundSprite;
 
-    public MainMenuView(ShapeWarsController controller) {
+    public MainMenuView(PirateWarsController controller) {
         this.stage = new Stage();
         this.controller = controller;
         this.uiBuilder = new UIBuilder(this.stage);

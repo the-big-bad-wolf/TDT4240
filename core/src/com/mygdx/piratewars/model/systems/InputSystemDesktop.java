@@ -1,8 +1,8 @@
-package com.mygdx.shapewars.model.systems;
+package com.mygdx.piratewars.model.systems;
 
-import static com.mygdx.shapewars.config.GameConfig.MAX_SPEED;
-import static com.mygdx.shapewars.config.GameConfig.MAX_TURN_RATE;
-import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
+import static com.mygdx.piratewars.config.GameConfig.MAX_SPEED;
+import static com.mygdx.piratewars.config.GameConfig.MAX_TURN_RATE;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -10,26 +10,26 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.SpriteComponent;
-import com.mygdx.shapewars.model.helperSystems.InputSystem;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.model.components.ComponentMappers;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.SpriteComponent;
+import com.mygdx.piratewars.model.helperSystems.InputSystem;
 
 public class InputSystemDesktop extends InputSystem {
     private static volatile InputSystemDesktop instance;
     private FitViewport fitViewport; // todo move to other class
 
-    private InputSystemDesktop(ShapeWarsModel shapeWarsModel) {
-        super(shapeWarsModel);
-        this.fitViewport = shapeWarsModel.shapeWarsViewport;
+    private InputSystemDesktop(PirateWarsModel pirateWarsModel) {
+        super(pirateWarsModel);
+        this.fitViewport = pirateWarsModel.pirateWarsViewport;
     }
 
-    public static InputSystemDesktop getInstance(ShapeWarsModel shapeWarsModel) {
+    public static InputSystemDesktop getInstance(PirateWarsModel pirateWarsModel) {
         if (instance == null) {
             synchronized (InputSystemDesktop.class) {
                 if (instance == null) {
-                    instance = new InputSystemDesktop(shapeWarsModel);
+                    instance = new InputSystemDesktop(pirateWarsModel);
                 }
             }
         }
@@ -65,12 +65,12 @@ public class InputSystemDesktop extends InputSystem {
     }
 
     private int getInputDirection() {
-        entities = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
+        entities = pirateWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
         int currentDir = 0;
         try {
             for (int i = 0; i < entities.size(); i++) {
                 Entity e = entities.get(i);
-                if (ComponentMappers.identity.get(e).getId() == shapeWarsModel.shipId)
+                if (ComponentMappers.identity.get(e).getId() == pirateWarsModel.shipId)
                     currentDir = (int) ComponentMappers.velocity.get(e).getDirection();
             }
         } catch (Exception e) { }
@@ -106,7 +106,7 @@ public class InputSystemDesktop extends InputSystem {
         try {
             for (int i = 0; i < entities.size(); i++) {
                 Entity entity = entities.get(i);
-                if (ComponentMappers.identity.get(entity).getId() == shapeWarsModel.shipId) {
+                if (ComponentMappers.identity.get(entity).getId() == pirateWarsModel.shipId) {
                     PositionComponent positionComponent = ComponentMappers.position.get(entity);
                     SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
 

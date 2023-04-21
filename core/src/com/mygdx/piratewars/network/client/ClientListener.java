@@ -1,16 +1,16 @@
-package com.mygdx.shapewars.network.client;
+package com.mygdx.piratewars.network.client;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.network.data.GameResponse;
-import com.mygdx.shapewars.network.data.LobbyResponse;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.network.data.GameResponse;
+import com.mygdx.piratewars.network.data.LobbyResponse;
 
 public class ClientListener extends Listener {
 
-    private ShapeWarsModel model;
+    private PirateWarsModel model;
 
-    public ClientListener(ShapeWarsModel model) {
+    public ClientListener(PirateWarsModel model) {
         this.model = model;
     }
 

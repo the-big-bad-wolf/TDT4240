@@ -1,18 +1,18 @@
-package com.mygdx.shapewars.model.helperSystems;
+package com.mygdx.piratewars.model.helperSystems;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.network.data.BulletData;
-import com.mygdx.shapewars.network.data.ShipData;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.network.data.BulletData;
+import com.mygdx.piratewars.network.data.ShipData;
 
 public abstract class UpdateSystem extends PirateWarsSystem {
     protected static volatile UpdateSystem instance;
-    protected ShapeWarsModel shapeWarsModel;
+    protected PirateWarsModel pirateWarsModel;
     public boolean updated; // works as a lock to avoid conflicts between threads
 
-    public UpdateSystem(ShapeWarsModel shapeWarsModel) {
-        this.shapeWarsModel = shapeWarsModel;
+    public UpdateSystem(PirateWarsModel pirateWarsModel) {
+        this.pirateWarsModel = pirateWarsModel;
     }
 
     public void dispose() {

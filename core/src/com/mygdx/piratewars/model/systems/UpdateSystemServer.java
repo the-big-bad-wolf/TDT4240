@@ -1,9 +1,9 @@
-package com.mygdx.shapewars.model.systems;
+package com.mygdx.piratewars.model.systems;
 
 import com.badlogic.ashley.core.Entity;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.model.helperSystems.FiringSystem;
-import com.mygdx.shapewars.model.helperSystems.UpdateSystem;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.model.helperSystems.FiringSystem;
+import com.mygdx.piratewars.model.helperSystems.UpdateSystem;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,16 +11,16 @@ public class UpdateSystemServer extends UpdateSystem {
 
     public List<Entity> unshotBullets;
 
-    public UpdateSystemServer(ShapeWarsModel shapeWarsModel) {
-        super(shapeWarsModel);
+    public UpdateSystemServer(PirateWarsModel pirateWarsModel) {
+        super(pirateWarsModel);
         this.unshotBullets = new ArrayList<>();
     }
 
-    public static UpdateSystem getInstance(ShapeWarsModel shapeWarsModel) {
+    public static UpdateSystem getInstance(PirateWarsModel pirateWarsModel) {
         if (instance == null) {
             synchronized (InputSystemDesktop.class) {
                 if (instance == null) {
-                    instance = new UpdateSystemServer(shapeWarsModel);
+                    instance = new UpdateSystemServer(pirateWarsModel);
                 }
             }
         }

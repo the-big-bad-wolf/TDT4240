@@ -1,4 +1,4 @@
-package com.mygdx.shapewars.view;
+package com.mygdx.piratewars.view;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -16,32 +16,32 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.config.Launcher;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.controller.ShapeWarsController;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.SpriteComponent;
+import com.mygdx.piratewars.config.Launcher;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.controller.PirateWarsController;
+import com.mygdx.piratewars.model.components.ComponentMappers;
+import com.mygdx.piratewars.model.components.SpriteComponent;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
-public class ShapeWarsView implements Screen {
+public class PirateWarsView implements Screen {
     private OrthogonalTiledMapRenderer mapRenderer;
     private ShapeRenderer shapeRenderer;
     private final Stage stage;
-    private final ShapeWarsModel model;
+    private final PirateWarsModel model;
     private final TiledMap map;
     private FitViewport fitViewport;
     private Sprite backgroundSprite;
     private ExtendViewport extendViewport;
-    private ShapeWarsController controller;
+    private PirateWarsController controller;
     private TextButton menuButton;
     private UIBuilder uiBuilder;
 
-    public ShapeWarsView(ShapeWarsController controller) {
+    public PirateWarsView(PirateWarsController controller) {
         this.controller = controller;
-        this.model = controller.shapeWarsModel;
+        this.model = controller.pirateWarsModel;
         this.stage = new Stage(); // todo check if we need to change that
-        map = ShapeWarsModel.getMap();
-        this.fitViewport = model.shapeWarsViewport;
+        map = PirateWarsModel.getMap();
+        this.fitViewport = model.pirateWarsViewport;
         this.uiBuilder = new UIBuilder(this.stage);
         stage.setViewport(fitViewport);
 
@@ -51,7 +51,7 @@ public class ShapeWarsView implements Screen {
         addActionsToUI();
     }
 
-    public ShapeWarsController getController() {
+    public PirateWarsController getController() {
         return controller;
     }
 
@@ -152,7 +152,7 @@ public class ShapeWarsView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     controller.setScreen(new MainMenuView(controller));
-                    controller.shapeWarsModel.dispose();
+                    controller.pirateWarsModel.dispose();
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }

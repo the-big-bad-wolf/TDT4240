@@ -1,31 +1,31 @@
-package com.mygdx.shapewars.network.server;
+package com.mygdx.piratewars.network.server;
 
-import static com.mygdx.shapewars.config.GameConfig.SHIP_FAMILY;
-import static com.mygdx.shapewars.config.GameConfig.BULLET_FAMILY;
+import static com.mygdx.piratewars.config.GameConfig.SHIP_FAMILY;
+import static com.mygdx.piratewars.config.GameConfig.BULLET_FAMILY;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.mygdx.shapewars.model.ShapeWarsModel;
-import com.mygdx.shapewars.model.components.ComponentMappers;
-import com.mygdx.shapewars.model.components.HealthComponent;
-import com.mygdx.shapewars.model.components.IdentityComponent;
-import com.mygdx.shapewars.model.components.PositionComponent;
-import com.mygdx.shapewars.model.components.VelocityComponent;
-import com.mygdx.shapewars.network.data.BulletData;
-import com.mygdx.shapewars.network.data.GameResponse;
-import com.mygdx.shapewars.network.data.InputRequest;
-import com.mygdx.shapewars.network.data.LobbyRequest;
-import com.mygdx.shapewars.network.data.LobbyResponse;
-import com.mygdx.shapewars.network.data.ShipData;
+import com.mygdx.piratewars.model.PirateWarsModel;
+import com.mygdx.piratewars.model.components.ComponentMappers;
+import com.mygdx.piratewars.model.components.HealthComponent;
+import com.mygdx.piratewars.model.components.IdentityComponent;
+import com.mygdx.piratewars.model.components.PositionComponent;
+import com.mygdx.piratewars.model.components.VelocityComponent;
+import com.mygdx.piratewars.network.data.BulletData;
+import com.mygdx.piratewars.network.data.GameResponse;
+import com.mygdx.piratewars.network.data.InputRequest;
+import com.mygdx.piratewars.network.data.LobbyRequest;
+import com.mygdx.piratewars.network.data.LobbyResponse;
+import com.mygdx.piratewars.network.data.ShipData;
 import java.util.ArrayList;
 
 public class ServerListener extends Listener {
 
-    private ShapeWarsModel model;
+    private PirateWarsModel model;
 
-    public ServerListener(ShapeWarsModel model) {
+    public ServerListener(PirateWarsModel model) {
         this.model = model;
     }
 
