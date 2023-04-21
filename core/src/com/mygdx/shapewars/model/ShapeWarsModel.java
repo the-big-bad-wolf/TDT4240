@@ -68,7 +68,8 @@ public class ShapeWarsModel {
     public Sprite aimHelp;
     public List<PirateWarsSystem> systems;
 
-    public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress, String selectedMap) {
+    public ShapeWarsModel(ShapeWarsController controller, GameModel gameModel, Role role, String serverIpAddress,
+            String selectedMap) {
         this.controller = controller;
         this.role = role;
         this.gameModel = gameModel;
@@ -93,8 +94,10 @@ public class ShapeWarsModel {
         map = loader.load(selectedMap.isEmpty() ? "maps/pirateMap.tmx" : this.selectedMap);
 
         OrthographicCamera camera = new OrthographicCamera();
-        float mapWidth = map.getProperties().get("width", Integer.class) * map.getProperties().get("tilewidth", Integer.class);
-        float mapHeight = map.getProperties().get("height", Integer.class) * map.getProperties().get("tileheight", Integer.class);
+        float mapWidth = map.getProperties().get("width", Integer.class)
+                * map.getProperties().get("tilewidth", Integer.class);
+        float mapHeight = map.getProperties().get("height", Integer.class)
+                * map.getProperties().get("tileheight", Integer.class);
         camera.setToOrtho(false, mapWidth, mapHeight);
         camera.update();
         shapeWarsViewport = new FitViewport(mapWidth, mapHeight, camera);
@@ -102,7 +105,8 @@ public class ShapeWarsModel {
         if (gameModel.launcher == Launcher.Mobile) {
             firebutton = new Firebutton(shapeWarsViewport.getWorldWidth() - 180, 480, JOYSTICK_OUTER_CIRCLE_RADIUS);
             joystickShip = new Joystick(180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS, JOYSTICK_INNER_CIRCLE_RADIUS);
-            joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth() - 180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS, JOYSTICK_INNER_CIRCLE_RADIUS);
+            joystickGun = new Joystick((int) shapeWarsViewport.getWorldWidth() - 180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS,
+                    JOYSTICK_INNER_CIRCLE_RADIUS);
         }
 
         shipObstacles = getLayerObstacles(SHIP_OBSTACLE_LAYER);
@@ -135,7 +139,14 @@ public class ShapeWarsModel {
             Vector2 cell = spawnCells.get(i);
             ship.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
             ship.add(new VelocityComponent(0, 0, 0));
-            ship.add(new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo give own ship its own color
+            ship.add(
+                    new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo
+                                                                                                                         // give
+                                                                                                                         // own
+                                                                                                                         // ship
+                                                                                                                         // its
+                                                                                                                         // own
+                                                                                                                         // color
             ship.add(new HealthComponent(100));
             ship.add(new IdentityComponent(i));
             engine.addEntity(ship);
@@ -160,6 +171,7 @@ public class ShapeWarsModel {
             if (!this.selectedMap.isEmpty() && !this.isWorldGenerated) {
                 System.out.println(this.selectedMap);
                 generateWorld();
+                generateEntities();
                 isWorldGenerated = true;
             }
 
@@ -174,7 +186,7 @@ public class ShapeWarsModel {
     }
 
     public static void addToEngine(Entity entity) {
-      engine.addEntity(entity);
+        engine.addEntity(entity);
     }
 
     public static TiledMap getMap() {
@@ -212,6 +224,7 @@ public class ShapeWarsModel {
         engine.removeAllEntities();
         try {
             connectorStrategy.dispose();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
 }
