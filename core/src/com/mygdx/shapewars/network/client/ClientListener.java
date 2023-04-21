@@ -6,7 +6,6 @@ import com.mygdx.shapewars.model.ShapeWarsModel;
 import com.mygdx.shapewars.network.data.GameResponse;
 import com.mygdx.shapewars.network.data.LobbyResponse;
 
-
 public class ClientListener extends Listener {
 
     private ShapeWarsModel model;
@@ -33,7 +32,10 @@ public class ClientListener extends Listener {
             model.shipId = response.clientShipId;
             model.selectedMap = response.selectedMap;
             // the ordering here is important!
-            model.createEntitiesFlag = !model.isGameActive && response.isGameActive;
+
+            if (!model.isGameActive && response.isGameActive) {
+                model.createEntitiesFlag = true;
+            }
             model.isGameActive = response.isGameActive;
         }
         if (object instanceof GameResponse) {
