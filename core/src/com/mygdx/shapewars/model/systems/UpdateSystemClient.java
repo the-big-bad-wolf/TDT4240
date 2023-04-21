@@ -52,14 +52,11 @@ public class UpdateSystemClient extends UpdateSystem {
         try {
             ImmutableArray<Entity> shipsClient = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
             for (int i = 0; i < shipsClient.size(); i++) {
-                boolean toRemove = true;
                 Entity shipClient = shipsClient.get(i);
                 for (int j = 0; j < shipsServer.length; j++) {
                     ShipData shipDataServer = shipsServer[j];
                     // i = index client side, j = index server side
                     if (shipDataServer.identityComponent.getId() == ComponentMappers.identity.get(shipClient).getId()) {
-                        toRemove = false;
-
                         // update position
                         float x = shipDataServer.positionComponent.getPosition().x;
                         float y = shipDataServer.positionComponent.getPosition().y;

@@ -100,7 +100,7 @@ public class ClientView implements Screen {
         float allButtonsWidth = 256f;
         float allButtonsHeight = 128f;
         float inputFieldXPos = Gdx.graphics.getWidth() / 2f - inputFieldWidth / 2;
-        float inputFieldYPos = Gdx.graphics.getHeight() / 2f + inputFieldHeight / 2;
+        float inputFieldYPos = Gdx.graphics.getHeight() * 2f / 3f;
         float backButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth - 50f;
         float backButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;

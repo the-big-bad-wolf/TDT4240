@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
@@ -15,7 +14,6 @@ public class ClientWaitingView implements Screen {
     private final Stage stage;
     private final UIBuilder uiBuilder;
     private ShapeWarsController controller;
-    private TextButton ipAddressField;
     private Sprite backgroundSprite;
 
     public ClientWaitingView(ShapeWarsController controller) {
@@ -96,6 +94,6 @@ public class ClientWaitingView implements Screen {
         float ipAddressHeight = 128;
         float ipAddressXPos = Gdx.graphics.getWidth() / 2f - ipAddressWidth / 2;
         float ipAddressYPos = Gdx.graphics.getHeight() / 2f - ipAddressHeight / 2 + 100f;
-        ipAddressField = uiBuilder.buildButton("Waiting for host to start the game", ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos, "ipaddress");
+        uiBuilder.buildButton("Waiting for host to start the game", ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos, "ipaddress");
     }
 }

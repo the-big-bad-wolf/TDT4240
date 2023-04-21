@@ -11,8 +11,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -25,7 +23,6 @@ public class SelectionView implements Screen {
     private final UIBuilder uiBuilder;
     private TextButton map1Button;
     private TextButton map2Button;
-    private TextButton selectMap;
     private TextButton backButton;
     private String map1;
     private String map2;
@@ -34,7 +31,6 @@ public class SelectionView implements Screen {
     private int sourceInt;
     private Sprite backgroundSprite;
     private SpriteBatch batch;
-    private ExtendViewport extendViewport;
 
     public SelectionView(ShapeWarsController controller, int sourceInt) {
         this.controller = controller;
@@ -42,7 +38,7 @@ public class SelectionView implements Screen {
         this.uiBuilder = new UIBuilder(this.stage);
         this.sourceInt = sourceInt;
         batch = new SpriteBatch();
-        extendViewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         buildUI();
         setMaps();
     }
@@ -101,13 +97,11 @@ public class SelectionView implements Screen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'pause'");
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'resume'");
     }
 
@@ -151,12 +145,12 @@ public class SelectionView implements Screen {
                 backYPos,
                 "redVersion");
 
-        selectMap = uiBuilder.buildButton("Select your preferred map:",
+        uiBuilder.buildButton("Select your preferred map:",
                 selectWidth,
                 selectHeight,
                 selectXPos,
                 selectYPos,
-                "ipaddress");
+                "default");
 
 
         addActionsToUI();

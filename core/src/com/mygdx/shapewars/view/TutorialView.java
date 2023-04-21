@@ -1,7 +1,5 @@
 package com.mygdx.shapewars.view;
 
-import java.net.UnknownHostException;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.shapewars.config.Role;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 
 public class TutorialView implements Screen {
@@ -28,7 +24,6 @@ public class TutorialView implements Screen {
 	private Sprite imageSprite;
 	private Sprite backgroundSprite;
 	private SpriteBatch batch;
-	private ExtendViewport extendViewport;
 
 	public TutorialView(ShapeWarsController controller, int sourceInt) {
 		this.controller = controller;
@@ -39,7 +34,6 @@ public class TutorialView implements Screen {
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.update();
 		batch = new SpriteBatch();
-		extendViewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		stage.setViewport(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
 		buildUI();
 	}
@@ -88,13 +82,11 @@ public class TutorialView implements Screen {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'pause'");
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'resume'");
 	}
 

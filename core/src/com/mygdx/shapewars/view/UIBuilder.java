@@ -1,18 +1,12 @@
 package com.mygdx.shapewars.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 public class UIBuilder {
@@ -20,10 +14,8 @@ public class UIBuilder {
     private final Skin skin;
     private TextFieldStyle fieldStyle;
     private TextButtonStyle buttonStyle;
-    private ImageButton.ImageButtonStyle imageButtonStyle;
     private TextField textField;
     private TextButton textButton;
-    private ImageButton imageButton;
 
     public UIBuilder(Stage stage) {
         this.stage = stage;
@@ -60,10 +52,5 @@ public class UIBuilder {
     private void buildButtonStyle(Skin skin, String styleName) {
         buttonStyle = skin.get(styleName, TextButtonStyle.class);
         buttonStyle.font.getData().setScale(1f);
-    }
-
-    private void buildImageButtonStyle(Skin skin, Drawable buttonUp) {
-        imageButtonStyle = new ImageButton.ImageButtonStyle();
-        imageButtonStyle.up = skin.newDrawable(buttonUp);
     }
 }

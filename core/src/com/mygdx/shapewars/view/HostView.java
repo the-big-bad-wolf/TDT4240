@@ -7,12 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.shapewars.controller.ShapeWarsController;
 import java.net.Inet4Address;
@@ -28,8 +25,6 @@ public class HostView implements Screen {
     private ShapeWarsController controller;
     private TextButton backButton;
     private TextButton startButton;
-    private TextButton ipAddressField;
-    private Label ipLabel;
     private String ipAddress;
     private Sprite backgroundSprite;
 
@@ -117,7 +112,7 @@ public class HostView implements Screen {
         float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         ipAddress = getIpAddress();
-        ipAddressField = uiBuilder.buildButton("Your IP address:  " + ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos, "ipaddress");
+        uiBuilder.buildButton("Your IP address:  " + ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos, "ipaddress");
         startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos, "default");
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos, "default");
 

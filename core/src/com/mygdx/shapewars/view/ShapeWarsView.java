@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -112,7 +111,6 @@ public class ShapeWarsView implements Screen {
         mapRenderer.render(layers);
         mapRenderer.getBatch().begin();
         for (int i = 0; i < model.engine.getEntities().size(); i++) {
-            // TODO access components without entities
             Entity entity = model.engine.getEntities().get(i);
             SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
             spriteComponent.getSprite().draw(mapRenderer.getBatch());
