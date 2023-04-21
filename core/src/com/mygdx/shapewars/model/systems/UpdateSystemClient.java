@@ -51,7 +51,6 @@ public class UpdateSystemClient extends UpdateSystem {
         // synchronize ship entities
         try {
             ImmutableArray<Entity> shipsClient = shapeWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
-
             for (int i = 0; i < shipsClient.size(); i++) {
                 boolean toRemove = true;
                 Entity shipClient = shipsClient.get(i);
@@ -78,10 +77,6 @@ public class UpdateSystemClient extends UpdateSystem {
 
                         break;
                     }
-                }
-                if (toRemove) {
-                    // ship existing in client ecs does not exist on server ecs -> remove it
-                    shapeWarsModel.engine.removeEntity(shipClient);
                 }
             }
         } catch (NullPointerException | ArrayIndexOutOfBoundsException exception) {

@@ -140,13 +140,7 @@ public class ShapeWarsModel {
             ship.add(new PositionComponent(cell.x * spawnLayer.getTileWidth(), cell.y * spawnLayer.getTileHeight()));
             ship.add(new VelocityComponent(0, 0, 0));
             ship.add(
-                    new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT)); // todo
-                                                                                                                         // give
-                                                                                                                         // own
-                                                                                                                         // ship
-                                                                                                                         // its
-                                                                                                                         // own
-                                                                                                                         // color
+                    new SpriteComponent(i == shipId ? PLAYER_FULL_HEALTH : ENEMY_FULL_HEALTH, SHIP_WIDTH, SHIP_HEIGHT));
             ship.add(new HealthComponent(100));
             ship.add(new IdentityComponent(i));
             engine.addEntity(ship);
@@ -171,7 +165,6 @@ public class ShapeWarsModel {
             if (!this.selectedMap.isEmpty() && !this.isWorldGenerated) {
                 System.out.println(this.selectedMap);
                 generateWorld();
-                generateEntities();
                 isWorldGenerated = true;
             }
 
