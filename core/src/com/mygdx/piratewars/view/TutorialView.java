@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.mygdx.shapewars.controller.ShapeWarsController;
+import com.mygdx.shapewars.controller.PirateWarsController;
 
 public class TutorialView implements Screen {
-	private final ShapeWarsController controller;
+	private final PirateWarsController controller;
 	private final Stage stage;
 	private final UIBuilder uiBuilder;
 	private TextButton nextButton;
@@ -25,7 +25,7 @@ public class TutorialView implements Screen {
 	private Sprite backgroundSprite;
 	private SpriteBatch batch;
 
-	public TutorialView(ShapeWarsController controller, int sourceInt) {
+	public TutorialView(PirateWarsController controller, int sourceInt) {
 		this.controller = controller;
 		this.stage = new Stage();
 		this.uiBuilder = new UIBuilder(this.stage);
