@@ -25,8 +25,10 @@ public class HostView implements Screen {
     private PirateWarsController controller;
     private TextButton backButton;
     private TextButton startButton;
+    private TextButton playersConnectedButton;
     private String ipAddress;
     private Sprite backgroundSprite;
+    private int playersConnected;
 
     public HostView(PirateWarsController controller) throws UnknownHostException {
         this.controller = controller;
@@ -71,6 +73,10 @@ public class HostView implements Screen {
         backgroundSprite.draw(controller.gameModel.batch);
         controller.gameModel.batch.end();
 
+        if (playersConnected != updatePlayersConnected()) {
+            buildPlayersConnectedButton();
+        }
+
         stage.act(delta);
         stage.draw();
     }
@@ -106,13 +112,15 @@ public class HostView implements Screen {
         float allButtonsWidth = 256f;
         float allButtonsHeight = 100f;
         float ipAddressXPos = Gdx.graphics.getWidth() / 2f - ipAddressWidth / 2;
-        float ipAddressYPos = Gdx.graphics.getHeight() / 2f - ipAddressHeight / 2 + 100f;
+        float ipAddressYPos = Gdx.graphics.getHeight() / 2f - ipAddressHeight / 2 + 200f;
         float backButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth - 50f;
         float backButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         float startButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
         float startButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
         ipAddress = getIpAddress();
         uiBuilder.buildButton("Your IP address:  " + ipAddress, ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos, "ipaddress");
+        updatePlayersConnected();
+        buildPlayersConnectedButton();
         startButton = uiBuilder.buildButton("Start", allButtonsWidth, allButtonsHeight, startButtonXPos, startButtonYPos, "default");
         backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight, backButtonXPos, backButtonYPos, "default");
 
@@ -167,4 +175,16 @@ public class HostView implements Screen {
         }
         return null;
     }
+
+    public int updatePlayersConnected() {
+        playersConnected = controller.pirateWarsModel.deviceShipMapping.size();
+        return playersConnected;
+    }
+
+    public void buildPlayersConnectedButton() {
+        float playersConnectedXPos = Gdx.graphics.getWidth() / 2f - 256f;
+        float playersConnectedYPos = Gdx.graphics.getHeight() / 2f - 10f;
+        playersConnectedButton = uiBuilder.buildButton("Players Connected: " + playersConnected, 512, 128, playersConnectedXPos, playersConnectedYPos, "ipaddress");
+    }
+     
 }

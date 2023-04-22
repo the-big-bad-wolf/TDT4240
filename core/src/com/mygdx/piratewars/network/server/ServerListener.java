@@ -20,13 +20,16 @@ import com.mygdx.piratewars.network.data.LobbyRequest;
 import com.mygdx.piratewars.network.data.LobbyResponse;
 import com.mygdx.piratewars.network.data.ShipData;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ServerListener extends Listener {
 
     private PirateWarsModel model;
+    private HashMap<Integer, String> connectionDeviceMapping;
 
     public ServerListener(PirateWarsModel model) {
         this.model = model;
+        this.connectionDeviceMapping = new HashMap<>();
     }
 
     @Override
@@ -36,6 +39,9 @@ public class ServerListener extends Listener {
 
     @Override
     public void disconnected(Connection connection) {
+        System.out.println(connectionDeviceMapping.get(connection.getID()));
+        model.deviceShipMapping.remove(connectionDeviceMapping.get(connection.getID()));
+        connectionDeviceMapping.remove(connection.getID());
         System.out.println("Client disconnected");
     }
 
@@ -43,8 +49,10 @@ public class ServerListener extends Listener {
     public void received(Connection connection, Object object) {
         if (object instanceof LobbyRequest) {
             LobbyRequest request = (LobbyRequest) object;
-            if (!model.deviceShipMapping.containsKey(request.deviceId))
+            if (!model.deviceShipMapping.containsKey(request.deviceId)) {
                 model.deviceShipMapping.put(request.deviceId, model.deviceShipMapping.size());
+                connectionDeviceMapping.put(connection.getID(), request.deviceId);
+            }
             connection.sendUDP(new LobbyResponse(model.deviceShipMapping.size(),
                     model.deviceShipMapping.get(request.deviceId), model.selectedMap, model.isGameActive));
         }

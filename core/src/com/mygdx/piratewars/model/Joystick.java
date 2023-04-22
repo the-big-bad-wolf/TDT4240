@@ -1,4 +1,4 @@
-package com.mygdx.piratewars.controller;
+package com.mygdx.piratewars.model;
 
 import com.badlogic.gdx.math.Circle;
 

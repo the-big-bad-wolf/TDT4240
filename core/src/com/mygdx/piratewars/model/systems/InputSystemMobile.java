@@ -7,10 +7,10 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.piratewars.controller.Joystick;
+import com.mygdx.piratewars.model.Firebutton;
+import com.mygdx.piratewars.model.Joystick;
 import com.mygdx.piratewars.model.PirateWarsModel;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.piratewars.controller.Firebutton;
 import com.mygdx.piratewars.model.helperSystems.InputSystem;
 
 public class InputSystemMobile extends InputSystem {
