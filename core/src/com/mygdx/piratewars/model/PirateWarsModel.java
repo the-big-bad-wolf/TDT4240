@@ -219,6 +219,7 @@ public class PirateWarsModel {
         engine.removeAllEntities();
         try {
             connectorStrategy.dispose();
+            updateSystemStrategy.dispose();
         } catch (IOException e) {
         }
     }
