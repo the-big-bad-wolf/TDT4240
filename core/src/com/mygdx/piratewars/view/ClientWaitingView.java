@@ -94,15 +94,18 @@ public class ClientWaitingView implements Screen {
 
     // todo rename variables and move to config
     private void buildUI() {
-        float ipAddressWidth = 512;
-        float ipAddressHeight = 128;
+        float waitingWidth = 512;
+        float waitingHeight = 128;
         float exitButtonWidth = 200;
         float exitButtonHeight = 100;
-        float ipAddressXPos = Gdx.graphics.getWidth() / 2f - ipAddressWidth / 2;
-        float ipAddressYPos = Gdx.graphics.getHeight() / 2f - ipAddressHeight / 2 + 100f;
-        uiBuilder.buildButton("Waiting for host to start the game", ipAddressWidth, ipAddressHeight, ipAddressXPos, ipAddressYPos, "ipaddress");
+        float waitingXPos = Gdx.graphics.getWidth() / 2f - waitingWidth / 2;
+        float waitingYPos = Gdx.graphics.getHeight() / 2f - waitingHeight / 2 + 100f;
+        float exitXPos = Gdx.graphics.getWidth() / 2f - exitButtonWidth / 2;
+        float exitYPos = waitingYPos - 200;
+
+        uiBuilder.buildButton("Waiting for host to start the game", waitingWidth, waitingHeight, waitingXPos, waitingYPos, "ipaddress");
         exitButton = uiBuilder.buildButton("Exit", exitButtonWidth, exitButtonHeight,
-                ipAddressXPos, ipAddressYPos-300, "default");
+                exitXPos, exitYPos, "redVersion");
         addActionsToUI();
     }
 
