@@ -31,6 +31,7 @@ public class PirateWarsView implements Screen {
     private final TiledMap map;
     private FitViewport fitViewport;
     private Sprite backgroundSprite;
+    private Sprite gameIsOverSprite;
     private ExtendViewport extendViewport;
     private PirateWarsController controller;
     private TextButton menuButton;
@@ -78,6 +79,10 @@ public class PirateWarsView implements Screen {
         // Background that shows around the actual playing field
         Texture background = new Texture(Gdx.files.internal("images/mapBackground.png"));
         backgroundSprite = new Sprite(background);
+
+        Texture gameOver = new Texture(Gdx.files.internal("images/gameOver.png"));
+        gameIsOverSprite = new Sprite(gameOver);
+
         render(Gdx.graphics.getDeltaTime());
     }
 
@@ -95,14 +100,6 @@ public class PirateWarsView implements Screen {
         for (int i = 0; i < numLayers; i++) {
             layers[i] = i;
         }
-        if (model.isGameActive == false) {
-            try {
-                controller.setScreen(new EndGameView(controller));
-                controller.pirateWarsModel.dispose();
-            } catch (NullPointerException nullPointerException) {
-                System.out.println("No Controller found");
-            }
-        }
 
         // drawing of the background, first sets the view to the extendViewport
         extendViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -111,6 +108,7 @@ public class PirateWarsView implements Screen {
         backgroundSprite.setSize(extendViewport.getWorldWidth(), extendViewport.getWorldHeight());
         backgroundSprite.setPosition(-extendViewport.getWorldWidth() / 2, -extendViewport.getWorldHeight() / 2);
         backgroundSprite.draw(mapRenderer.getBatch());
+
         mapRenderer.getBatch().end();
 
         // drawing of actual map, therefore setting view back to fitViewpoint
@@ -131,6 +129,13 @@ public class PirateWarsView implements Screen {
             }
         }
 
+        if (model.isGameActive == false) {
+            gameIsOverSprite.setSize(750, 250);
+            gameIsOverSprite.setPosition((fitViewport.getWorldWidth() - 750) / 2f, (fitViewport.getWorldHeight() - 250) / 2f);
+            gameIsOverSprite.draw(mapRenderer.getBatch());
+        }
+
+
         mapRenderer.getBatch().end();
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -148,8 +153,9 @@ public class PirateWarsView implements Screen {
             // draw fireButton
             shapeRenderer.circle(model.getFirebutton().getOuterCircle().x, model.getFirebutton().getOuterCircle().y, model.getFirebutton().getOuterCircle().radius);
         }
-
         shapeRenderer.end();
+
+
         stage.act(delta);
         stage.draw();
     }
