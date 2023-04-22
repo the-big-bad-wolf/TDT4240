@@ -134,7 +134,9 @@ public class ClientView implements Screen {
                 dispose();
                 System.out.println(inputField.getText());
                 controller.generatePirateWarsModel(Role.Client, inputField.getText(), "");
-                controller.setScreen(new ClientWaitingView(controller));
+                if (!(controller.getScreen() instanceof MainMenuView)) {
+                    controller.setScreen(new ClientWaitingView(controller));
+                }
             }
         });
 

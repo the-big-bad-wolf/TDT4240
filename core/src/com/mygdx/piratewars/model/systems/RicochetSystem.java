@@ -14,7 +14,6 @@ import com.mygdx.piratewars.model.components.SpriteComponent;
 import com.mygdx.piratewars.model.components.VelocityComponent;
 import com.badlogic.gdx.math.Polygon;
 import com.mygdx.piratewars.model.helperSystems.CollisionSystem;
-import com.mygdx.piratewars.model.helperSystems.FiringSystem;
 import com.mygdx.piratewars.model.helperSystems.PirateWarsSystem;
 
 import java.util.ArrayList;
