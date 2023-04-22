@@ -121,7 +121,7 @@ public class ClientView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
                 try {
-                    controller.setScreen(new MainMenuView(controller));
+                    controller.setScreen(new TutorialView(controller, 1));
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No controller found");
                 }
