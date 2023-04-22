@@ -218,12 +218,12 @@ public class PirateWarsModel {
                 system.dispose();
             }  
         }
-        engine.removeAllSystems();
-        engine.removeAllEntities();
         try {
+            engine.removeAllSystems();
+            engine.removeAllEntities();
             connectorStrategy.dispose();
             updateSystemStrategy.dispose();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
         }
     }
 }
