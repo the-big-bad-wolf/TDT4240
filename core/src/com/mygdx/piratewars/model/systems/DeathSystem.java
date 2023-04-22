@@ -46,6 +46,7 @@ public class DeathSystem extends PirateWarsSystem {
                     entity.remove(SpriteComponent.class);
                     entity.add(deadShipSprite);
                     entity.remove(HealthComponent.class);
+                    model.numPlayersAlive -= 1;
                 } else {
                     model.engine.removeEntity(entity);
                 }

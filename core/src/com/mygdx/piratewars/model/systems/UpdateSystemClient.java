@@ -39,9 +39,10 @@ public class UpdateSystemClient extends UpdateSystem {
 
     public void addedToEngine(Engine engine) { }
 
-    public void replaceData(ShipData[] shipsServer, BulletData[] bulletsServer) {
+    public void replaceData(ShipData[] shipsServer, BulletData[] bulletsServer, boolean isGameActive) {
         this.shipsServer = shipsServer;
         this.bulletsServer = bulletsServer;
+        pirateWarsModel.isGameActive = isGameActive;
     }
 
     public void update(float deltaTime) {

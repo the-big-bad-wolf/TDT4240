@@ -95,6 +95,14 @@ public class PirateWarsView implements Screen {
         for (int i = 0; i < numLayers; i++) {
             layers[i] = i;
         }
+        if (model.isGameActive == false) {
+            try {
+                controller.setScreen(new EndGameView(controller));
+                controller.pirateWarsModel.dispose();
+            } catch (NullPointerException nullPointerException) {
+                System.out.println("No Controller found");
+            }
+        }
 
         // drawing of the background, first sets the view to the extendViewport
         extendViewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

@@ -99,7 +99,7 @@ public class ServerListener extends Listener {
             }
             ShipData[] shipDataArray = shipDataArrayList.toArray(new ShipData[shipDataArrayList.size()]);
             BulletData[] bulletDataArray = bulletDataArrayList.toArray(new BulletData[bulletDataArrayList.size()]);
-            GameResponse response = new GameResponse(shipDataArray, bulletDataArray);
+            GameResponse response = new GameResponse(shipDataArray, bulletDataArray, model.isGameActive);
             connection.sendUDP(response);
         }
     }

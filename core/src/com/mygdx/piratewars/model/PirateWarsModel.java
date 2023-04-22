@@ -47,7 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PirateWarsModel {
-    public int shipId, numPlayers;
+    public int shipId, numPlayers, numPlayersAlive;
     public boolean isGameActive, createEntitiesFlag, isWorldGenerated;
     public static Engine engine;
     private static TiledMap map;
@@ -70,6 +70,7 @@ public class PirateWarsModel {
             String selectedMap) {
         this.controller = controller;
         this.role = role;
+        this.numPlayersAlive = -1;
         this.gameModel = gameModel;
         this.selectedMap = selectedMap;
         this.engine = new Engine();
@@ -117,6 +118,7 @@ public class PirateWarsModel {
             // todo maybe move this further up?
             this.updateSystemStrategy = UpdateSystemServer.getInstance(this);
             isGameActive = true;
+            numPlayersAlive = numPlayers;
         } else {
             this.updateSystemStrategy = UpdateSystemClient.getInstance(this);
         }
@@ -174,6 +176,9 @@ public class PirateWarsModel {
             }
         }
         engine.update(Gdx.graphics.getDeltaTime());
+        if (isGameActive && ((numPlayersAlive == 1 || numPlayersAlive == 0) && numPlayers >= 2)  || (numPlayersAlive == 0 && numPlayers == 1)) {
+            isGameActive = false;
+        }
     }
 
     public static void addToEngine(Entity entity) {

@@ -41,7 +41,7 @@ public class ClientListener extends Listener {
         if (object instanceof GameResponse) {
             GameResponse response = (GameResponse) object;
             if (!model.updateSystemStrategy.updated) {
-                model.updateSystemStrategy.replaceData(response.ships, response.bullets);
+                model.updateSystemStrategy.replaceData(response.ships, response.bullets, response.isGameActive);
                 model.updateSystemStrategy.updated = true;
             }
         }

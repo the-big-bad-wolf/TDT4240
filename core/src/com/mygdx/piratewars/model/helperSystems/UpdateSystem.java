@@ -27,7 +27,7 @@ public abstract class UpdateSystem extends PirateWarsSystem {
         return;
     }
 
-    public void replaceData(ShipData[] shipsServer, BulletData[] bulletsServer) {
+    public void replaceData(ShipData[] shipsServer, BulletData[] bulletsServer, boolean isGameActive) {
         return;
     }
 }
