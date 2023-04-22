@@ -10,8 +10,8 @@ import java.io.IOException;
 
 public class ClientConnector extends ConnectorStrategy {
 
-    private Client client;
-    private ClientListener listener;
+    public Client client;
+    public ClientListener listener;
 
     public ClientConnector(PirateWarsModel model, String ipAddress) {
         this.client = new com.esotericsoftware.kryonet.Client();
@@ -21,7 +21,6 @@ public class ClientConnector extends ConnectorStrategy {
             client.connect(5000, ipAddress, 25444, 25666);
         } catch (IOException e) {
             e.printStackTrace();
-            model.controller.setScreen(new MainMenuView(model.controller));
             return;
         }
 

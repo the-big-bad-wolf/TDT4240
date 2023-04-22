@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.piratewars.config.Role;
 import com.mygdx.piratewars.controller.PirateWarsController;
+import com.mygdx.piratewars.network.client.ClientConnector;
 
 public class ClientView implements Screen {
     private final Stage stage;
@@ -131,11 +132,22 @@ public class ClientView implements Screen {
         okButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                dispose();
                 System.out.println(inputField.getText());
                 controller.generatePirateWarsModel(Role.Client, inputField.getText(), "");
-                if (!(controller.getScreen() instanceof MainMenuView)) {
+
+                ClientConnector connector = (ClientConnector) controller.pirateWarsModel.connectorStrategy;
+
+                if (!connector.client.isConnected()) {
+                    stage.setKeyboardFocus(null);
+                    inputField.setText("Enter valid IP address");
+                    uiBuilder.buildButton("Invalid IP", 256f, 128f,
+                        Gdx.graphics.getWidth() / 2f - 200 / 2f,
+                            Gdx.graphics.getHeight() * 2f / 3f - 150, "redVersion");
+                    controller.pirateWarsModel.dispose();
+                }
+                else {
                     controller.setScreen(new ClientWaitingView(controller));
+                    dispose();
                 }
             }
         });

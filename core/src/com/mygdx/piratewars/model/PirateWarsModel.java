@@ -223,7 +223,7 @@ public class PirateWarsModel {
             engine.removeAllEntities();
             connectorStrategy.dispose();
             updateSystemStrategy.dispose();
-        } catch (IOException | NullPointerException e) {
+        } catch (Exception e) {
         }
     }
 }
