@@ -5,7 +5,6 @@ import com.mygdx.piratewars.model.PirateWarsModel;
 import com.mygdx.piratewars.network.ConnectorStrategy;
 import com.mygdx.piratewars.network.data.InputRequest;
 import com.mygdx.piratewars.network.data.LobbyRequest;
-import com.mygdx.piratewars.view.MainMenuView;
 import java.io.IOException;
 
 public class ClientConnector extends ConnectorStrategy {
