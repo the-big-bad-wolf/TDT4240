@@ -23,17 +23,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ServerListener extends Listener {
-
+    public ServerConnector connector;
     private PirateWarsModel model;
     private HashMap<Integer, String> connectionDeviceMapping;
 
-    public ServerListener(PirateWarsModel model) {
+    public ServerListener(PirateWarsModel model, ServerConnector connector) {
+        this.connector = connector;
         this.model = model;
         this.connectionDeviceMapping = new HashMap<>();
     }
 
     @Override
     public void connected(Connection connection) {
+        if (connector.server.getConnections().length > 3) {
+            connection.close();
+        }
         System.out.println("New client connected");
     }
 
@@ -63,11 +67,14 @@ public class ServerListener extends Listener {
             ImmutableArray<Entity> ships = model.engine.getEntitiesFor(SHIP_FAMILY);
             try {
                 for (int i = 0; i < ships.size(); i++) {
-                    if (ComponentMappers.identity.get(ships.get(i)).getId() == model.deviceShipMapping.get(request.clientId)) {
+                    if (ComponentMappers.identity.get(ships.get(i)).getId() == model.deviceShipMapping
+                            .get(request.clientId)) {
                         VelocityComponent velocityComponent = ComponentMappers.velocity.get(ships.get(i));
-                        velocityComponent.setVelocity(request.valueInput, request.directionShipInput, request.directionGunInput);
+                        velocityComponent.setVelocity(request.valueInput, request.directionShipInput,
+                                request.directionGunInput);
                         if (request.firingFlag) {
-                            model.updateSystemStrategy.addUnshotBullets(ships.get(i)); // cannot call firing system directly from this thread
+                            model.updateSystemStrategy.addUnshotBullets(ships.get(i)); // cannot call firing system
+                                                                                       // directly from this thread
                         }
                     }
                 }
@@ -86,8 +93,8 @@ public class ServerListener extends Listener {
                 PositionComponent positionComponent = ComponentMappers.position.get(ship);
                 HealthComponent healthComponent = ComponentMappers.health.get(ship);
                 IdentityComponent identityComponent = ComponentMappers.identity.get(ship);
-                shipDataArrayList.add(new ShipData(velocityComponent, positionComponent, healthComponent, identityComponent));
-
+                shipDataArrayList
+                        .add(new ShipData(velocityComponent, positionComponent, healthComponent, identityComponent));
 
             }
             for (int i = 0; i < bullets.size(); i++) {

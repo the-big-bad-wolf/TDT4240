@@ -8,15 +8,14 @@ import java.io.IOException;
 
 public class ServerConnector extends ConnectorStrategy {
 
-    private Server server;
+    public Server server;
     private ServerListener listener;
 
     public ServerConnector(PirateWarsModel model) {
         this.server = new Server();
         this.server.start();
-        this.listener = new ServerListener(model);
+        this.listener = new ServerListener(model, this);
         this.server.addListener(listener);
-
         try {
             server.bind(25444, 25666);
         } catch (IOException e) {
