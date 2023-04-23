@@ -65,7 +65,6 @@ public class InputSystemDesktop extends InputSystem {
     }
 
     private int getInputDirection() {
-        entities = pirateWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
         int currentDir = 0;
         try {
             for (int i = 0; i < entities.size(); i++) {
