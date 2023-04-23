@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="28">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="32">
  <tileset firstgid="1" source="TileSet/pirateTileset.tsx"/>
  <layer id="1" name="waterLayer" width="32" height="18">
   <data encoding="csv">
@@ -111,7 +111,7 @@
 0,0,0,0,0,79,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="6" name="tankCollisionLayer" visible="0">
+ <objectgroup id="6" name="tankCollisionLayer">
   <object id="2" x="708.152" y="258.272" width="127.426" height="124.005">
    <polygon points="0,0 127.426,0 127.426,124.005 0,124.005"/>
   </object>
@@ -156,6 +156,18 @@
   </object>
   <object id="17" x="706" y="834" width="250" height="121">
    <polygon points="0,0 250,0 250,121 0,121"/>
+  </object>
+  <object id="28" x="1476" y="259" width="184.667" height="187">
+   <polygon points="0,0 184.667,0 184.667,187 0,187"/>
+  </object>
+  <object id="29" x="1661.33" y="386" width="59.3333" height="186.667">
+   <polygon points="0,0 59.3333,0 59.3333,186.667 0,186.667"/>
+  </object>
+  <object id="30" x="1603" y="509.333" width="55.6667" height="63.3333">
+   <polygon points="0,0 55.6667,0 55.6667,63.3333 0,63.3333"/>
+  </object>
+  <object id="31" x="1537.67" y="448" width="121" height="61.6667">
+   <polygon points="0,0 121,0 121,61.6667 0,61.6667"/>
   </object>
  </objectgroup>
  <objectgroup id="7" name="bulletCollisionLayer" visible="0" offsetx="-10" offsety="8">

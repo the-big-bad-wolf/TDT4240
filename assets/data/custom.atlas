@@ -25,18 +25,18 @@ mainMenuOver
   orig: 1890, 515
   offset: 0, 0
   index: -1
-sansbold_0
-  rotate: false
-  xy: 1274, 350
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
 map1
   rotate: false
   xy: 1, 131
   size: 1271, 731
   orig: 1271, 731
+  offset: 0, 0
+  index: -1
+sansbold_0
+  rotate: false
+  xy: 1274, 350
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
 
