@@ -35,6 +35,9 @@ public class DeathSystem extends PirateWarsSystem {
     public void update(float deltaTime) {
         for (Entity entity : entities) {
             HealthComponent healthComponent = ComponentMappers.health.get(entity);
+            if (healthComponent.isDead()) {
+                continue;
+            }
             Vector2 position = ComponentMappers.position.get(entity).getPosition();
             if (healthComponent.getHealth() <= 0 
                 || position.x < -1000 || position.x > Gdx.graphics.getWidth() + 1000
@@ -45,8 +48,8 @@ public class DeathSystem extends PirateWarsSystem {
                     deadShipSprite.setRotation(ComponentMappers.velocity.get(entity).getDirection());
                     entity.remove(SpriteComponent.class);
                     entity.add(deadShipSprite);
-                    entity.remove(HealthComponent.class);
                     model.numPlayersAlive -= 1;
+                    healthComponent.setDead();
                 } else {
                     model.engine.removeEntity(entity);
                 }

@@ -17,7 +17,7 @@ public class ClientConnector extends ConnectorStrategy {
         this.client.start();
 
         try {
-            client.connect(5000, ipAddress, 25444, 25666);
+            client.connect(3000, ipAddress, 25444, 25666);
         } catch (IOException e) {
             e.printStackTrace();
             return;

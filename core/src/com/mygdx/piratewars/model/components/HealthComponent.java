@@ -4,9 +4,11 @@ import com.badlogic.ashley.core.Component;
 
 public class HealthComponent implements Component {
   private int health;
+  private boolean dead;
 
   public HealthComponent(int health) {
     this.health = health;
+    this.dead = false;
   }
 
   public HealthComponent() { } // needed for kryonet deserialization
@@ -21,5 +23,13 @@ public class HealthComponent implements Component {
 
   public void takeDamage(int damage) {
     health -= damage;
+  }
+
+  public boolean isDead() {
+    return this.dead;
+  }
+
+  public void setDead() {
+    this.dead = true;
   }
 }
