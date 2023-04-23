@@ -102,9 +102,9 @@ public class ClientView implements Screen {
         float allButtonsHeight = 128f;
         float inputFieldXPos = Gdx.graphics.getWidth() / 2f - inputFieldWidth / 2;
         float inputFieldYPos = Gdx.graphics.getHeight() * 2f / 3f;
-        float backButtonXPos = Gdx.graphics.getWidth() / 2f - allButtonsWidth - 50f;
+        float backButtonXPos = (Gdx.graphics.getWidth() - allButtonsWidth) / 2f  - 180f;
         float backButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
-        float okButtonXPos = Gdx.graphics.getWidth() / 2f + 50f;
+        float okButtonXPos = (Gdx.graphics.getWidth() - allButtonsWidth) / 2f + 180f;
         float okButtonYPos = Gdx.graphics.getHeight() / 2f - allButtonsHeight / 2 - 100f;
 
         inputField = uiBuilder.buildTextField("Enter host IP address", "default", inputFieldWidth, inputFieldHeight, inputFieldXPos, inputFieldYPos);
@@ -140,9 +140,9 @@ public class ClientView implements Screen {
                 if (!connector.client.isConnected()) {
                     stage.setKeyboardFocus(null);
                     inputField.setText("Enter valid IP address");
-                    uiBuilder.buildButton("Invalid IP", 256f, 128f,
-                        Gdx.graphics.getWidth() / 2f - 200 / 2f,
-                            Gdx.graphics.getHeight() * 2f / 3f - 150, "redVersion");
+                    uiBuilder.buildButton("Invalid IP", 250, 128f,
+                        Gdx.graphics.getWidth() / 2f - 250 / 2f,
+                            Gdx.graphics.getHeight() * 2f / 3f - 150, "invalidIP");
                     controller.pirateWarsModel.dispose();
                 }
                 else {

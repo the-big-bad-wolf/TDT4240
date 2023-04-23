@@ -281,6 +281,12 @@
 		"up": "button3",
 		"down": "button3",
 		"over": "button3"
+	},
+	"invalidIP": {
+		"font": "sans",
+		"fontColor": "gray",
+		"overFontColor": "gray",
+		"up": "buttonred"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
