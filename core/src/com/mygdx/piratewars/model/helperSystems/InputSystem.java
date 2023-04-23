@@ -42,11 +42,14 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
                 for (int i = 0; i < entities.size(); i++) {
                     Entity entity = entities.get(i);
                     if (ComponentMappers.identity.get(entity).getId() == 0) {
-                        VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
-                        velocityComponent.setVelocity(inputValue, inputDirectionShip, inputDirectionGun);
                         if (ComponentMappers.health.get(entity).isDead()) {
+                            inputValue = 0;
+                            inputDirectionShip = 0;
+                            inputDirectionGun = 0;
                             firingFlag = false;
                         }
+                        VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
+                        velocityComponent.setVelocity(inputValue, inputDirectionShip, inputDirectionGun);
                         if (firingFlag) {
                             FiringSystem.spawnBullet(entity);
                         }
