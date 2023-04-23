@@ -27,10 +27,11 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
 
     }
 
-    public void addedToEngine(Engine engine) { }
+    public void addedToEngine(Engine engine) {
+        entities = pirateWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
+    }
 
     public void update(float deltaTime) {
-        entities = pirateWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
         Gdx.input.setInputProcessor(this.pirateWarsModel.multiplexer); // set multiplexer as input processor
 
         // todo can this be coded simpler?
@@ -40,6 +41,9 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
             try {
                 for (int i = 0; i < entities.size(); i++) {
                     Entity entity = entities.get(i);
+                    if (ComponentMappers.health.get(entity).isDead()) {
+                        continue;
+                    }
                     if (ComponentMappers.identity.get(entity).getId() == 0) {
                         VelocityComponent velocityComponent = ComponentMappers.velocity.get(entity);
                         velocityComponent.setVelocity(inputValue, inputDirectionShip, inputDirectionGun);
@@ -50,7 +54,12 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
                 }
             } catch (NullPointerException e) { }
         } else {
-            pirateWarsModel.connectorStrategy.sendInputRequest(pirateWarsModel.gameModel.deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
+            if (!ComponentMappers.health.get(
+                entities.get(pirateWarsModel.shipId)).isDead()) {
+                        pirateWarsModel.connectorStrategy.sendInputRequest(pirateWarsModel.gameModel.deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
+                    } else {
+                        pirateWarsModel.connectorStrategy.sendInputRequest(pirateWarsModel.gameModel.deviceId, 0, 0, 0, false);
+                    }
         }
         firingFlag = false;
     }

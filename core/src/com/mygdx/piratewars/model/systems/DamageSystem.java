@@ -43,6 +43,9 @@ public class DamageSystem extends PirateWarsSystem {
                 PositionComponent shipPositionComponent = ComponentMappers.position.get(ship);
                 SpriteComponent shipSpriteComponent = ComponentMappers.sprite.get(ship);
                 HealthComponent shipHealthComponent = ComponentMappers.health.get(ship);
+                if (shipHealthComponent.isDead()) {
+                    continue;
+                }
                 if (CollisionSystem.checkCollisionWithEntity(bulletPositionComponent, bulletSpriteComponent,
                         shipPositionComponent, shipSpriteComponent)) {
                     ParentComponent bulletParentComponent = ComponentMappers.parent.get(bullet);

@@ -124,7 +124,7 @@ public class PirateWarsView implements Screen {
             // render the aim helper if the player is alive
             if (ComponentMappers.identity.get(entity) != null 
                     && ComponentMappers.identity.get(entity).getId() == model.shipId 
-                    && ComponentMappers.health.get(entity) != null) {
+                    && !ComponentMappers.health.get(entity).isDead()) {
                 model.aimHelp.draw(mapRenderer.getBatch());
             }
         }

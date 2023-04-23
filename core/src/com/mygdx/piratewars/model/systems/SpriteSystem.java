@@ -52,6 +52,10 @@ public class SpriteSystem extends PirateWarsSystem {
             IdentityComponent shipIdentityComponent = ComponentMappers.identity.get(ship);
             SpriteComponent shipSpriteComponent = ComponentMappers.sprite.get(ship);
 
+            if (shipHealthComponent.isDead()) {
+                continue;
+            }
+
             if (shipIdentityComponent.getId() == pirateWarsModel.shipId) {
                 String expectedSkin;
                 if (shipHealthComponent.getHealth() >= 100) {
