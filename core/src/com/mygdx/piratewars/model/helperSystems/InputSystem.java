@@ -44,7 +44,7 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
                     if (ComponentMappers.identity.get(entity).getId() == 0) {
                         if (ComponentMappers.health.get(entity).isDead()) {
                             inputValue = 0;
-                            inputDirectionShip = 0;
+                            inputDirectionShip = ComponentMappers.velocity.get(entity).getDirection();
                             inputDirectionGun = 0;
                             firingFlag = false;
                         }
