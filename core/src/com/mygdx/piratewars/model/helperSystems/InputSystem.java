@@ -61,7 +61,7 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
                 entities.get(pirateWarsModel.shipId)).isDead()) {
                         pirateWarsModel.connectorStrategy.sendInputRequest(pirateWarsModel.gameModel.deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
                     } else {
-                        pirateWarsModel.connectorStrategy.sendInputRequest(pirateWarsModel.gameModel.deviceId, 0, 0, 0, false);
+                        pirateWarsModel.connectorStrategy.sendInputRequest(pirateWarsModel.gameModel.deviceId, 0, ComponentMappers.velocity.get(entities.get(pirateWarsModel.shipId)).getDirection(), 0, false);
                     }
         }
         firingFlag = false;
