@@ -41,7 +41,6 @@ import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.piratewars.view.PirateWarsView;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +103,8 @@ public class PirateWarsModel {
         if (gameModel.launcher == Launcher.Mobile) {
             firebutton = new Firebutton(pirateWarsViewport.getWorldWidth() - 180, 480, JOYSTICK_OUTER_CIRCLE_RADIUS);
             joystickShip = new Joystick(180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS, JOYSTICK_INNER_CIRCLE_RADIUS);
-            joystickGun = new Joystick((int) pirateWarsViewport.getWorldWidth() - 180, 180, JOYSTICK_OUTER_CIRCLE_RADIUS,
+            joystickGun = new Joystick((int) pirateWarsViewport.getWorldWidth() - 180, 180,
+                    JOYSTICK_OUTER_CIRCLE_RADIUS,
                     JOYSTICK_INNER_CIRCLE_RADIUS);
         }
 
@@ -176,7 +176,8 @@ public class PirateWarsModel {
             }
         }
         engine.update(Gdx.graphics.getDeltaTime());
-        if (isGameActive && ((numPlayersAlive == 1 || numPlayersAlive == 0) && numPlayers >= 2)  || (numPlayersAlive == 0 && numPlayers == 1)) {
+        if (isGameActive && ((numPlayersAlive == 1 || numPlayersAlive == 0) && numPlayers >= 2)
+                || (numPlayersAlive == 0 && numPlayers == 1)) {
             isGameActive = false;
         }
     }
@@ -213,10 +214,10 @@ public class PirateWarsModel {
     }
 
     public void dispose() {
-        if (systems!=null) {
+        if (systems != null) {
             for (PirateWarsSystem system : systems) {
                 system.dispose();
-            }  
+            }
         }
         try {
             engine.removeAllSystems();
