@@ -56,7 +56,7 @@ public class SpriteSystem extends PirateWarsSystem {
                 continue;
             }
 
-            if (shipIdentityComponent.getId() == pirateWarsModel.shipId) {
+            if (shipIdentityComponent.getId() == pirateWarsModel.getShipId()) {
                 String expectedSkin;
                 if (shipHealthComponent.getHealth() >= 100) {
                     expectedSkin = PLAYER_FULL_HEALTH;
@@ -73,7 +73,7 @@ public class SpriteSystem extends PirateWarsSystem {
                 }
 
                 Vector2 position = ComponentMappers.position.get(ship).getPosition();
-                pirateWarsModel.aimHelp.setPosition(position.x + SHIP_WIDTH / 2 + 100, position.y + SHIP_HEIGHT / 2);
+                pirateWarsModel.getAimHelp().setPosition(position.x + SHIP_WIDTH / 2 + 100, position.y + SHIP_HEIGHT / 2);
             } else {
                 String expectedSkin;
                 if (shipHealthComponent.getHealth() >= 100) {

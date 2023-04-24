@@ -20,7 +20,7 @@ public class ServerConnector extends ConnectorStrategy {
             server.bind(25444, 25666);
         } catch (IOException e) {
             e.printStackTrace();
-            model.controller.setScreen(new MainMenuView(model.controller));
+            model.getController().setScreen(new MainMenuView(model.getController()));
             return;
         }
 

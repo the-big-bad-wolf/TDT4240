@@ -42,7 +42,7 @@ public class PirateWarsView implements Screen {
         this.model = controller.pirateWarsModel;
         this.stage = new Stage(); // todo check if we need to change that
         map = PirateWarsModel.getMap();
-        this.fitViewport = model.pirateWarsViewport;
+        this.fitViewport = model.getPirateWarsViewport();
         this.uiBuilder = new UIBuilder(this.stage);
         stage.setViewport(fitViewport);
 
@@ -58,8 +58,8 @@ public class PirateWarsView implements Screen {
 
     @Override
     public void show() {
-        model.multiplexer.addProcessor(this.stage); // set stage as first input processor
-        Gdx.input.setInputProcessor(model.multiplexer);
+        model.getMultiplexer().addProcessor(this.stage); // set stage as first input processor
+        Gdx.input.setInputProcessor(model.getMultiplexer());
         // create a render object to easily render all layers, objects, etc. of our TileMap
         mapRenderer = new OrthogonalTiledMapRenderer(map);
         shapeRenderer = new ShapeRenderer();
@@ -116,20 +116,20 @@ public class PirateWarsView implements Screen {
         mapRenderer.setView((OrthographicCamera) fitViewport.getCamera());
         mapRenderer.render(layers);
         mapRenderer.getBatch().begin();
-        for (int i = 0; i < model.engine.getEntities().size(); i++) {
-            Entity entity = model.engine.getEntities().get(i);
+        for (int i = 0; i < model.getEngine().getEntities().size(); i++) {
+            Entity entity = model.getEngine().getEntities().get(i);
             SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
             spriteComponent.getSprite().draw(mapRenderer.getBatch());
 
             // render the aim helper if the player is alive
             if (ComponentMappers.identity.get(entity) != null 
-                    && ComponentMappers.identity.get(entity).getId() == model.shipId 
+                    && ComponentMappers.identity.get(entity).getId() == model.getShipId() 
                     && !ComponentMappers.health.get(entity).isDead()) {
-                model.aimHelp.draw(mapRenderer.getBatch());
+                model.getAimHelp().draw(mapRenderer.getBatch());
             }
         }
 
-        if (model.isGameActive == false) {
+        if (model.isGameActive() == false) {
             gameIsOverSprite.setSize(750, 250);
             gameIsOverSprite.setPosition((fitViewport.getWorldWidth() - 750) / 2f, (fitViewport.getWorldHeight() - 250) / 2f);
             gameIsOverSprite.draw(mapRenderer.getBatch());
@@ -140,7 +140,7 @@ public class PirateWarsView implements Screen {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        if (model.gameModel.launcher == Launcher.Mobile) {
+        if (model.getGameModel().launcher == Launcher.Mobile) {
             // draw joystick
             shapeRenderer.setProjectionMatrix(fitViewport.getCamera().combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

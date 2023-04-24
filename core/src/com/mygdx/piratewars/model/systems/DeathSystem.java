@@ -48,10 +48,10 @@ public class DeathSystem extends PirateWarsSystem {
                     deadShipSprite.setRotation(ComponentMappers.velocity.get(entity).getDirection());
                     entity.remove(SpriteComponent.class);
                     entity.add(deadShipSprite);
-                    model.numPlayersAlive -= 1;
+                    model.setNumPlayersAlive(model.getNumPlayersAlive() - 1);
                     healthComponent.setDead();
                 } else {
-                    model.engine.removeEntity(entity);
+                    model.getEngine().removeEntity(entity);
                 }
             }
         }

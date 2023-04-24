@@ -23,21 +23,21 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
 
     public InputSystem(PirateWarsModel pirateWarsModel) {
         this.pirateWarsModel = pirateWarsModel;
-        this.pirateWarsModel.multiplexer.addProcessor(this);  // set your game input precessor as second
+        this.pirateWarsModel.getMultiplexer().addProcessor(this);  // set your game input precessor as second
 
     }
 
     public void addedToEngine(Engine engine) {
-        entities = pirateWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
+        entities = pirateWarsModel.getEngine().getEntitiesFor(SHIP_FAMILY);
     }
 
     public void update(float deltaTime) {
-        Gdx.input.setInputProcessor(this.pirateWarsModel.multiplexer); // set multiplexer as input processor
+        Gdx.input.setInputProcessor(this.pirateWarsModel.getMultiplexer()); // set multiplexer as input processor
 
         // todo can this be coded simpler?
-        pirateWarsModel.aimHelp.setRotation(inputDirectionGun);
+        pirateWarsModel.getAimHelp().setRotation(inputDirectionGun);
 
-        if (pirateWarsModel.role == Role.Server) {
+        if (pirateWarsModel.getRole() == Role.Server) {
             try {
                 for (int i = 0; i < entities.size(); i++) {
                     Entity entity = entities.get(i);
@@ -58,10 +58,10 @@ public abstract class InputSystem extends PirateWarsSystem implements InputProce
             } catch (NullPointerException e) { }
         } else {
             if (!ComponentMappers.health.get(
-                entities.get(pirateWarsModel.shipId)).isDead()) {
-                        pirateWarsModel.connectorStrategy.sendInputRequest(pirateWarsModel.gameModel.deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
+                entities.get(pirateWarsModel.getShipId())).isDead()) {
+                        pirateWarsModel.getConnectorStrategy().sendInputRequest(pirateWarsModel.getGameModel().deviceId, inputValue, inputDirectionShip, inputDirectionGun, firingFlag);
                     } else {
-                        pirateWarsModel.connectorStrategy.sendInputRequest(pirateWarsModel.gameModel.deviceId, 0, ComponentMappers.velocity.get(entities.get(pirateWarsModel.shipId)).getDirection(), 0, false);
+                        pirateWarsModel.getConnectorStrategy().sendInputRequest(pirateWarsModel.getGameModel().deviceId, 0, ComponentMappers.velocity.get(entities.get(pirateWarsModel.getShipId())).getDirection(), 0, false);
                     }
         }
         firingFlag = false;

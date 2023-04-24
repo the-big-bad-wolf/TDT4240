@@ -135,7 +135,7 @@ public class ClientView implements Screen {
                 System.out.println(inputField.getText());
                 controller.generatePirateWarsModel(Role.Client, inputField.getText(), "");
 
-                ClientConnector connector = (ClientConnector) controller.pirateWarsModel.connectorStrategy;
+                ClientConnector connector = (ClientConnector) controller.pirateWarsModel.getConnectorStrategy();
 
                 if (!connector.client.isConnected()) {
                     stage.setKeyboardFocus(null);

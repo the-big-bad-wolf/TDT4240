@@ -28,21 +28,21 @@ public class ClientListener extends Listener {
     public void received(Connection connection, Object object) {
         if (object instanceof LobbyResponse) {
             LobbyResponse response = (LobbyResponse) object;
-            model.numPlayers = response.numPlayers;
-            model.shipId = response.clientShipId;
-            model.selectedMap = response.selectedMap;
+            model.setNumPlayers(response.numPlayers);
+            model.setShipId(response.clientShipId);
+            model.setSelectedMap(response.selectedMap);
             // the ordering here is important!
 
-            if (!model.isGameActive && response.isGameActive) {
-                model.createEntitiesFlag = true;
+            if (!model.isGameActive() && response.isGameActive) {
+                model.setCreateEntitiesFlag(true);
             }
-            model.isGameActive = response.isGameActive;
+            model.setGameActive(response.isGameActive);
         }
         if (object instanceof GameResponse) {
             GameResponse response = (GameResponse) object;
-            if (!model.updateSystemStrategy.updated) {
-                model.updateSystemStrategy.replaceData(response.ships, response.bullets, response.isGameActive);
-                model.updateSystemStrategy.updated = true;
+            if (!model.getUpdateSystemStrategy().updated) {
+                model.getUpdateSystemStrategy().replaceData(response.ships, response.bullets, response.isGameActive);
+                model.getUpdateSystemStrategy().updated = true;
             }
         }
     }

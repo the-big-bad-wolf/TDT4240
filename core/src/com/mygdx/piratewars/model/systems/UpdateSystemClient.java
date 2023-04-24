@@ -42,7 +42,7 @@ public class UpdateSystemClient extends UpdateSystem {
     public void replaceData(ShipData[] shipsServer, BulletData[] bulletsServer, boolean isGameActive) {
         this.shipsServer = shipsServer;
         this.bulletsServer = bulletsServer;
-        pirateWarsModel.isGameActive = isGameActive;
+        pirateWarsModel.setGameActive(isGameActive);
     }
 
     public void update(float deltaTime) {
@@ -51,7 +51,7 @@ public class UpdateSystemClient extends UpdateSystem {
 
         // synchronize ship entities
         try {
-            ImmutableArray<Entity> shipsClient = pirateWarsModel.engine.getEntitiesFor(SHIP_FAMILY);
+            ImmutableArray<Entity> shipsClient = pirateWarsModel.getEngine().getEntitiesFor(SHIP_FAMILY);
             for (int i = 0; i < shipsClient.size(); i++) {
                 Entity shipClient = shipsClient.get(i);
                 for (int j = 0; j < shipsServer.length; j++) {
@@ -84,7 +84,7 @@ public class UpdateSystemClient extends UpdateSystem {
         // synchronize bullet entities
         try {
             Family bulletFamily = Family.all(PositionComponent.class, VelocityComponent.class, SpriteComponent.class, HealthComponent.class).exclude(IdentityComponent.class).get();
-            ImmutableArray<Entity> bulletsClient = pirateWarsModel.engine.getEntitiesFor(bulletFamily);
+            ImmutableArray<Entity> bulletsClient = pirateWarsModel.getEngine().getEntitiesFor(bulletFamily);
 
             int numberOfBulletsServer = bulletsServer.length;
             int numberOfBulletsClient = bulletsClient.size();
@@ -97,18 +97,18 @@ public class UpdateSystemClient extends UpdateSystem {
                     bullet.add(new VelocityComponent(0, 0));
                     bullet.add(new SpriteComponent(CANNON_BALL, 10, 10)); // todo why does a bullet have an image file??
                     bullet.add(new HealthComponent(3));
-                    pirateWarsModel.engine.addEntity(bullet);
+                    pirateWarsModel.getEngine().addEntity(bullet);
                 }
             } else if (diff < 0) {
                 // client has more entities -> client needs to delete #diff bullets
                 diff = Math.abs(diff);
                 for (int i = 0; i < diff; i++) {
                     Entity e = bulletsClient.get(numberOfBulletsClient - i - 1);
-                    pirateWarsModel.engine.removeEntity(e); // not at once?
+                    pirateWarsModel.getEngine().removeEntity(e); // not at once?
                 }
             }
 
-            bulletsClient = pirateWarsModel.engine.getEntitiesFor(bulletFamily);
+            bulletsClient = pirateWarsModel.getEngine().getEntitiesFor(bulletFamily);
 
             for (int i = 0; i < bulletsClient.size() && i < bulletsServer.length; i++) {
                 Entity bulletClient = bulletsClient.get(i);

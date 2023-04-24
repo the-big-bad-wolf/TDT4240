@@ -24,10 +24,10 @@ public class InputSystemMobile extends InputSystem {
 
     private InputSystemMobile(PirateWarsModel pirateWarsModel) {
         super(pirateWarsModel);
-        this.joystickShip = pirateWarsModel.joystickShip;
-        this.joystickGun = pirateWarsModel.joystickGun;
-        this.firebutton = pirateWarsModel.firebutton;
-        this.fitViewport = pirateWarsModel.pirateWarsViewport;
+        this.joystickShip = pirateWarsModel.getJoystickShip();
+        this.joystickGun = pirateWarsModel.getJoystickGun();
+        this.firebutton = pirateWarsModel.getFirebutton();
+        this.fitViewport = pirateWarsModel.getPirateWarsViewport();
     }
 
     public static InputSystemMobile getInstance(PirateWarsModel pirateWarsModel) {

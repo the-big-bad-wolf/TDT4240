@@ -44,7 +44,7 @@ public class ServerListener extends Listener {
     @Override
     public void disconnected(Connection connection) {
         System.out.println(connectionDeviceMapping.get(connection.getID()));
-        model.deviceShipMapping.remove(connectionDeviceMapping.get(connection.getID()));
+        model.getDeviceShipMapping().remove(connectionDeviceMapping.get(connection.getID()));
         connectionDeviceMapping.remove(connection.getID());
         System.out.println("Client disconnected");
     }
@@ -53,27 +53,27 @@ public class ServerListener extends Listener {
     public void received(Connection connection, Object object) {
         if (object instanceof LobbyRequest) {
             LobbyRequest request = (LobbyRequest) object;
-            if (!model.deviceShipMapping.containsKey(request.deviceId)) {
-                model.deviceShipMapping.put(request.deviceId, model.deviceShipMapping.size());
+            if (!model.getDeviceShipMapping().containsKey(request.deviceId)) {
+                model.getDeviceShipMapping().put(request.deviceId, model.getDeviceShipMapping().size());
                 connectionDeviceMapping.put(connection.getID(), request.deviceId);
             }
-            connection.sendUDP(new LobbyResponse(model.deviceShipMapping.size(),
-                    model.deviceShipMapping.get(request.deviceId), model.selectedMap, model.isGameActive));
+            connection.sendUDP(new LobbyResponse(model.getDeviceShipMapping().size(),
+                    model.getDeviceShipMapping().get(request.deviceId), model.getSelectedMap(), model.isGameActive()));
         }
 
         if (object instanceof InputRequest) {
             // first get input from the client
             InputRequest request = (InputRequest) object;
-            ImmutableArray<Entity> ships = model.engine.getEntitiesFor(SHIP_FAMILY);
+            ImmutableArray<Entity> ships = model.getEngine().getEntitiesFor(SHIP_FAMILY);
             try {
                 for (int i = 0; i < ships.size(); i++) {
-                    if (ComponentMappers.identity.get(ships.get(i)).getId() == model.deviceShipMapping
+                    if (ComponentMappers.identity.get(ships.get(i)).getId() == model.getDeviceShipMapping()
                             .get(request.clientId)) {
                         VelocityComponent velocityComponent = ComponentMappers.velocity.get(ships.get(i));
                         velocityComponent.setVelocity(request.valueInput, request.directionShipInput,
                                 request.directionGunInput);
                         if (request.firingFlag) {
-                            model.updateSystemStrategy.addUnshotBullets(ships.get(i)); // cannot call firing system
+                            model.getUpdateSystemStrategy().addUnshotBullets(ships.get(i)); // cannot call firing system
                                                                                        // directly from this thread
                         }
                     }
@@ -85,7 +85,7 @@ public class ServerListener extends Listener {
             ArrayList<ShipData> shipDataArrayList = new ArrayList<>();
             ArrayList<BulletData> bulletDataArrayList = new ArrayList<>();
 
-            ImmutableArray<Entity> bullets = model.engine.getEntitiesFor(BULLET_FAMILY);
+            ImmutableArray<Entity> bullets = model.getEngine().getEntitiesFor(BULLET_FAMILY);
 
             for (int i = 0; i < ships.size(); i++) {
                 Entity ship = ships.get(i);
@@ -106,7 +106,7 @@ public class ServerListener extends Listener {
             }
             ShipData[] shipDataArray = shipDataArrayList.toArray(new ShipData[shipDataArrayList.size()]);
             BulletData[] bulletDataArray = bulletDataArrayList.toArray(new BulletData[bulletDataArrayList.size()]);
-            GameResponse response = new GameResponse(shipDataArray, bulletDataArray, model.isGameActive);
+            GameResponse response = new GameResponse(shipDataArray, bulletDataArray, model.isGameActive());
             connection.sendUDP(response);
         }
     }

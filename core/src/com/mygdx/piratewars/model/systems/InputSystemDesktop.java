@@ -2,7 +2,6 @@ package com.mygdx.piratewars.model.systems;
 
 import static com.mygdx.piratewars.config.GameConfig.MAX_SPEED;
 import static com.mygdx.piratewars.config.GameConfig.MAX_TURN_RATE;
-import static com.mygdx.piratewars.config.GameConfig.SHIP_FAMILY;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -22,7 +21,7 @@ public class InputSystemDesktop extends InputSystem {
 
     private InputSystemDesktop(PirateWarsModel pirateWarsModel) {
         super(pirateWarsModel);
-        this.fitViewport = pirateWarsModel.pirateWarsViewport;
+        this.fitViewport = pirateWarsModel.getPirateWarsViewport();
     }
 
     public static InputSystemDesktop getInstance(PirateWarsModel pirateWarsModel) {
@@ -69,7 +68,7 @@ public class InputSystemDesktop extends InputSystem {
         try {
             for (int i = 0; i < entities.size(); i++) {
                 Entity e = entities.get(i);
-                if (ComponentMappers.identity.get(e).getId() == pirateWarsModel.shipId)
+                if (ComponentMappers.identity.get(e).getId() == pirateWarsModel.getShipId())
                     currentDir = (int) ComponentMappers.velocity.get(e).getDirection();
             }
         } catch (Exception e) { }
@@ -105,7 +104,7 @@ public class InputSystemDesktop extends InputSystem {
         try {
             for (int i = 0; i < entities.size(); i++) {
                 Entity entity = entities.get(i);
-                if (ComponentMappers.identity.get(entity).getId() == pirateWarsModel.shipId) {
+                if (ComponentMappers.identity.get(entity).getId() == pirateWarsModel.getShipId()) {
                     PositionComponent positionComponent = ComponentMappers.position.get(entity);
                     SpriteComponent spriteComponent = ComponentMappers.sprite.get(entity);
 

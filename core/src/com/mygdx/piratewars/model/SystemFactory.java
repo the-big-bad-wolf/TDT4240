@@ -16,8 +16,8 @@ import java.util.List;
 
 public class SystemFactory {
     public static List<PirateWarsSystem> generateSystems(PirateWarsModel model) {
-        Role role = model.role;
-        Launcher launcher = model.gameModel.launcher;
+        Role role = model.getRole();
+        Launcher launcher = model.getGameModel().launcher;
 
         List<PirateWarsSystem> systems = new ArrayList<>();
 
@@ -27,8 +27,8 @@ public class SystemFactory {
         systems.add(DeathSystem.getInstance(model));
 
         if (role == Role.Server) {
-            systems.add(MovementSystem.getInstance(model.shipObstacles));
-            systems.add(RicochetSystem.getInstance(model.bulletObstacles));
+            systems.add(MovementSystem.getInstance(model.getShipObstacles()));
+            systems.add(RicochetSystem.getInstance(model.getBulletObstacles()));
             systems.add(DamageSystem.getInstance());
         }
         return systems;

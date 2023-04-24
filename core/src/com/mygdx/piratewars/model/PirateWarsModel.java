@@ -9,25 +9,34 @@ import static com.mygdx.piratewars.config.GameConfig.SHIP_HEIGHT;
 import static com.mygdx.piratewars.config.GameConfig.SHIP_OBSTACLE_LAYER;
 import static com.mygdx.piratewars.config.GameConfig.SHIP_WIDTH;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.piratewars.config.Launcher;
+import com.mygdx.piratewars.config.Role;
 import com.mygdx.piratewars.controller.PirateWarsController;
 import com.mygdx.piratewars.model.components.HealthComponent;
 import com.mygdx.piratewars.model.components.IdentityComponent;
 import com.mygdx.piratewars.model.components.PositionComponent;
 import com.mygdx.piratewars.model.components.SpriteComponent;
 import com.mygdx.piratewars.model.components.VelocityComponent;
-import com.mygdx.piratewars.config.Role;
 import com.mygdx.piratewars.model.helperSystems.PirateWarsSystem;
 import com.mygdx.piratewars.model.helperSystems.UpdateSystem;
 import com.mygdx.piratewars.model.systems.UpdateSystemClient;
@@ -35,35 +44,27 @@ import com.mygdx.piratewars.model.systems.UpdateSystemServer;
 import com.mygdx.piratewars.network.ConnectorStrategy;
 import com.mygdx.piratewars.network.client.ClientConnector;
 import com.mygdx.piratewars.network.server.ServerConnector;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.piratewars.view.PirateWarsView;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class PirateWarsModel {
-    public int shipId, numPlayers, numPlayersAlive;
-    public boolean isGameActive, createEntitiesFlag, isWorldGenerated;
-    public static Engine engine;
+    private int shipId, numPlayers, numPlayersAlive;
+    private boolean isGameActive, createEntitiesFlag, isWorldGenerated;
+    private static Engine engine;
     private static TiledMap map;
-    public Role role;
-    public ConnectorStrategy connectorStrategy;
-    public HashMap<String, Integer> deviceShipMapping;
-    public Joystick joystickShip, joystickGun;
-    public Firebutton firebutton;
-    public ArrayList<Polygon> shipObstacles, bulletObstacles;
-    public FitViewport pirateWarsViewport;
-    public GameModel gameModel;
-    public PirateWarsController controller;
-    public UpdateSystem updateSystemStrategy;
-    public String selectedMap;
-    public InputMultiplexer multiplexer;
-    public Sprite aimHelp;
-    public List<PirateWarsSystem> systems;
+    private Role role;
+    private ConnectorStrategy connectorStrategy;
+    private HashMap<String, Integer> deviceShipMapping;
+    private Joystick joystickShip, joystickGun;
+    private Firebutton firebutton;
+    private ArrayList<Polygon> shipObstacles, bulletObstacles;
+    private FitViewport pirateWarsViewport;
+    private GameModel gameModel;
+    private PirateWarsController controller;
+    private UpdateSystem updateSystemStrategy;
+    private String selectedMap;
+    private InputMultiplexer multiplexer;
+    private Sprite aimHelp;
+    private List<PirateWarsSystem> systems;
 
     public PirateWarsModel(PirateWarsController controller, GameModel gameModel, Role role, String serverIpAddress,
             String selectedMap) {
@@ -85,7 +86,7 @@ public class PirateWarsModel {
         }
     }
 
-    public void generateWorld() {
+    private void generateWorld() {
         this.multiplexer = new InputMultiplexer();
 
         TmxMapLoader loader = new TmxMapLoader();
@@ -186,6 +187,98 @@ public class PirateWarsModel {
         engine.addEntity(entity);
     }
 
+    public int getShipId() {
+        return shipId;
+    }
+
+    public void setShipId(int shipId) {
+        this.shipId = shipId;
+    }
+
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+
+    public int getNumPlayersAlive() {
+        return numPlayersAlive;
+    }
+
+    public void setNumPlayersAlive(int numPlayersAlive) {
+        this.numPlayersAlive = numPlayersAlive;
+    }
+
+    public boolean isGameActive() {
+        return isGameActive;
+    }
+
+    public void setGameActive(boolean isGameActive) {
+        this.isGameActive = isGameActive;
+    }
+
+    public void setCreateEntitiesFlag(boolean createEntitiesFlag) {
+        this.createEntitiesFlag = createEntitiesFlag;
+    }
+
+    public static Engine getEngine() {
+        return engine;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public ConnectorStrategy getConnectorStrategy() {
+        return connectorStrategy;
+    }
+
+    public HashMap<String, Integer> getDeviceShipMapping() {
+        return deviceShipMapping;
+    }
+
+    public ArrayList<Polygon> getShipObstacles() {
+        return shipObstacles;
+    }
+
+    public ArrayList<Polygon> getBulletObstacles() {
+        return bulletObstacles;
+    }
+
+    public FitViewport getPirateWarsViewport() {
+        return pirateWarsViewport;
+    }
+
+    public GameModel getGameModel() {
+        return gameModel;
+    }
+
+    public PirateWarsController getController() {
+        return controller;
+    }
+
+    public UpdateSystem getUpdateSystemStrategy() {
+        return updateSystemStrategy;
+    }
+
+    public String getSelectedMap() {
+        return selectedMap;
+    }
+
+    public void setSelectedMap(String selectedMap) {
+        this.selectedMap = selectedMap;
+    }
+
+    public InputMultiplexer getMultiplexer() {
+        return multiplexer;
+    }
+
+    public Sprite getAimHelp() {
+        return aimHelp;
+    }
+
     public static TiledMap getMap() {
         return map;
     }
@@ -202,7 +295,7 @@ public class PirateWarsModel {
         return firebutton;
     }
 
-    public ArrayList<Polygon> getLayerObstacles(int layer) {
+    private ArrayList<Polygon> getLayerObstacles(int layer) {
         ArrayList<Polygon> layerObstacles = new ArrayList<>();
         for (MapObject object : map.getLayers().get(layer).getObjects()) {
             if (object instanceof PolygonMapObject) {

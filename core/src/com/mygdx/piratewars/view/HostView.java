@@ -176,7 +176,7 @@ public class HostView implements Screen {
     }
 
     public int updatePlayersConnected() {
-        playersConnected = controller.pirateWarsModel.deviceShipMapping.size();
+        playersConnected = controller.pirateWarsModel.getDeviceShipMapping().size();
         return playersConnected;
     }
 

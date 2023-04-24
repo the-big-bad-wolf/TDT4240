@@ -126,7 +126,7 @@ public class ClientWaitingView implements Screen {
     }
 
     public String updateMapSelected() {
-        mapSelected = controller.pirateWarsModel.selectedMap;
+        mapSelected = controller.pirateWarsModel.getSelectedMap();
         int startIndex = mapSelected.indexOf("Map");
         int endIndex = startIndex + 4;
         try {
