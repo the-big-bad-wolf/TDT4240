@@ -19,6 +19,7 @@ public class ClientWaitingView implements Screen {
     private PirateWarsController controller;
     private Sprite backgroundSprite;
     private TextButton exitButton;
+    private String mapSelected;
 
     public ClientWaitingView(PirateWarsController controller) {
         this.controller = controller;
@@ -63,6 +64,10 @@ public class ClientWaitingView implements Screen {
         backgroundSprite.draw(controller.gameModel.batch);
         controller.gameModel.batch.end();
 
+        if (mapSelected != updateMapSelected()) {
+            buildMapSelectedButton();
+        }
+
         stage.act(delta);
         stage.draw();
     }
@@ -99,9 +104,9 @@ public class ClientWaitingView implements Screen {
         float exitButtonWidth = 200;
         float exitButtonHeight = 100;
         float waitingXPos = Gdx.graphics.getWidth() / 2f - waitingWidth / 2;
-        float waitingYPos = Gdx.graphics.getHeight() / 2f - waitingHeight / 2 + 100f;
+        float waitingYPos = Gdx.graphics.getHeight() / 2f - waitingHeight / 2 + 200f;
         float exitXPos = Gdx.graphics.getWidth() / 2f - exitButtonWidth / 2;
-        float exitYPos = waitingYPos - 200;
+        float exitYPos = waitingYPos - 400f;
 
         uiBuilder.buildButton("Waiting for host to start the game", waitingWidth, waitingHeight, waitingXPos, waitingYPos, "ipaddress");
         exitButton = uiBuilder.buildButton("Exit", exitButtonWidth, exitButtonHeight,
@@ -118,5 +123,21 @@ public class ClientWaitingView implements Screen {
                 controller.setScreen(new MainMenuView(controller));
             }
         });
+    }
+
+    public String updateMapSelected() {
+        mapSelected = controller.pirateWarsModel.selectedMap;
+        int startIndex = mapSelected.indexOf("Map");
+        int endIndex = startIndex + 4;
+        try {
+            mapSelected = mapSelected.substring(startIndex, endIndex); // extract the desired substring
+        } catch (Exception e) {}
+        return mapSelected;
+    }
+
+    public void buildMapSelectedButton() {
+        float mapSelectedXPos = Gdx.graphics.getWidth() / 2f - 256f;
+        float mapSelectedYPos = Gdx.graphics.getHeight() / 2f - 10f;
+        uiBuilder.buildButton("Map Selected: " + mapSelected, 512, 128, mapSelectedXPos, mapSelectedYPos, "ipaddress");
     }
 }

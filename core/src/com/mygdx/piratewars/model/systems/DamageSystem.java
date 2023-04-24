@@ -61,7 +61,6 @@ public class DamageSystem extends PirateWarsSystem {
             }
 
             // Check if bullet hits bullet
-            //Array<Entity> bulletsCopy = new Array<Entity>(bullets.toArray(Entity.class));
             for (int j = i + 1; j < bullets.size(); j++) {
                 Entity otherBullet = bullets.get(j);
                 PositionComponent otherBulletPositionComponent = ComponentMappers.position.get(otherBullet);

@@ -25,7 +25,6 @@ public class HostView implements Screen {
     private PirateWarsController controller;
     private TextButton backButton;
     private TextButton startButton;
-    private TextButton playersConnectedButton;
     private String ipAddress;
     private Sprite backgroundSprite;
     private int playersConnected;
@@ -184,7 +183,7 @@ public class HostView implements Screen {
     public void buildPlayersConnectedButton() {
         float playersConnectedXPos = Gdx.graphics.getWidth() / 2f - 256f;
         float playersConnectedYPos = Gdx.graphics.getHeight() / 2f - 10f;
-        playersConnectedButton = uiBuilder.buildButton("Players Connected: " + playersConnected, 512, 128, playersConnectedXPos, playersConnectedYPos, "ipaddress");
+        uiBuilder.buildButton("Players Connected: " + playersConnected, 512, 128, playersConnectedXPos, playersConnectedYPos, "ipaddress");
     }
      
 }
