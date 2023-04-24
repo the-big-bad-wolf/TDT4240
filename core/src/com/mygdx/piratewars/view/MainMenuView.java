@@ -50,12 +50,12 @@ public class MainMenuView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        controller.gameModel.batch.begin();
+        controller.getGameModel().batch.begin();
         backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
         backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
                 (stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
-        backgroundSprite.draw(controller.gameModel.batch);
-        controller.gameModel.batch.end();
+        backgroundSprite.draw(controller.getGameModel().batch);
+        controller.getGameModel().batch.end();
 
         stage.act(delta);
         stage.draw();

@@ -59,8 +59,8 @@ public class TutorialView implements Screen {
 		stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		stage.getViewport().apply();
 
-		controller.gameModel.batch.begin();
-		controller.gameModel.batch.end();
+		controller.getGameModel().batch.begin();
+		controller.getGameModel().batch.end();
 
 		batch.begin();
 		backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());

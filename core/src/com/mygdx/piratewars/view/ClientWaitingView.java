@@ -57,12 +57,12 @@ public class ClientWaitingView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        controller.gameModel.batch.begin();
+        controller.getGameModel().batch.begin();
         backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
         backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
                 (stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
-        backgroundSprite.draw(controller.gameModel.batch);
-        controller.gameModel.batch.end();
+        backgroundSprite.draw(controller.getGameModel().batch);
+        controller.getGameModel().batch.end();
 
         if (mapSelected != updateMapSelected()) {
             buildMapSelectedButton();
@@ -118,7 +118,7 @@ public class ClientWaitingView implements Screen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.pirateWarsModel.dispose();
+                controller.getPirateWarsModel().dispose();
                 dispose();
                 controller.setScreen(new MainMenuView(controller));
             }
@@ -126,7 +126,7 @@ public class ClientWaitingView implements Screen {
     }
 
     public String updateMapSelected() {
-        mapSelected = controller.pirateWarsModel.getSelectedMap();
+        mapSelected = controller.getPirateWarsModel().getSelectedMap();
         int startIndex = mapSelected.indexOf("Map");
         int endIndex = startIndex + 4;
         try {

@@ -11,9 +11,9 @@ import com.mygdx.piratewars.view.PirateWarsView;
 
 public class PirateWarsController extends Game {
 
-    public PirateWarsModel pirateWarsModel;
-    public GameModel gameModel;
-    public Launcher launcher;
+    private PirateWarsModel pirateWarsModel;
+    private GameModel gameModel;
+    private Launcher launcher;
 
     public PirateWarsController(Launcher launcher) {
         this.launcher = launcher;
@@ -22,6 +22,14 @@ public class PirateWarsController extends Game {
     public void create() {
         this.gameModel = new GameModel(launcher);
         this.setScreen(new MainMenuView(this));
+    }
+
+    public PirateWarsModel getPirateWarsModel() {
+        return pirateWarsModel;
+    }
+
+    public GameModel getGameModel() {
+        return gameModel;
     }
 
     public void render() {

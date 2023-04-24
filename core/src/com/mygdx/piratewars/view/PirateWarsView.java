@@ -39,7 +39,7 @@ public class PirateWarsView implements Screen {
 
     public PirateWarsView(PirateWarsController controller) {
         this.controller = controller;
-        this.model = controller.pirateWarsModel;
+        this.model = controller.getPirateWarsModel();
         this.stage = new Stage(); // todo check if we need to change that
         map = PirateWarsModel.getMap();
         this.fitViewport = model.getPirateWarsViewport();
@@ -166,7 +166,7 @@ public class PirateWarsView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     controller.setScreen(new MainMenuView(controller));
-                    controller.pirateWarsModel.dispose();
+                    controller.getPirateWarsModel().dispose();
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No Controller found");
                 }

@@ -72,8 +72,8 @@ public class SelectionView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        controller.gameModel.batch.begin();
-        controller.gameModel.batch.end();
+        controller.getGameModel().batch.begin();
+        controller.getGameModel().batch.end();
 
         batch.begin();
         backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
@@ -167,7 +167,7 @@ public class SelectionView implements Screen {
                     }
                     if (sourceInt == 2) {
                         controller.generatePirateWarsModel(Role.Server, "", map1);
-                        controller.pirateWarsModel.generateEntities();
+                        controller.getPirateWarsModel().generateEntities();
                         controller.setScreen(new PirateWarsView(controller));
                     }
                 } catch (NullPointerException | UnknownHostException nullPointerException) {
@@ -186,7 +186,7 @@ public class SelectionView implements Screen {
                     }
                     if (sourceInt == 2) {
                         controller.generatePirateWarsModel(Role.Server, "", map2);
-                        controller.pirateWarsModel.generateEntities();
+                        controller.getPirateWarsModel().generateEntities();
                         controller.setScreen(new PirateWarsView(controller));
                     }
                 } catch (NullPointerException | UnknownHostException nullPointerException) {

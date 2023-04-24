@@ -59,12 +59,12 @@ public class ClientView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        controller.gameModel.batch.begin();
+        controller.getGameModel().batch.begin();
         backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
         backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
                 (stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
-        backgroundSprite.draw(controller.gameModel.batch);
-        controller.gameModel.batch.end();
+        backgroundSprite.draw(controller.getGameModel().batch);
+        controller.getGameModel().batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -135,7 +135,7 @@ public class ClientView implements Screen {
                 System.out.println(inputField.getText());
                 controller.generatePirateWarsModel(Role.Client, inputField.getText(), "");
 
-                ClientConnector connector = (ClientConnector) controller.pirateWarsModel.getConnectorStrategy();
+                ClientConnector connector = (ClientConnector) controller.getPirateWarsModel().getConnectorStrategy();
 
                 if (!connector.client.isConnected()) {
                     stage.setKeyboardFocus(null);
@@ -143,7 +143,7 @@ public class ClientView implements Screen {
                     uiBuilder.buildButton("Invalid IP", 250, 128f,
                         Gdx.graphics.getWidth() / 2f - 250 / 2f,
                             Gdx.graphics.getHeight() * 2f / 3f - 150, "invalidIP");
-                    controller.pirateWarsModel.dispose();
+                    controller.getPirateWarsModel().dispose();
                 }
                 else {
                     controller.setScreen(new ClientWaitingView(controller));

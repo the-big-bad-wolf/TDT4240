@@ -65,12 +65,12 @@ public class HostView implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
         stage.getViewport().apply();
 
-        controller.gameModel.batch.begin();
+        controller.getGameModel().batch.begin();
         backgroundSprite.setSize(stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
         backgroundSprite.setPosition((stage.getViewport().getWorldWidth() - backgroundSprite.getWidth()) / 2,
                 (stage.getViewport().getWorldHeight() - backgroundSprite.getHeight()) / 2);
-        backgroundSprite.draw(controller.gameModel.batch);
-        controller.gameModel.batch.end();
+        backgroundSprite.draw(controller.getGameModel().batch);
+        controller.getGameModel().batch.end();
 
         if (playersConnected != updatePlayersConnected()) {
             buildPlayersConnectedButton();
@@ -132,7 +132,7 @@ public class HostView implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     controller.setScreen(new SelectionView(controller, 0));
-                    controller.pirateWarsModel.dispose();
+                    controller.getPirateWarsModel().dispose();
                 } catch (NullPointerException nullPointerException) {
                     System.out.println("No controller found");
                 }
@@ -142,7 +142,7 @@ public class HostView implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.pirateWarsModel.generateEntities();
+                controller.getPirateWarsModel().generateEntities();
                 controller.setScreen(new PirateWarsView(controller));
             }
         });
@@ -176,7 +176,7 @@ public class HostView implements Screen {
     }
 
     public int updatePlayersConnected() {
-        playersConnected = controller.pirateWarsModel.getDeviceShipMapping().size();
+        playersConnected = controller.getPirateWarsModel().getDeviceShipMapping().size();
         return playersConnected;
     }
 
