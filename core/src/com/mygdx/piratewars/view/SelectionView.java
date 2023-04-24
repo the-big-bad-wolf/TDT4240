@@ -120,6 +120,7 @@ public class SelectionView implements Screen {
         float allButtonsHeight = 100f;
         float selectWidth = 800;
         float selectHeight = 100;
+        float backButtonWidth = 256f;
 
         float map1XPos = Gdx.graphics.getWidth() / 2f - (Gdx.graphics.getWidth() / 4f + allButtonsWidth / 2f);
         float map1YPos = Gdx.graphics.getHeight()/ 5f - allButtonsHeight;
@@ -127,7 +128,7 @@ public class SelectionView implements Screen {
         float map2YPos = Gdx.graphics.getHeight()/ 5f - allButtonsHeight;
         float selectXPos = Gdx.graphics.getWidth() / 2f - selectWidth / 2f;
         float selectYPos = Gdx.graphics.getHeight() - (Gdx.graphics.getHeight()/6f + selectHeight / 2f);
-        float backXPos = Gdx.graphics.getWidth() - allButtonsWidth / 2;
+        float backXPos = Gdx.graphics.getWidth() - backButtonWidth;
         float backYPos = Gdx.graphics.getHeight() - allButtonsHeight;
 
         map1Button = uiBuilder.buildButton("Caribbean", allButtonsWidth, allButtonsHeight,
@@ -140,7 +141,7 @@ public class SelectionView implements Screen {
                 map2YPos,
                 "default");
 
-        backButton = uiBuilder.buildButton("Back", allButtonsWidth, allButtonsHeight,
+        backButton = uiBuilder.buildButton("Back", backButtonWidth, allButtonsHeight,
                 backXPos,
                 backYPos,
                 "redVersion");
