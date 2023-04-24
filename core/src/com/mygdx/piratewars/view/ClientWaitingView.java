@@ -127,10 +127,20 @@ public class ClientWaitingView implements Screen {
 
     public String updateMapSelected() {
         mapSelected = controller.getPirateWarsModel().getSelectedMap();
-        int startIndex = mapSelected.indexOf("Map");
-        int endIndex = startIndex + 4;
+        int startIndex = mapSelected.indexOf("/") + 1;
+        int endIndex = mapSelected.indexOf(".");
+        StringBuilder sb = new StringBuilder();
         try {
-            mapSelected = mapSelected.substring(startIndex, endIndex); // extract the desired substring
+            mapSelected = mapSelected.substring(startIndex, endIndex);
+            sb.append(mapSelected.charAt(0));
+            for (int i = 1; i < mapSelected.length(); i++) {
+                char c = mapSelected.charAt(i);
+                if (Character.isUpperCase(c)) {
+                    sb.append(" ");
+                }
+                sb.append(c);
+            }
+            mapSelected = sb.toString();
         } catch (Exception e) {}
         return mapSelected;
     }

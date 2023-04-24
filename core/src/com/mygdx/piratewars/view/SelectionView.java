@@ -48,10 +48,10 @@ public class SelectionView implements Screen {
         Texture background = new Texture(Gdx.files.internal("images/mapBackground.png"));
         backgroundSprite = new Sprite(background);
 
-        Texture map1Texture = new Texture(Gdx.files.internal("images/map1.png"));
+        Texture map1Texture = new Texture(Gdx.files.internal("images/Caribbean.png"));
         map1Sprite = new Sprite(map1Texture);
 
-        Texture map2Texture = new Texture(Gdx.files.internal("images/map2.png"));
+        Texture map2Texture = new Texture(Gdx.files.internal("images/MediterraneanSea.png"));
         map2Sprite = new Sprite(map2Texture);
 
         setMapSprites(960, 480);
@@ -116,7 +116,7 @@ public class SelectionView implements Screen {
     }
 
     private void buildUI() {
-        float allButtonsWidth = 250f;
+        float allButtonsWidth = 600f;
         float allButtonsHeight = 100f;
         float selectWidth = 800;
         float selectHeight = 100;
@@ -127,15 +127,15 @@ public class SelectionView implements Screen {
         float map2YPos = Gdx.graphics.getHeight()/ 5f - allButtonsHeight;
         float selectXPos = Gdx.graphics.getWidth() / 2f - selectWidth / 2f;
         float selectYPos = Gdx.graphics.getHeight() - (Gdx.graphics.getHeight()/6f + selectHeight / 2f);
-        float backXPos = Gdx.graphics.getWidth() - allButtonsWidth;
+        float backXPos = Gdx.graphics.getWidth() - allButtonsWidth / 2;
         float backYPos = Gdx.graphics.getHeight() - allButtonsHeight;
 
-        map1Button = uiBuilder.buildButton("Map1", allButtonsWidth, allButtonsHeight,
+        map1Button = uiBuilder.buildButton("Caribbean", allButtonsWidth, allButtonsHeight,
                 map1XPos,
                 map1YPos,
                 "default");
 
-        map2Button = uiBuilder.buildButton("Map2", allButtonsWidth, allButtonsHeight,
+        map2Button = uiBuilder.buildButton("Mediterranean Sea", allButtonsWidth, allButtonsHeight,
                 map2XPos,
                 map2YPos,
                 "default");
@@ -214,8 +214,8 @@ public class SelectionView implements Screen {
     }
 
     private void setMaps() {
-        this.map1 = "maps/pirateMap.tmx";
-        this.map2 = "maps/pirateMap2.tmx";
+        this.map1 = "maps/Caribbean.tmx";
+        this.map2 = "maps/MediterraneanSea.tmx";
     }
 
     private void setMapSprites(int width, int height) {

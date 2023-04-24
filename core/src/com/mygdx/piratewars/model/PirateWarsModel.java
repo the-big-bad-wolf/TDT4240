@@ -90,7 +90,7 @@ public class PirateWarsModel {
         this.multiplexer = new InputMultiplexer();
 
         TmxMapLoader loader = new TmxMapLoader();
-        map = loader.load(selectedMap.isEmpty() ? "maps/pirateMap.tmx" : this.selectedMap);
+        map = loader.load(selectedMap.isEmpty() ? "maps/Caribbean.tmx" : this.selectedMap);
 
         OrthographicCamera camera = new OrthographicCamera();
         float mapWidth = map.getProperties().get("width", Integer.class)
