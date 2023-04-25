@@ -10,7 +10,7 @@ Alternatively you can use Anddoird Studio's built in functions to run the app or
 
 #### Download APKs
 
-To install the game on an Android device, go to this https://shorturl.at/nRUVW}. It might take some time to start downloading, so be patient. If prompted with questions asking for verification, press "accept" or "yes". To run the game, run the PirateWars.apk.
+To install the game on an Android device, go to this https://shorturl.at/nRUVW. It might take some time to start downloading, so be patient. If prompted with questions asking for verification, press "accept" or "yes". To run the game, run the PirateWars.apk.
 
 
 To install the game on a Windows device, go to this link https://shorturl.at/qtuJ1. It might take some time to start downloading, so be patient. If prompted with questions asking for verification, press "accept" or "yes". Double-click the runnable JAR file named "PirateWars" to run the game. You need to have installed a JVM.
